@@ -1,0 +1,11 @@
+<%- include('../partials/admin-top') %>
+<div class="page-head"><h1>Messagerie</h1></div>
+<div class="card">
+  <% if (!threads.length) { %><p class="muted">Aucune conversation.</p><% } %>
+  <table><% threads.forEach(t => { %>
+    <tr><td><a href="/admin/clients/<%= t.id %>#messages"><strong><%= t.first_name %> <%= t.last_name %></strong></a></td>
+      <td class="small muted"><%= datetime(t.last_at) %></td>
+      <td><% if (t.unread) { %><span class="chip cyan"><%= t.unread %> non lu(s)</span><% } %></td></tr>
+  <% }) %></table>
+</div>
+<%- include('../partials/admin-bottom') %>

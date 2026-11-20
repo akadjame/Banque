@@ -1,0 +1,129 @@
+<%- include('partials/head') %>
+<%
+  const b = offer.boost;
+  const end = offer.endDate ? offer.endDate.split('-').reverse().join('.') : '';
+  const fmtRate = (r) => Number(r).toLocaleString('fr-FR', { maximumFractionDigits: 2 });
+%>
+<main>
+  <section class="hero">
+    <div class="bubble b1" aria-hidden="true">🧳</div>
+    <div class="bubble b2" aria-hidden="true">🚗</div>
+    <div class="bubble b3" aria-hidden="true">🐷</div>
+    <div class="badge-label" aria-hidden="true"><div>100 %<b>EN LIGNE</b>0 € DE FRAIS</div></div>
+    <div class="container">
+      <h1>Vos projets avancent,<br><span class="pill">votre épargne</span><br>travaille !</h1>
+
+      <div class="offer-card">
+        <div class="offer-title">NOS OFFRES DU MOMENT ✨</div>
+        <% if (end) { %><p class="until">Jusqu'au <%= end %></p><% } %>
+        <p class="lead">Profitez de notre offre de bienvenue</p>
+        <% if (b) { %>
+          <span class="boost-tag">TAUX BOOSTÉ</span>
+          <div class="big-rate"><%= fmtRate(b.boosted_rate) %>%<sup>(1)</sup></div>
+          <p>pendant <%= b.boost_months %> mois<% if (b.boost_cap_cents) { %> jusqu'à <%= eur(b.boost_cap_cents).replace(',00', '') %><% } %> puis <strong><%= fmtRate(b.base_rate) %>%</strong>*</p>
+        <% } %>
+        <% if (offer.welcome > 0) { %>
+          <div class="plus">+</div>
+          <div class="big-amount"><%= eur(offer.welcome).replace(',00', '') %><sup>(2)</sup></div>
+          <p class="lead" style="margin-top:4px">de prime de bienvenue</p>
+        <% } %>
+        <a class="btn btn-violet" href="/ouvrir-un-livret">Ouvrir mon livret en 5 minutes</a>
+        <% if (offer.referrer > 0) { %>
+        <div class="starburst">
+          <div><span class="tag">PARRAINAGE</span><b><%= eur(offer.referrer).replace(',00', '') %></b>pour le parrain<br><strong>+<%= eur(offer.referee).replace(',00', '') %></strong> pour le filleul</div>
+        </div>
+        <% } %>
+      </div>
+    </div>
+  </section>
+
+  <section class="block light">
+    <div class="container">
+      <h2 class="section-title">Pourquoi nous choisir ?</h2>
+      <p class="section-sub">Tout ce qu'un livret en ligne doit offrir, et un peu plus.</p>
+      <div class="grid grid-3">
+        <div class="feature"><div class="ico">📈</div><h3>Intérêts au jour le jour</h3><p>Chaque euro rapporte dès le premier jour, pas à la quinzaine. Suivez vos intérêts acquis en temps réel.</p></div>
+        <div class="feature"><div class="ico">🔓</div><h3>Argent disponible</h3><p>Pas de durée de blocage. Demandez un retrait vers votre compte de référence à tout moment.</p></div>
+        <div class="feature"><div class="ico">0€</div><h3>Zéro frais</h3><p>Ni frais d'ouverture, ni frais de gestion, ni frais de clôture.</p></div>
+        <div class="feature"><div class="ico">💬</div><h3>Un conseiller qui répond</h3><p>Messagerie sécurisée dans votre espace client, réponse sous 24 h ouvrées.</p></div>
+        <div class="feature"><div class="ico">📄</div><h3>Relevés & RIB</h3><p>Relevés mensuels et RIB téléchargeables à tout moment depuis votre espace.</p></div>
+        <div class="feature"><div class="ico">🎁</div><h3>Parrainage illimité</h3><p>Parrainez vos proches : vous êtes récompensés tous les deux, sans limite de filleuls.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="livrets">
+    <div class="container">
+      <h2 class="section-title">Nos livrets</h2>
+      <p class="section-sub">Choisissez le livret qui vous correspond. Vous pouvez en détenir plusieurs.</p>
+      <div class="grid grid-2">
+        <% offer.products.forEach(p => { %>
+        <div class="product">
+          <h3><%= p.name %></h3>
+          <div class="rate"><%= fmtRate(p.boosted_rate || p.base_rate) %>%</div>
+          <p class="small" style="color:#b9bce0">taux annuel brut<%= p.boosted_rate ? ` pendant ${p.boost_months} mois, puis ${fmtRate(p.base_rate)} %` : '' %></p>
+          <ul>
+            <li><%= p.description %></li>
+            <li>Versement minimum : <%= eur(p.min_deposit_cents) %></li>
+            <li><%= p.max_balance_cents ? 'Plafond : ' + eur(p.max_balance_cents) : 'Sans plafond de dépôt' %></li>
+            <li>Ouverture 100 % en ligne</li>
+          </ul>
+          <a class="btn btn-cyan" href="/ouvrir-un-livret">Ouvrir ce livret</a>
+        </div>
+        <% }) %>
+      </div>
+    </div>
+  </section>
+
+  <section class="block light" id="simulateur">
+    <div class="container">
+      <h2 class="section-title">Simulez vos gains</h2>
+      <p class="section-sub">Estimez les intérêts de votre épargne sur 12 mois.</p>
+      <div class="simu" id="simu"
+           data-boost="<%= b ? b.boosted_rate : 0 %>" data-base="<%= b ? b.base_rate : (offer.products[0] ? offer.products[0].base_rate : 0) %>"
+           data-months="<%= b ? b.boost_months : 0 %>" data-cap="<%= b && b.boost_cap_cents ? b.boost_cap_cents / 100 : 0 %>" data-bonus="<%= offer.welcome / 100 %>">
+        <div>
+          <label for="simu-amount">Montant épargné : <strong id="simu-amount-out">10 000 €</strong></label>
+          <input type="range" id="simu-amount" min="100" max="200000" step="100" value="10000">
+          <label for="simu-monthly">Versement mensuel : <strong id="simu-monthly-out">100 €</strong></label>
+          <input type="range" id="simu-monthly" min="0" max="3000" step="50" value="100">
+          <p class="small muted">Simulation indicative, sur la base des taux actuels et d'intérêts calculés au jour le jour, avant prélèvements fiscaux et sociaux.</p>
+        </div>
+        <div class="result">
+          <div>Intérêts estimés sur 12 mois</div>
+          <div class="amount" id="simu-result">—</div>
+          <div class="small">+ prime de bienvenue : <strong id="simu-bonus"></strong></div>
+          <a class="btn btn-violet" style="margin-top:16px" href="/ouvrir-un-livret">J'ouvre mon livret</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="container">
+      <h2 class="section-title">Ouvrez votre livret en 3 étapes</h2>
+      <p class="section-sub">Moins de 5 minutes, depuis votre téléphone ou votre ordinateur.</p>
+      <div class="grid grid-3 steps">
+        <div class="step"><h3>Remplissez le formulaire</h3><p style="color:#c9cbef">Vos informations et l'IBAN de votre compte courant (compte de référence).</p></div>
+        <div class="step"><h3>Validation du dossier</h3><p style="color:#c9cbef">Notre équipe vérifie votre dossier et active votre livret.</p></div>
+        <div class="step"><h3>Faites un premier versement</h3><p style="color:#c9cbef">Virement depuis votre compte de référence : vos intérêts démarrent aussitôt.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block light" id="parrainage">
+    <div class="container center">
+      <h2 class="section-title">Parrainez, gagnez ensemble</h2>
+      <p class="section-sub"><%= eur(offer.referrer) %> pour vous, <%= eur(offer.referee) %> pour votre filleul, à chaque parrainage validé.</p>
+      <a class="btn btn-violet" href="/connexion?next=/espace/parrainage">Je parraine un proche</a>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="container small" style="color:#9fa3cf">
+      <p>(1) Taux annuel brut boosté applicable aux nouveaux livrets ouverts pendant la période de l'offre, pendant la durée et dans la limite du plafond indiqués. Au-delà, taux de base en vigueur. * Taux de base susceptible d'évoluer.</p>
+      <p>(2) Prime versée après validation du dossier et premier versement. Une seule prime par client.</p>
+    </div>
+  </section>
+</main>
+<%- include('partials/foot') %>

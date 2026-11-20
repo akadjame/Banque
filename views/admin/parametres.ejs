@@ -1,0 +1,34 @@
+<%- include('../partials/admin-top') %>
+<div class="page-head"><h1>Offres & taux</h1></div>
+<form class="card" method="post" action="/admin/parametres">
+  <input type="hidden" name="_csrf" value="<%= csrf %>">
+  <h2>Primes & offre du moment</h2>
+  <div class="grid grid-4">
+    <div><label>Prime de bienvenue (€)</label><input name="welcome_bonus_cents" value="<%= (offer.welcome / 100).toFixed(2).replace('.', ',') %>"></div>
+    <div><label>Prime parrain (€)</label><input name="referrer_bonus_cents" value="<%= (offer.referrer / 100).toFixed(2).replace('.', ',') %>"></div>
+    <div><label>Prime filleul (€)</label><input name="referee_bonus_cents" value="<%= (offer.referee / 100).toFixed(2).replace('.', ',') %>"></div>
+    <div><label>Fin de l'offre</label><input type="date" name="offer_end_date" value="<%= offer.endDate %>"></div>
+  </div>
+  <button class="btn btn-violet btn-sm" style="margin-top:14px">Enregistrer</button>
+</form>
+
+<div class="alert alert-warn">Avant de modifier un taux, versez les intérêts acquis (tableau de bord) : le calcul des intérêts non versés utilise le taux en vigueur.</div>
+
+<% products.forEach(p => { %>
+<form class="card" method="post" action="/admin/produits/<%= p.id %>">
+  <input type="hidden" name="_csrf" value="<%= csrf %>">
+  <div class="page-head" style="margin-bottom:4px"><h2 style="margin:0"><%= p.name %> <span class="small muted mono"><%= p.code %></span></h2>
+    <label class="check" style="margin:0"><input type="checkbox" name="active" value="1" <%= p.active ? 'checked' : '' %>> Proposé à l'ouverture</label></div>
+  <div class="row"><div><label>Nom</label><input name="name" value="<%= p.name %>"></div><div><label>Description</label><input name="description" value="<%= p.description || '' %>"></div></div>
+  <div class="grid grid-4">
+    <div><label>Taux de base (%)</label><input name="base_rate" value="<%= p.base_rate %>"></div>
+    <div><label>Taux boosté (%)</label><input name="boosted_rate" value="<%= p.boosted_rate ?? '' %>" placeholder="aucun"></div>
+    <div><label>Durée du boost (mois)</label><input name="boost_months" type="number" min="0" value="<%= p.boost_months %>"></div>
+    <div><label>Plafond du boost (€)</label><input name="boost_cap" value="<%= p.boost_cap_cents ? p.boost_cap_cents / 100 : '' %>" placeholder="aucun"></div>
+    <div><label>Plafond de dépôt (€)</label><input name="max_balance" value="<%= p.max_balance_cents ? p.max_balance_cents / 100 : '' %>" placeholder="illimité"></div>
+  </div>
+  <button class="btn btn-light btn-sm" style="margin-top:14px">Mettre à jour</button>
+</form>
+<% }) %>
+<form method="post" action="/admin/produits"><input type="hidden" name="_csrf" value="<%= csrf %>"><button class="btn btn-violet btn-sm">+ Créer un livret</button></form>
+<%- include('../partials/admin-bottom') %>

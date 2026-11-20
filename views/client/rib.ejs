@@ -1,0 +1,24 @@
+<%- include('../partials/client-top') %>
+<div class="print-doc">
+  <div style="display:flex;justify-content:space-between;align-items:center">
+    <h1>Relevé d'Identité Bancaire</h1>
+    <strong><%= bank.name %> <%= bank.subtitle %></strong>
+  </div>
+  <dl class="kv" style="margin-top:20px">
+    <dt>Titulaire</dt><dd><%= user.civility || '' %> <%= user.first_name %> <%= user.last_name.toUpperCase() %><br><%= user.address %>, <%= user.postal_code %> <%= user.city %></dd>
+    <dt>Livret</dt><dd><%= account.product.name %></dd>
+    <dt>IBAN</dt><dd class="mono"><%= iban(account.iban) %></dd>
+    <dt>Code banque</dt><dd class="mono"><%= account.iban.slice(4, 9) %></dd>
+    <dt>Code guichet</dt><dd class="mono"><%= account.iban.slice(9, 14) %></dd>
+    <dt>N° de compte</dt><dd class="mono"><%= account.iban.slice(14, 25) %></dd>
+    <dt>Clé RIB</dt><dd class="mono"><%= account.iban.slice(25, 27) %></dd>
+    <dt>Domiciliation</dt><dd><%= bank.legalName %></dd>
+  </dl>
+  <p class="small muted" style="margin-top:20px">Ce livret d'épargne reçoit uniquement les virements émis depuis votre compte de référence.</p>
+  <div class="actions no-print" style="margin-top:20px">
+    <button class="btn btn-violet btn-sm" data-print>Imprimer / PDF</button>
+    <button class="btn btn-light btn-sm" data-copy="<%= account.iban %>">Copier l'IBAN</button>
+    <a class="btn btn-light btn-sm" href="/espace/compte/<%= account.id %>">Retour</a>
+  </div>
+</div>
+<%- include('../partials/client-bottom') %>

@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title><%= title %> — <%= bank.name %> <%= bank.subtitle %></title>
+  <link rel="icon" href="/static/img/logo.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="container">
+    <a class="logo" href="/">
+      <img class="logo-mark" src="/static/img/logo.svg" alt="">
+      <span class="logo-text"><strong><%= bank.name %></strong><span><%= bank.subtitle %></span></span>
+    </a>
+    <nav class="nav">
+      <% if (!user) { %>
+        <a class="link" href="/#livrets">Nos livrets</a>
+        <a class="link" href="/#simulateur">Simulateur</a>
+        <a class="link" href="/aide">Aide</a>
+        <a class="link" href="/connexion">Espace client</a>
+        <a class="btn btn-cyan" href="/ouvrir-un-livret">Ouvrir un livret</a>
+      <% } else { %>
+        <a class="link" href="<%= user.role === 'admin' ? '/admin' : '/espace' %>"><%= user.first_name %> <%= user.last_name %></a>
+        <form method="post" action="/deconnexion" style="margin:0">
+          <input type="hidden" name="_csrf" value="<%= csrf %>">
+          <button class="btn btn-ghost btn-sm" type="submit">Déconnexion</button>
+        </form>
+      <% } %>
+    </nav>
+  </div>
+</header>

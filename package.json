@@ -1,0 +1,19 @@
+{
+  "name": "banque-en-ligne",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Banque d'épargne en ligne : site public, espace client et back-office",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node --no-warnings src/server.js",
+    "dev": "node --no-warnings --watch src/server.js",
+    "create-admin": "node --no-warnings scripts/create-admin.js",
+    "seed-demo": "node --no-warnings scripts/seed-demo.js",
+    "test": "node --no-warnings --test"
+  },
+  "engines": { "node": ">=22.13" },
+  "dependencies": {
+    "ejs": "^3.1.10",
+    "express": "^5.1.0"
+  }
+}

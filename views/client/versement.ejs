@@ -1,0 +1,27 @@
+<%- include('../partials/client-top') %>
+<div class="page-head"><h1>Alimenter mon livret</h1></div>
+<div class="card">
+  <p>Pour alimenter votre livret, effectuez un <strong>virement depuis votre compte de référence</strong> vers l'IBAN de votre livret ci-dessous.
+  Le versement est crédité dès sa réception et commence à rapporter des intérêts le jour même.</p>
+  <% if (user.reference_iban) { %><p class="small muted">Compte de référence : <span class="mono"><%= iban(user.reference_iban) %></span></p><% } %>
+</div>
+<div class="grid grid-2">
+  <% accounts.filter(a => a.status === 'actif').forEach(a => { %>
+  <div class="card">
+    <h2><%= a.product.name %></h2>
+    <dl class="kv">
+      <dt>Bénéficiaire</dt><dd><%= user.first_name %> <%= user.last_name.toUpperCase() %></dd>
+      <dt>IBAN</dt><dd class="mono"><%= iban(a.iban) %></dd>
+      <dt>Banque</dt><dd><%= bank.legalName %></dd>
+      <dt>Référence</dt><dd class="mono"><%= user.client_number %></dd>
+      <% if (a.product.min_deposit_cents) { %><dt>Minimum</dt><dd><%= eur(a.product.min_deposit_cents) %></dd><% } %>
+      <% if (a.product.max_balance_cents) { %><dt>Plafond</dt><dd><%= eur(a.product.max_balance_cents) %></dd><% } %>
+    </dl>
+    <div class="actions" style="margin-top:14px">
+      <button class="btn btn-violet btn-sm" data-copy="<%= a.iban %>">Copier l'IBAN</button>
+      <a class="btn btn-light btn-sm" href="/espace/compte/<%= a.id %>/rib">Télécharger le RIB</a>
+    </div>
+  </div>
+  <% }) %>
+</div>
+<%- include('../partials/client-bottom') %>

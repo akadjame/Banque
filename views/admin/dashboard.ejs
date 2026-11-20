@@ -1,0 +1,34 @@
+<%- include('../partials/admin-top') %>
+<div class="page-head">
+  <h1>Tableau de bord</h1>
+  <form method="post" action="/admin/interets" data-confirm="Verser les intérêts acquis sur tous les livrets ?">
+    <input type="hidden" name="_csrf" value="<%= csrf %>">
+    <button class="btn btn-violet btn-sm">Verser les intérêts (<%= eur(accrued) %>)</button>
+  </form>
+</div>
+<div class="grid grid-4" style="margin-bottom:22px">
+  <div class="stat"><div class="k">Encours total</div><div class="v"><%= eur(stats.encours) %></div><div class="small muted"><%= stats.accounts %> livrets</div></div>
+  <div class="stat"><div class="k">Clients</div><div class="v"><%= stats.clients %></div><div class="small muted"><%= stats.active %> actifs</div></div>
+  <div class="stat"><div class="k">Intérêts acquis à verser</div><div class="v"><%= eur(accrued) %></div><div class="small muted"><%= eur(stats.interestMonth) %> versés ce mois</div></div>
+  <div class="stat"><div class="k">À traiter</div><div class="v"><%= counts.pendingUsers + counts.pendingWithdrawals %></div>
+    <div class="small muted"><a href="/admin/clients?status=en_attente"><%= counts.pendingUsers %> dossiers</a> · <a href="/admin/retraits"><%= counts.pendingWithdrawals %> retraits</a></div></div>
+</div>
+<div class="grid grid-2">
+  <div class="card">
+    <div class="page-head" style="margin-bottom:6px"><h2 style="margin:0">Derniers clients</h2><a class="btn btn-light btn-sm" href="/admin/clients/nouveau">+ Nouveau client</a></div>
+    <table><% recentUsers.forEach(u => { %>
+      <tr><td><a href="/admin/clients/<%= u.id %>"><%= u.first_name %> <%= u.last_name %></a><div class="small muted"><%= u.email %></div></td>
+        <td class="small muted"><%= date(u.created_at) %></td>
+        <td><span class="chip <%= { en_attente: 'orange', actif: 'green', bloque: 'red', cloture: '' }[u.status] %>"><%= statusLabels[u.status] %></span></td></tr>
+    <% }) %></table>
+  </div>
+  <div class="card">
+    <h2>Dernières opérations</h2>
+    <table><% recentTx.forEach(t => { %>
+      <tr><td><a href="/admin/clients/<%= t.user_id %>"><%= t.first_name %> <%= t.last_name %></a><div class="small muted"><%= t.label %></div></td>
+        <td class="small muted"><%= date(t.created_at) %></td>
+        <td style="text-align:right" class="<%= t.amount_cents > 0 ? 'amt-pos' : 'amt-neg' %>"><%= eur(t.amount_cents, { sign: true }) %></td></tr>
+    <% }) %></table>
+  </div>
+</div>
+<%- include('../partials/admin-bottom') %>

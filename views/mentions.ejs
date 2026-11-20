@@ -1,0 +1,11 @@
+<%- include('partials/head') %>
+<main class="block"><div class="container" style="max-width:820px">
+  <h1 class="section-title">Mentions légales</h1>
+  <div class="card" style="color:var(--ink)">
+    <p><strong><%= bank.legalName %></strong></p>
+    <p>À compléter : forme sociale, capital, siège social, RCS, numéro d'agrément ACPR / partenaire bancaire agréé, numéro ORIAS le cas échéant, directeur de la publication, hébergeur.</p>
+    <p>Contact : <%= bank.supportEmail %> — <%= bank.supportPhone %></p>
+    <p>Données personnelles : à compléter (responsable de traitement, finalités, durées de conservation, droits RGPD, DPO).</p>
+  </div>
+</div></main>
+<%- include('partials/foot') %>

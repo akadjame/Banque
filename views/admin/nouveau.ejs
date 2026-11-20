@@ -1,0 +1,31 @@
+<%- include('../partials/admin-top') %>
+<div class="page-head"><h1>Nouveau client</h1></div>
+<form class="card" method="post" action="/admin/clients/nouveau" style="max-width:760px">
+  <input type="hidden" name="_csrf" value="<%= csrf %>">
+  <% if (error) { %><div class="alert alert-error"><%= error %></div><% } %>
+  <div class="row-3">
+    <div><label for="civility">Civilité</label><select id="civility" name="civility"><option>M.</option><option <%= values.civility === 'Mme' ? 'selected' : '' %>>Mme</option></select></div>
+    <div><label for="birth_date">Date de naissance</label><input type="date" id="birth_date" name="birth_date" value="<%= values.birth_date || '' %>"></div>
+  </div>
+  <div class="row">
+    <div><label for="first_name">Prénom</label><input id="first_name" name="first_name" value="<%= values.first_name || '' %>" required></div>
+    <div><label for="last_name">Nom</label><input id="last_name" name="last_name" value="<%= values.last_name || '' %>" required></div>
+  </div>
+  <div class="row">
+    <div><label for="email">E-mail (identifiant)</label><input type="email" id="email" name="email" value="<%= values.email || '' %>" required></div>
+    <div><label for="phone">Téléphone</label><input id="phone" name="phone" value="<%= values.phone || '' %>"></div>
+  </div>
+  <label for="address">Adresse</label><input id="address" name="address" value="<%= values.address || '' %>">
+  <div class="row-3"><div><label for="postal_code">Code postal</label><input id="postal_code" name="postal_code" value="<%= values.postal_code || '' %>"></div>
+    <div><label for="city">Ville</label><input id="city" name="city" value="<%= values.city || '' %>"></div></div>
+  <div class="row">
+    <div><label for="reference_iban">IBAN de référence</label><input id="reference_iban" class="mono" name="reference_iban" value="<%= values.reference_iban || '' %>"></div>
+    <div><label for="reference_holder">Titulaire</label><input id="reference_holder" name="reference_holder" value="<%= values.reference_holder || '' %>"></div>
+  </div>
+  <div class="row">
+    <div><label for="product_id">Livret</label><select id="product_id" name="product_id"><% offer.products.forEach(p => { %><option value="<%= p.id %>"><%= p.name %></option><% }) %></select></div>
+    <div><label for="password">Mot de passe provisoire</label><input id="password" name="password" required minlength="10"></div>
+  </div>
+  <button class="btn btn-violet" style="margin-top:18px">Créer le client (statut actif)</button>
+</form>
+<%- include('../partials/admin-bottom') %>

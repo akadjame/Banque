@@ -1,0 +1,33 @@
+<footer class="site-footer no-print">
+  <div class="container">
+    <div class="cols">
+      <div>
+        <a class="logo" href="/">
+          <img class="logo-mark" src="/static/img/logo.svg" alt="">
+          <span class="logo-text"><strong><%= bank.name %></strong><span><%= bank.subtitle %></span></span>
+        </a>
+        <p>L'épargne en ligne simple, rémunérée et sans frais.</p>
+      </div>
+      <div>
+        <p><a href="/#livrets">Nos livrets</a></p>
+        <p><a href="/#parrainage">Parrainage</a></p>
+        <p><a href="/aide">Aide & FAQ</a></p>
+      </div>
+      <div>
+        <p><a href="/connexion">Espace client</a></p>
+        <p><a href="/mentions-legales">Mentions légales</a></p>
+        <p><%= bank.supportPhone %><br><%= bank.supportEmail %></p>
+      </div>
+    </div>
+    <div class="legal">
+      <%= bank.legalName %>. Taux annuels bruts, avant prélèvements fiscaux et sociaux. Les intérêts sont calculés au jour le jour.
+      Offres soumises à conditions, voir <a href="/aide">conditions</a>.
+    </div>
+  </div>
+</footer>
+<% if (!user || user.role !== 'admin') { %>
+<a class="help-btn no-print" href="<%= user ? '/espace/messages' : '/aide' %>"><span class="q">?</span> BESOIN D'AIDE ?</a>
+<% } %>
+<script src="/static/js/app.js"></script>
+</body>
+</html>

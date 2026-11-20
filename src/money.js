@@ -1,0 +1,117 @@
+// Outils monétaires : montants en centimes (entiers), IBAN, calcul des intérêts.
+
+const DAY_MS = 86400000;
+
+function formatEuros(cents, { sign = false } = {}) {
+  const v = (cents || 0) / 100;
+  const s = v.toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' });
+  return sign && cents > 0 ? '+' + s : s;
+}
+
+// "1 234,56" / "1234.56" / "1234" -> 123456 ; renvoie null si invalide
+function parseEuros(input) {
+  if (input === undefined || input === null) return null;
+  const s = String(input).replace(/[\s €]/g, '').replace(',', '.');
+  if (!/^\d+(\.\d{1,2})?$/.test(s)) return null;
+  const [ent, dec = ''] = s.split('.');
+  const cents = Number(ent) * 100 + Number((dec + '00').slice(0, 2));
+  return Number.isSafeInteger(cents) ? cents : null;
+}
+
+function formatRate(r) {
+  return Number(r).toLocaleString('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' %';
+}
+
+// ---------- IBAN ----------
+function mod97(numStr) {
+  let r = 0;
+  for (let i = 0; i < numStr.length; i += 7) r = Number(String(r) + numStr.slice(i, i + 7)) % 97;
+  return r;
+}
+function lettersToDigits(s) {
+  return s.toUpperCase().replace(/[A-Z]/g, (c) => String(c.charCodeAt(0) - 55));
+}
+function normalizeIban(iban) {
+  return String(iban || '').replace(/\s+/g, '').toUpperCase();
+}
+function isValidIban(iban) {
+  const s = normalizeIban(iban);
+  if (!/^[A-Z]{2}\d{2}[A-Z0-9]{10,30}$/.test(s)) return false;
+  return mod97(lettersToDigits(s.slice(4) + s.slice(0, 4))) === 1;
+}
+function formatIban(iban) {
+  return normalizeIban(iban).replace(/(.{4})/g, '$1 ').trim();
+}
+// Génère un IBAN français valide (clé RIB + clé IBAN) à partir d'un numéro de compte
+function generateFrenchIban(bankCode, branchCode, accountNumber) {
+  const acc = String(accountNumber).padStart(11, '0');
+  const ribKey = 97 - Number((89n * BigInt(bankCode) + 15n * BigInt(branchCode) + 3n * BigInt(acc)) % 97n);
+  const bban = bankCode + branchCode + acc + String(ribKey).padStart(2, '0');
+  const check = 98 - mod97(lettersToDigits(bban + 'FR00'));
+  return 'FR' + String(check).padStart(2, '0') + bban;
+}
+
+// ---------- Dates ----------
+function parseDbDate(s) {
+  if (s instanceof Date) return s;
+  return new Date(String(s).replace(' ', 'T') + (String(s).endsWith('Z') ? '' : 'Z'));
+}
+function toDbDate(d) {
+  return d.toISOString().slice(0, 19).replace('T', ' ');
+}
+function addMonths(d, n) {
+  const r = new Date(d.getTime());
+  r.setUTCMonth(r.getUTCMonth() + n);
+  return r;
+}
+function boostEndDate(account, product) {
+  if (!product.boosted_rate || !product.boost_months) return null;
+  return addMonths(parseDbDate(account.opened_at), product.boost_months);
+}
+
+// ---------- Intérêts ----------
+// Intérêts calculés au jour le jour sur le solde de fin de journée, depuis last_interest_at.
+// `txs` : opérations du compte postérieures à last_interest_at (created_at, amount_cents).
+// Renvoie { cents, until } : `until` = date jusqu'à laquelle les intérêts sont arrêtés (jours entiers).
+function computeInterest(account, product, txs, now = new Date()) {
+  const start = parseDbDate(account.last_interest_at);
+  const days = Math.floor((now - start) / DAY_MS);
+  if (days <= 0) return { cents: 0, exact: 0, until: start };
+
+  const sorted = txs
+    .map((t) => ({ at: parseDbDate(t.created_at).getTime(), amount: t.amount_cents }))
+    .sort((a, b) => a.at - b.at);
+  let balance = account.balance_cents - sorted.reduce((s, t) => s + t.amount, 0);
+
+  const boostEnd = boostEndDate(account, product);
+  const cap = product.boost_cap_cents;
+  let total = 0;
+  let i = 0;
+  for (let d = 1; d <= days; d++) {
+    const dayEnd = start.getTime() + d * DAY_MS;
+    while (i < sorted.length && sorted[i].at <= dayEnd) balance += sorted[i++].amount;
+    if (balance <= 0) continue;
+    const dayStart = dayEnd - DAY_MS;
+    if (boostEnd && dayStart < boostEnd.getTime()) {
+      const boosted = cap ? Math.min(balance, cap) : balance;
+      total += (boosted * product.boosted_rate + (balance - boosted) * product.base_rate) / 100 / 365;
+    } else {
+      total += (balance * product.base_rate) / 100 / 365;
+    }
+  }
+  return { cents: Math.floor(total), exact: total, until: new Date(start.getTime() + days * DAY_MS) };
+}
+
+// Taux actuellement appliqué au compte
+function currentRate(account, product, now = new Date()) {
+  const end = boostEndDate(account, product);
+  if (end && now < end) return { rate: product.boosted_rate, boosted: true, until: end };
+  return { rate: product.base_rate, boosted: false, until: null };
+}
+
+module.exports = {
+  formatEuros, parseEuros, formatRate,
+  isValidIban, normalizeIban, formatIban, generateFrenchIban,
+  parseDbDate, toDbDate, addMonths, boostEndDate,
+  computeInterest, currentRate, DAY_MS,
+};

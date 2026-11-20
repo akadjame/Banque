@@ -1,0 +1,63 @@
+<%- include('partials/head') %>
+<main class="form-page"><div class="container">
+  <form class="form-card" method="post" action="/ouvrir-un-livret" autocomplete="on">
+    <input type="hidden" name="_csrf" value="<%= csrf %>">
+    <h1>Ouvrir mon livret</h1>
+    <p class="muted">Gratuit, sans engagement, en 5 minutes.</p>
+    <% if (error) { %><div class="alert alert-error"><%= error %></div><% } %>
+
+    <fieldset>
+      <legend>1. Mon livret</legend>
+      <div class="choice">
+        <% offer.products.forEach((p, i) => { %>
+        <label><input type="radio" name="product_id" value="<%= p.id %>" <%= (values.product_id ? values.product_id == p.id : i === 0) ? 'checked' : '' %>>
+          <span><strong><%= p.name %></strong><br><span class="small muted"><%= rate(p.boosted_rate || p.base_rate) %><%= p.boosted_rate ? ` ${p.boost_months} mois puis ${rate(p.base_rate)}` : '' %></span></span></label>
+        <% }) %>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>2. Mon identité</legend>
+      <div class="row-3">
+        <div><label for="civility">Civilité</label>
+          <select id="civility" name="civility"><option value="M." <%= values.civility === 'M.' ? 'selected' : '' %>>M.</option><option value="Mme" <%= values.civility === 'Mme' ? 'selected' : '' %>>Mme</option></select></div>
+        <div><label for="birth_date">Date de naissance</label><input type="date" id="birth_date" name="birth_date" value="<%= values.birth_date || '' %>" required></div>
+      </div>
+      <div class="row">
+        <div><label for="first_name">Prénom</label><input id="first_name" name="first_name" value="<%= values.first_name || '' %>" required autocomplete="given-name"></div>
+        <div><label for="last_name">Nom</label><input id="last_name" name="last_name" value="<%= values.last_name || '' %>" required autocomplete="family-name"></div>
+      </div>
+      <div class="row">
+        <div><label for="email">E-mail</label><input type="email" id="email" name="email" value="<%= values.email || '' %>" required autocomplete="email"></div>
+        <div><label for="phone">Téléphone mobile</label><input type="tel" id="phone" name="phone" value="<%= values.phone || '' %>" autocomplete="tel"></div>
+      </div>
+      <label for="address">Adresse</label><input id="address" name="address" value="<%= values.address || '' %>" required autocomplete="street-address">
+      <div class="row-3">
+        <div><label for="postal_code">Code postal</label><input id="postal_code" name="postal_code" value="<%= values.postal_code || '' %>" required autocomplete="postal-code"></div>
+        <div><label for="city">Ville</label><input id="city" name="city" value="<%= values.city || '' %>" required autocomplete="address-level2"></div>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>3. Mon compte de référence</legend>
+      <p class="small muted">Votre compte courant, à votre nom, dans une autre banque. Les versements partent de ce compte et les retraits y sont reversés.</p>
+      <label for="reference_iban">IBAN</label><input id="reference_iban" name="reference_iban" class="mono" value="<%= values.reference_iban ? iban(values.reference_iban) : '' %>" placeholder="FR76 ...." required>
+      <label for="reference_holder">Titulaire du compte</label><input id="reference_holder" name="reference_holder" value="<%= values.reference_holder || '' %>" required>
+    </fieldset>
+
+    <fieldset>
+      <legend>4. Mes accès</legend>
+      <div class="row">
+        <div><label for="password">Mot de passe</label><input type="password" id="password" name="password" minlength="10" required autocomplete="new-password"></div>
+        <div><label for="password2">Confirmation</label><input type="password" id="password2" name="password2" minlength="10" required autocomplete="new-password"></div>
+      </div>
+      <p class="small muted">10 caractères minimum avec une majuscule, une minuscule et un chiffre.</p>
+      <label for="parrain">Code parrain (facultatif)</label><input id="parrain" name="parrain" value="<%= values.parrain || '' %>">
+    </fieldset>
+
+    <label class="check" style="margin-top:22px"><input type="checkbox" name="cgu" value="1" required> <span>J'accepte les conditions générales et je certifie être majeur et résident fiscal français.</span></label>
+    <button class="btn btn-violet btn-block" style="margin-top:22px" type="submit">Valider ma demande</button>
+    <p class="small muted center">Déjà client ? <a href="/connexion">Connectez-vous</a></p>
+  </form>
+</div></main>
+<%- include('partials/foot') %>

@@ -1,0 +1,46 @@
+<%- include('../partials/client-top') %>
+<div class="page-head"><h1>Mon profil</h1></div>
+<div class="grid grid-2">
+  <div class="card">
+    <h2>Mes informations</h2>
+    <dl class="kv">
+      <dt>Nom</dt><dd><%= user.civility || '' %> <%= user.first_name %> <%= user.last_name %></dd>
+      <dt>E-mail</dt><dd><%= user.email %></dd>
+      <dt>Né(e) le</dt><dd><%= user.birth_date ? user.birth_date.split('-').reverse().join('/') : '—' %></dd>
+      <dt>N° client</dt><dd class="mono"><%= user.client_number %></dd>
+      <dt>Client depuis</dt><dd><%= date(user.created_at) %></dd>
+    </dl>
+    <form method="post" action="/espace/profil" style="margin-top:12px">
+      <input type="hidden" name="_csrf" value="<%= csrf %>"><input type="hidden" name="action" value="coordonnees">
+      <label for="phone">Téléphone</label><input id="phone" name="phone" value="<%= user.phone || '' %>">
+      <label for="address">Adresse</label><input id="address" name="address" value="<%= user.address || '' %>">
+      <div class="row-3"><div><label for="postal_code">Code postal</label><input id="postal_code" name="postal_code" value="<%= user.postal_code || '' %>"></div>
+        <div><label for="city">Ville</label><input id="city" name="city" value="<%= user.city || '' %>"></div></div>
+      <button class="btn btn-violet btn-sm" style="margin-top:14px">Enregistrer</button>
+    </form>
+  </div>
+  <div>
+    <div class="card">
+      <h2>Compte de référence</h2>
+      <p class="small muted">Compte courant à votre nom vers lequel sont virés vos retraits.</p>
+      <form method="post" action="/espace/profil" data-confirm="Modifier votre compte de référence ?">
+        <input type="hidden" name="_csrf" value="<%= csrf %>"><input type="hidden" name="action" value="reference">
+        <label for="reference_iban">IBAN</label><input id="reference_iban" class="mono" name="reference_iban" value="<%= user.reference_iban ? iban(user.reference_iban) : '' %>" required>
+        <label for="reference_holder">Titulaire</label><input id="reference_holder" name="reference_holder" value="<%= user.reference_holder || '' %>" required>
+        <label for="ref_pw">Mot de passe (confirmation)</label><input type="password" id="ref_pw" name="password" required autocomplete="current-password">
+        <button class="btn btn-violet btn-sm" style="margin-top:14px">Modifier</button>
+      </form>
+    </div>
+    <div class="card">
+      <h2>Mot de passe</h2>
+      <form method="post" action="/espace/profil">
+        <input type="hidden" name="_csrf" value="<%= csrf %>"><input type="hidden" name="action" value="password">
+        <label for="current">Mot de passe actuel</label><input type="password" id="current" name="current" required autocomplete="current-password">
+        <label for="password">Nouveau mot de passe</label><input type="password" id="password" name="password" required minlength="10" autocomplete="new-password">
+        <label for="password2">Confirmation</label><input type="password" id="password2" name="password2" required minlength="10" autocomplete="new-password">
+        <button class="btn btn-violet btn-sm" style="margin-top:14px">Changer</button>
+      </form>
+    </div>
+  </div>
+</div>
+<%- include('../partials/client-bottom') %>

@@ -1,0 +1,44 @@
+<%- include('../partials/client-top') %>
+<div class="page-head"><h1>Demander un retrait</h1></div>
+<div class="grid grid-2">
+  <div class="card">
+    <h2>Nouveau retrait</h2>
+    <% if (!user.reference_iban) { %>
+      <div class="alert alert-warn">Ajoutez un compte de référence dans <a href="/espace/profil">votre profil</a> pour pouvoir effectuer un retrait.</div>
+    <% } else { %>
+    <form method="post" action="/espace/retrait" data-confirm="Confirmer la demande de retrait ?">
+      <input type="hidden" name="_csrf" value="<%= csrf %>">
+      <label for="account_id">Depuis le livret</label>
+      <select id="account_id" name="account_id">
+        <% accounts.filter(a => a.status === 'actif').forEach(a => { %><option value="<%= a.id %>"><%= a.product.name %> — disponible <%= eur(a.available) %></option><% }) %>
+      </select>
+      <label for="amount">Montant (€)</label>
+      <input id="amount" name="amount" inputmode="decimal" placeholder="0,00" required>
+      <label for="note">Motif (facultatif)</label>
+      <input id="note" name="note" maxlength="140">
+      <label>Vers mon compte de référence</label>
+      <div class="alert alert-info mono" style="margin:0"><%= iban(user.reference_iban) %><br><span class="small" style="font-family:inherit"><%= user.reference_holder %></span></div>
+      <button class="btn btn-violet btn-block" style="margin-top:18px" type="submit" <%= user.status !== 'actif' ? 'disabled' : '' %>>Valider le retrait</button>
+    </form>
+    <p class="small muted">Les fonds sont virés sous 24 à 48 h ouvrées. Les retraits sont uniquement possibles vers votre compte de référence, pour votre sécurité.</p>
+    <% } %>
+  </div>
+  <div class="card">
+    <h2>Mes demandes</h2>
+    <% if (!requests.length) { %><p class="muted">Aucune demande.</p><% } %>
+    <div class="table-wrap"><table>
+      <% requests.forEach(w => { %>
+      <tr>
+        <td><%= date(w.created_at) %><div class="small muted"><%= w.product_name %></div></td>
+        <td class="amt-neg"><%= eur(w.amount_cents) %></td>
+        <td><span class="chip <%= { en_attente: 'orange', effectue: 'green', refuse: 'red', annule: '' }[w.status] %>"><%= statusLabels[w.status] %></span>
+          <% if (w.admin_note) { %><div class="small muted"><%= w.admin_note %></div><% } %></td>
+        <td><% if (w.status === 'en_attente') { %>
+          <form method="post" action="/espace/retrait/<%= w.id %>/annuler" data-confirm="Annuler cette demande ?">
+            <input type="hidden" name="_csrf" value="<%= csrf %>"><button class="btn btn-light btn-sm">Annuler</button></form><% } %></td>
+      </tr>
+      <% }) %>
+    </table></div>
+  </div>
+</div>
+<%- include('../partials/client-bottom') %>

@@ -1,0 +1,48 @@
+<%- include('../partials/client-top') %>
+<div class="page-head">
+  <div><h1><%= account.product.name %></h1><div class="small muted mono"><%= iban(account.iban) %></div></div>
+  <div class="actions">
+    <a class="btn btn-light btn-sm" href="/espace/compte/<%= account.id %>/rib">RIB</a>
+    <a class="btn btn-violet btn-sm" href="/espace/retrait">Retrait</a>
+  </div>
+</div>
+
+<div class="grid grid-4" style="margin-bottom:22px">
+  <div class="stat"><div class="k">Solde</div><div class="v"><%= eur(account.balance_cents) %></div></div>
+  <div class="stat"><div class="k">Disponible</div><div class="v"><%= eur(account.available) %></div><% if (account.pending) { %><div class="small muted"><%= eur(account.pending) %> en cours de retrait</div><% } %></div>
+  <div class="stat"><div class="k">Intérêts acquis</div><div class="v amt-pos"><%= eur(account.accrued.cents) %></div><div class="small muted">depuis le <%= date(account.last_interest_at) %></div></div>
+  <div class="stat"><div class="k">Taux actuel</div><div class="v"><%= rate(account.rate.rate) %></div>
+    <div class="small muted"><%= account.rate.boosted ? `boosté jusqu'au ${account.rate.until.toLocaleDateString('fr-FR')}` : 'taux de base' %></div></div>
+</div>
+
+<div class="card">
+  <div class="page-head" style="margin-bottom:10px">
+    <h2 style="margin:0">Opérations</h2>
+    <% if (months.length) { %>
+    <form method="get" action="/espace/compte/<%= account.id %>/releve" class="inline-form" style="max-width:340px">
+      <select name="mois"><% months.forEach(mo => { %><option value="<%= mo %>"><%= new Date(mo + '-01').toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' }) %></option><% }) %></select>
+      <button class="btn btn-light btn-sm" type="submit">Relevé</button>
+    </form>
+    <% } %>
+  </div>
+  <div class="tabs">
+    <a href="?" class="<%= !type ? 'active' : '' %>">Toutes</a>
+    <% Object.entries(txLabels).forEach(([k, v]) => { %><a href="?type=<%= k %>" class="<%= type === k ? 'active' : '' %>"><%= v %></a><% }) %>
+  </div>
+  <% if (!txs.length) { %><p class="muted">Aucune opération.</p><% } else { %>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Date</th><th>Libellé</th><th>Type</th><th style="text-align:right">Montant</th><th style="text-align:right">Solde</th></tr></thead>
+    <tbody>
+    <% txs.forEach(t => { %>
+      <tr><td><%= datetime(t.created_at) %></td><td><%= t.label %></td><td><span class="chip"><%= txLabels[t.type] %></span></td>
+      <td style="text-align:right" class="<%= t.amount_cents > 0 ? 'amt-pos' : 'amt-neg' %>"><%= eur(t.amount_cents, { sign: true }) %></td>
+      <td style="text-align:right" class="muted"><%= eur(t.balance_after_cents) %></td></tr>
+    <% }) %>
+    </tbody>
+  </table></div>
+  <% if (pages > 1) { %><div class="pager">
+    <% for (let p = 1; p <= pages; p++) { %><% if (p === page) { %><span><%= p %></span><% } else { %><a href="?<%= type ? 'type=' + type + '&' : '' %>page=<%= p %>"><%= p %></a><% } %><% } %>
+  </div><% } %>
+  <% } %>
+</div>
+<%- include('../partials/client-bottom') %>

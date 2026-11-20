@@ -1,0 +1,23 @@
+<%- include('../partials/admin-top') %>
+<div class="page-head"><h1>Clients</h1><a class="btn btn-violet btn-sm" href="/admin/clients/nouveau">+ Nouveau client</a></div>
+<form class="card inline-form" method="get">
+  <div><label for="q">Recherche</label><input id="q" name="q" value="<%= q %>" placeholder="Nom, e-mail, n° client"></div>
+  <div><label for="status">Statut</label><select id="status" name="status"><option value="">Tous</option>
+    <% ['en_attente','actif','bloque','cloture'].forEach(s => { %><option value="<%= s %>" <%= status === s ? 'selected' : '' %>><%= statusLabels[s] %></option><% }) %></select></div>
+  <div style="flex:0 0 auto"><button class="btn btn-light">Filtrer</button></div>
+</form>
+<div class="card table-wrap">
+  <table>
+    <thead><tr><th>Client</th><th>N° client</th><th>Inscription</th><th>Statut</th><th style="text-align:right">Épargne</th></tr></thead>
+    <tbody>
+    <% clients.forEach(c => { %>
+      <tr><td><a href="/admin/clients/<%= c.id %>"><strong><%= c.first_name %> <%= c.last_name %></strong></a><div class="small muted"><%= c.email %></div></td>
+        <td class="mono small"><%= c.client_number %></td><td class="small"><%= date(c.created_at) %></td>
+        <td><span class="chip <%= { en_attente: 'orange', actif: 'green', bloque: 'red', cloture: '' }[c.status] %>"><%= statusLabels[c.status] %></span></td>
+        <td style="text-align:right"><strong><%= eur(c.total) %></strong></td></tr>
+    <% }) %>
+    <% if (!clients.length) { %><tr><td colspan="5" class="muted">Aucun client.</td></tr><% } %>
+    </tbody>
+  </table>
+</div>
+<%- include('../partials/admin-bottom') %>

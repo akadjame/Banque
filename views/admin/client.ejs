@@ -1,0 +1,137 @@
+<%- include('../partials/admin-top') %>
+<div class="page-head">
+  <div>
+    <h1><%= customer.civility || '' %> <%= customer.first_name %> <%= customer.last_name %></h1>
+    <span class="chip <%= { en_attente: 'orange', actif: 'green', bloque: 'red', cloture: '' }[customer.status] %>"><%= statusLabels[customer.status] %></span>
+    <span class="small muted">N° <span class="mono"><%= customer.client_number %></span> · inscrit le <%= date(customer.created_at) %> · dernière connexion <%= datetime(customer.last_login_at) %></span>
+  </div>
+  <form method="post" action="/admin/clients/<%= customer.id %>/statut" class="actions">
+    <input type="hidden" name="_csrf" value="<%= csrf %>">
+    <% if (customer.status !== 'actif') { %><button class="btn btn-success btn-sm" name="status" value="actif">Valider / activer</button><% } %>
+    <% if (customer.status !== 'bloque') { %><button class="btn btn-danger btn-sm" name="status" value="bloque" data-confirm="Bloquer ce client ?">Bloquer</button><% } %>
+  </form>
+</div>
+
+<h2 style="font-size:1.2rem">Livrets</h2>
+<div class="grid grid-2" style="margin-bottom:22px">
+<% accounts.forEach(a => { %>
+  <div class="card" style="margin:0">
+    <div style="display:flex;justify-content:space-between;gap:8px;align-items:center">
+      <strong><%= a.product.name %></strong>
+      <span class="chip <%= a.status === 'actif' ? 'green' : 'red' %>"><%= statusLabels[a.status] %></span>
+    </div>
+    <div style="font-size:1.8rem;font-weight:800"><%= eur(a.balance_cents) %></div>
+    <div class="small muted mono"><%= iban(a.iban) %></div>
+    <div class="small">Taux : <strong><%= rate(a.rate.rate) %></strong><%= a.rate.boosted ? ` (boosté jusqu'au ${a.rate.until.toLocaleDateString('fr-FR')})` : '' %> ·
+      Intérêts acquis : <strong class="amt-pos"><%= eur(a.accrued.cents) %></strong><% if (a.pending) { %> · <span class="chip orange"><%= eur(a.pending) %> en retrait</span><% } %></div>
+
+    <% if (a.status !== 'cloture') { %>
+    <form method="post" action="/admin/comptes/<%= a.id %>/operation" style="margin-top:14px" data-confirm="Confirmer l'opération ?">
+      <input type="hidden" name="_csrf" value="<%= csrf %>">
+      <div class="inline-form">
+        <div><label>Opération</label><select name="kind">
+          <option value="credit">Créditer (versement reçu)</option>
+          <option value="prime">Créditer (prime / geste)</option>
+          <option value="debit">Débiter (régularisation)</option>
+        </select></div>
+        <div><label>Montant (€)</label><input name="amount" inputmode="decimal" placeholder="0,00" required></div>
+      </div>
+      <label>Libellé (visible par le client)</label><input name="label" placeholder="Ex : Virement reçu de M. Dupont" maxlength="120">
+      <button class="btn btn-violet btn-sm" style="margin-top:10px">Enregistrer</button>
+    </form>
+    <div class="actions" style="margin-top:10px">
+      <form method="post" action="/admin/comptes/<%= a.id %>/interets"><input type="hidden" name="_csrf" value="<%= csrf %>"><button class="btn btn-light btn-sm">Verser les intérêts</button></form>
+      <form method="post" action="/admin/comptes/<%= a.id %>/statut"><input type="hidden" name="_csrf" value="<%= csrf %>">
+        <% if (a.status === 'actif') { %><button class="btn btn-light btn-sm" name="status" value="bloque">Bloquer le livret</button><% } else { %><button class="btn btn-light btn-sm" name="status" value="actif">Débloquer</button><% } %>
+        <button class="btn btn-light btn-sm" name="status" value="cloture" data-confirm="Clôturer ce livret ? (solde à zéro requis)">Clôturer</button></form>
+    </div>
+    <% } %>
+  </div>
+<% }) %>
+  <% if (openable.length) { %>
+  <form class="card" style="margin:0" method="post" action="/admin/clients/<%= customer.id %>/ouvrir">
+    <input type="hidden" name="_csrf" value="<%= csrf %>">
+    <h2>Ouvrir un livret</h2>
+    <select name="product_id"><% openable.forEach(p => { %><option value="<%= p.id %>"><%= p.name %></option><% }) %></select>
+    <button class="btn btn-light btn-sm" style="margin-top:10px">Ouvrir</button>
+  </form>
+  <% } %>
+</div>
+
+<div class="grid grid-2">
+  <div class="card">
+    <h2>Primes</h2>
+    <div class="actions">
+      <form method="post" action="/admin/clients/<%= customer.id %>/prime-bienvenue" data-confirm="Verser la prime de bienvenue (<%= eur(offer.welcome) %>) ?">
+        <input type="hidden" name="_csrf" value="<%= csrf %>">
+        <button class="btn btn-sm <%= customer.welcome_paid ? 'btn-light' : 'btn-violet' %>" <%= customer.welcome_paid ? 'disabled' : '' %>><%= customer.welcome_paid ? 'Prime de bienvenue versée ✓' : `Verser la prime de bienvenue (${eur(offer.welcome)})` %></button>
+      </form>
+      <% if (parrain) { %>
+      <form method="post" action="/admin/clients/<%= customer.id %>/parrainage" data-confirm="Verser les primes de parrainage ?">
+        <input type="hidden" name="_csrf" value="<%= csrf %>">
+        <button class="btn btn-sm <%= customer.referral_paid ? 'btn-light' : 'btn-violet' %>" <%= customer.referral_paid ? 'disabled' : '' %>><%= customer.referral_paid ? 'Parrainage versé ✓' : 'Verser le parrainage' %></button>
+      </form>
+      <% } %>
+    </div>
+    <p class="small" style="margin-top:12px">Parrain : <% if (parrain) { %><a href="/admin/clients/<%= parrain.id %>"><%= parrain.first_name %> <%= parrain.last_name %></a><% } else { %>—<% } %> · Code de parrainage : <span class="mono"><%= customer.referral_code %></span></p>
+    <% if (filleuls.length) { %><p class="small">Filleuls : <% filleuls.forEach((f, i) => { %><a href="/admin/clients/<%= f.id %>"><%= f.first_name %> <%= f.last_name %></a><%= f.referral_paid ? ' ✓' : '' %><%= i < filleuls.length - 1 ? ', ' : '' %><% }) %></p><% } %>
+  </div>
+
+  <div class="card">
+    <h2>Retraits</h2>
+    <% if (!withdrawals.length) { %><p class="muted small">Aucune demande.</p><% } %>
+    <table><% withdrawals.forEach(w => { %>
+      <tr><td class="small"><%= date(w.created_at) %></td><td><strong><%= eur(w.amount_cents) %></strong></td>
+        <td><span class="chip <%= { en_attente: 'orange', effectue: 'green', refuse: 'red', annule: '' }[w.status] %>"><%= statusLabels[w.status] %></span></td></tr>
+    <% }) %></table>
+    <% if (withdrawals.some(w => w.status === 'en_attente')) { %><a class="btn btn-light btn-sm" href="/admin/retraits">Traiter</a><% } %>
+  </div>
+</div>
+
+<div class="grid grid-2">
+  <form class="card" method="post" action="/admin/clients/<%= customer.id %>/infos">
+    <input type="hidden" name="_csrf" value="<%= csrf %>">
+    <h2>Informations</h2>
+    <dl class="kv"><dt>E-mail</dt><dd><%= customer.email %></dd><dt>Naissance</dt><dd><%= customer.birth_date ? customer.birth_date.split('-').reverse().join('/') : '—' %></dd></dl>
+    <label>Téléphone</label><input name="phone" value="<%= customer.phone || '' %>">
+    <label>Adresse</label><input name="address" value="<%= customer.address || '' %>">
+    <div class="row-3"><div><label>CP</label><input name="postal_code" value="<%= customer.postal_code || '' %>"></div><div><label>Ville</label><input name="city" value="<%= customer.city || '' %>"></div></div>
+    <label>IBAN de référence</label><input class="mono" name="reference_iban" value="<%= customer.reference_iban ? iban(customer.reference_iban) : '' %>">
+    <label>Titulaire</label><input name="reference_holder" value="<%= customer.reference_holder || '' %>">
+    <button class="btn btn-light btn-sm" style="margin-top:12px">Enregistrer</button>
+  </form>
+  <div>
+    <div class="card" id="messages">
+      <h2>Messagerie</h2>
+      <div class="thread" style="max-height:300px">
+        <% if (!msgs.length) { %><p class="muted small">Aucun message.</p><% } %>
+        <% msgs.forEach(msg => { %><div class="msg <%= msg.from_admin ? 'me' : '' %>"><% if (msg.subject) { %><strong><%= msg.subject %></strong><br><% } %><%= msg.body %><div class="meta"><%= msg.from_admin ? 'Conseiller' : 'Client' %> · <%= datetime(msg.created_at) %></div></div><% }) %>
+      </div>
+      <form method="post" action="/admin/clients/<%= customer.id %>/message" style="margin-top:12px">
+        <input type="hidden" name="_csrf" value="<%= csrf %>">
+        <textarea name="body" rows="3" required placeholder="Répondre au client…"></textarea>
+        <button class="btn btn-violet btn-sm" style="margin-top:8px">Envoyer</button>
+      </form>
+    </div>
+    <form class="card" method="post" action="/admin/clients/<%= customer.id %>/mot-de-passe" data-confirm="Réinitialiser le mot de passe ?">
+      <input type="hidden" name="_csrf" value="<%= csrf %>">
+      <h2>Réinitialiser le mot de passe</h2>
+      <input name="password" placeholder="Nouveau mot de passe provisoire" minlength="10" required>
+      <button class="btn btn-light btn-sm" style="margin-top:8px">Réinitialiser</button>
+    </form>
+  </div>
+</div>
+
+<div class="card">
+  <h2>Historique des opérations</h2>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Date</th><th>Livret</th><th>Libellé</th><th>Type</th><th>Par</th><th style="text-align:right">Montant</th><th style="text-align:right">Solde</th></tr></thead>
+    <tbody><% txs.forEach(t => { %>
+      <tr><td class="small"><%= datetime(t.created_at) %></td><td class="small"><%= t.product_name %></td><td><%= t.label %></td><td><span class="chip"><%= txLabels[t.type] %></span></td>
+        <td class="small muted"><%= t.admin_name || 'Système' %></td>
+        <td style="text-align:right" class="<%= t.amount_cents > 0 ? 'amt-pos' : 'amt-neg' %>"><%= eur(t.amount_cents, { sign: true }) %></td>
+        <td style="text-align:right" class="muted"><%= eur(t.balance_after_cents) %></td></tr>
+    <% }) %></tbody>
+  </table></div>
+</div>
+<%- include('../partials/admin-bottom') %>

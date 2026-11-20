@@ -1,0 +1,14 @@
+<%- include('head') %>
+<div class="app">
+  <aside class="side no-print">
+    <div class="side-title">Administration</div>
+    <a href="/admin" class="<%= path === '/' ? 'active' : '' %>">📊 Tableau de bord</a>
+    <a href="/admin/clients" class="<%= path.startsWith('/clients') ? 'active' : '' %>">👥 Clients<% if (counts.pendingUsers) { %><span class="count"><%= counts.pendingUsers %></span><% } %></a>
+    <a href="/admin/retraits" class="<%= path === '/retraits' ? 'active' : '' %>">⬆️ Retraits<% if (counts.pendingWithdrawals) { %><span class="count"><%= counts.pendingWithdrawals %></span><% } %></a>
+    <a href="/admin/messages" class="<%= path === '/messages' ? 'active' : '' %>">💬 Messagerie<% if (counts.unread) { %><span class="count"><%= counts.unread %></span><% } %></a>
+    <div class="side-title">Configuration</div>
+    <a href="/admin/parametres" class="<%= path === '/parametres' ? 'active' : '' %>">⚙️ Offres & taux</a>
+    <a href="/admin/journal" class="<%= path === '/journal' ? 'active' : '' %>">📜 Journal</a>
+  </aside>
+  <main class="main">
+    <%- include('flash') %>

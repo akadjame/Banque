@@ -1,0 +1,52 @@
+<%- include('../partials/client-top') %>
+<div class="page-head">
+  <h1>Bonjour <%= user.first_name %> 👋</h1>
+  <span class="muted small">N° client <span class="mono"><%= user.client_number %></span></span>
+</div>
+
+<div class="grid grid-2" style="margin-bottom:22px">
+  <div class="balance-card">
+    <div class="label">Épargne totale</div>
+    <div class="value"><%= eur(total) %></div>
+    <div class="label" style="margin-top:10px">Intérêts acquis non encore versés : <strong><%= eur(totalAccrued) %></strong></div>
+    <div class="label">Intérêts versés cette année : <strong><%= eur(interestYear) %></strong></div>
+  </div>
+  <div class="card" style="margin:0;display:flex;flex-direction:column;justify-content:center;gap:10px">
+    <a class="btn btn-violet" href="/espace/versement">Alimenter mon livret</a>
+    <a class="btn btn-light" href="/espace/retrait">Demander un retrait</a>
+  </div>
+</div>
+
+<h2 style="font-size:1.2rem">Mes livrets</h2>
+<div class="grid grid-2" style="margin-bottom:22px">
+  <% accounts.forEach(a => { %>
+  <a class="acct" href="/espace/compte/<%= a.id %>">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:8px">
+      <span class="name"><%= a.product.name %></span>
+      <% if (a.rate.boosted) { %><span class="chip violet">Boosté <%= rate(a.rate.rate) %></span><% } else { %><span class="chip"><%= rate(a.rate.rate) %></span><% } %>
+    </div>
+    <div class="bal"><%= eur(a.balance_cents) %></div>
+    <div class="small muted mono"><%= iban(a.iban) %></div>
+    <div class="small" style="margin-top:6px">Intérêts acquis : <strong class="amt-pos"><%= eur(a.accrued.cents) %></strong></div>
+    <% if (a.rate.boosted) { %><div class="small muted">Taux boosté jusqu'au <%= a.rate.until.toLocaleDateString('fr-FR') %></div><% } %>
+    <% if (a.status !== 'actif') { %><span class="chip red"><%= statusLabels[a.status] %></span><% } %>
+  </a>
+  <% }) %>
+  <% if (!accounts.length) { %><div class="card">Aucun livret. <a href="/espace/ouvrir">Ouvrir un livret</a></div><% } %>
+</div>
+
+<div class="card">
+  <h2>Dernières opérations</h2>
+  <% if (!recent.length) { %><p class="muted">Aucune opération pour le moment. Faites votre premier versement pour commencer à épargner.</p><% } else { %>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Date</th><th>Libellé</th><th>Livret</th><th style="text-align:right">Montant</th></tr></thead>
+    <tbody>
+    <% recent.forEach(t => { %>
+      <tr><td><%= date(t.created_at) %></td><td><%= t.label %></td><td class="small muted"><%= t.product_name %></td>
+        <td style="text-align:right" class="<%= t.amount_cents > 0 ? 'amt-pos' : 'amt-neg' %>"><%= eur(t.amount_cents, { sign: true }) %></td></tr>
+    <% }) %>
+    </tbody>
+  </table></div>
+  <% } %>
+</div>
+<%- include('../partials/client-bottom') %>

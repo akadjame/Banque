@@ -1,0 +1,26 @@
+<%- include('../partials/client-top') %>
+<div class="print-doc">
+  <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:20px">
+    <div><strong><%= bank.name %> <%= bank.subtitle %></strong><br><span class="small"><%= bank.legalName %></span></div>
+    <div style="text-align:right"><%= user.civility || '' %> <%= user.first_name %> <%= user.last_name.toUpperCase() %><br><%= user.address %><br><%= user.postal_code %> <%= user.city %></div>
+  </div>
+  <h1 style="margin-top:30px">Relevé de compte — <%= new Date(month + '-01').toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' }) %></h1>
+  <p><%= account.product.name %> — <span class="mono"><%= iban(account.iban) %></span></p>
+  <table>
+    <thead><tr><th>Date</th><th>Libellé</th><th style="text-align:right">Débit</th><th style="text-align:right">Crédit</th></tr></thead>
+    <tbody>
+      <tr><td></td><td><strong>Solde au début de la période</strong></td><td></td><td style="text-align:right"><strong><%= eur(opening) %></strong></td></tr>
+      <% txs.forEach(t => { %>
+      <tr><td><%= date(t.created_at) %></td><td><%= t.label %></td>
+        <td style="text-align:right"><%= t.amount_cents < 0 ? eur(-t.amount_cents) : '' %></td>
+        <td style="text-align:right"><%= t.amount_cents > 0 ? eur(t.amount_cents) : '' %></td></tr>
+      <% }) %>
+      <tr><td></td><td><strong>Solde en fin de période</strong></td><td></td><td style="text-align:right"><strong><%= eur(closing) %></strong></td></tr>
+    </tbody>
+  </table>
+  <div class="actions no-print" style="margin-top:20px">
+    <button class="btn btn-violet btn-sm" data-print>Imprimer / PDF</button>
+    <a class="btn btn-light btn-sm" href="/espace/compte/<%= account.id %>">Retour</a>
+  </div>
+</div>
+<%- include('../partials/client-bottom') %>

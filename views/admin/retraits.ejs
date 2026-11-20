@@ -1,0 +1,36 @@
+<%- include('../partials/admin-top') %>
+<div class="page-head"><h1>Demandes de retrait</h1></div>
+<div class="tabs">
+  <% ['en_attente','effectue','refuse','annule'].forEach(s => { %><a href="?status=<%= s %>" class="<%= status === s ? 'active' : '' %>"><%= statusLabels[s] %></a><% }) %>
+</div>
+<% if (status === 'en_attente') { %>
+<div class="alert alert-info">Pour chaque demande : émettez le virement vers l'IBAN de référence depuis le compte de l'établissement, puis cliquez sur « Virement effectué » pour débiter le livret.</div>
+<% } %>
+<% if (!list.length) { %><div class="card muted">Aucune demande.</div><% } %>
+<% list.forEach(w => { %>
+<div class="card">
+  <div class="page-head" style="margin-bottom:8px">
+    <div><a href="/admin/clients/<%= w.user_id %>"><strong><%= w.first_name %> <%= w.last_name %></strong></a> · <%= w.product_name %>
+      <div class="small muted">Demandé le <%= datetime(w.created_at) %><%= w.processed_at ? ' · traité le ' + datetime(w.processed_at) : '' %></div></div>
+    <div style="font-size:1.6rem;font-weight:800"><%= eur(w.amount_cents) %></div>
+  </div>
+  <dl class="kv">
+    <dt>Vers (référence)</dt><dd class="mono"><%= iban(w.destination_iban) %> <button class="btn btn-light btn-sm" data-copy="<%= w.destination_iban %>">Copier</button></dd>
+    <dt>Titulaire</dt><dd><%= w.reference_holder || '—' %></dd>
+    <dt>Solde du livret</dt><dd><%= eur(w.balance_cents) %></dd>
+    <% if (w.client_note) { %><dt>Motif client</dt><dd><%= w.client_note %></dd><% } %>
+    <% if (w.admin_note) { %><dt>Note</dt><dd><%= w.admin_note %></dd><% } %>
+  </dl>
+  <% if (w.status === 'en_attente') { %>
+  <form method="post" action="/admin/retraits/<%= w.id %>" class="inline-form" style="margin-top:12px">
+    <input type="hidden" name="_csrf" value="<%= csrf %>">
+    <div><input name="note" placeholder="Note / motif de refus" maxlength="300"></div>
+    <div class="actions" style="flex:0 0 auto">
+      <button class="btn btn-success btn-sm" name="decision" value="valider">Virement effectué</button>
+      <button class="btn btn-danger btn-sm" name="decision" value="refuser">Refuser</button>
+    </div>
+  </form>
+  <% } %>
+</div>
+<% }) %>
+<%- include('../partials/admin-bottom') %>

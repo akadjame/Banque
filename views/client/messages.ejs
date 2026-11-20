@@ -1,0 +1,18 @@
+<%- include('../partials/client-top') %>
+<div class="page-head"><h1>Messagerie sécurisée</h1></div>
+<div class="card">
+  <div class="thread">
+    <% if (!msgs.length) { %><p class="muted">Écrivez à votre conseiller, il vous répond sous 24 h ouvrées.</p><% } %>
+    <% msgs.forEach(msg => { %>
+      <div class="msg <%= msg.from_admin ? '' : 'me' %>"><% if (msg.subject) { %><strong><%= msg.subject %></strong><br><% } %><%= msg.body %>
+        <div class="meta"><%= msg.from_admin ? 'Votre conseiller' : 'Vous' %> · <%= datetime(msg.created_at) %></div></div>
+    <% }) %>
+  </div>
+</div>
+<form class="card" method="post" action="/espace/messages">
+  <input type="hidden" name="_csrf" value="<%= csrf %>">
+  <label for="subject">Objet</label><input id="subject" name="subject" maxlength="120">
+  <label for="body">Message</label><textarea id="body" name="body" rows="4" required maxlength="3000"></textarea>
+  <button class="btn btn-violet" style="margin-top:14px">Envoyer</button>
+</form>
+<%- include('../partials/client-bottom') %>

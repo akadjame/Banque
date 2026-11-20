@@ -1,0 +1,18 @@
+<%- include('head') %>
+<div class="app">
+  <aside class="side no-print">
+    <div class="side-title">Mon espace</div>
+    <a href="/espace" class="<%= path === '/' ? 'active' : '' %>">🏠 Synthèse</a>
+    <a href="/espace/versement" class="<%= path === '/versement' ? 'active' : '' %>">⬇️ Alimenter</a>
+    <a href="/espace/retrait" class="<%= path === '/retrait' ? 'active' : '' %>">⬆️ Retrait</a>
+    <a href="/espace/ouvrir" class="<%= path === '/ouvrir' ? 'active' : '' %>">➕ Ouvrir un livret</a>
+    <div class="side-title">Services</div>
+    <a href="/espace/messages" class="<%= path === '/messages' ? 'active' : '' %>">💬 Messagerie<% if (unread) { %><span class="count"><%= unread %></span><% } %></a>
+    <a href="/espace/parrainage" class="<%= path === '/parrainage' ? 'active' : '' %>">🎁 Parrainage</a>
+    <a href="/espace/profil" class="<%= path === '/profil' ? 'active' : '' %>">👤 Mon profil</a>
+  </aside>
+  <main class="main">
+    <% if (user.status === 'en_attente') { %>
+      <div class="alert alert-warn no-print">Votre dossier est en cours de validation par nos équipes. Vous pourrez demander des retraits dès sa validation.</div>
+    <% } %>
+    <%- include('flash') %>
