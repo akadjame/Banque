@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Retrait — AURORA ÉPARGNE</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body><div class="demo-bar">Aperçu de démonstration · marque provisoire · les formulaires sont désactivés ·
+    <a href="index.html">Site public</a> · <a href="espace.html">Espace client</a> · <a href="admin.html">Administration</a></div><div class="demo-toast" id="demo-toast" hidden>Aperçu : cette action fonctionne sur la vraie version du site.</div>
+<header class="site-header">
+  <div class="container">
+    <a class="logo" href="index.html">
+      <img class="logo-mark" src="logo.svg" alt="">
+      <span class="logo-text"><strong>AURORA</strong><span>ÉPARGNE</span></span>
+    </a>
+    <nav class="nav">
+      
+        <a class="link" href="espace.html">Camille Martin</a>
+        <form method="post" action="#" style="margin:0">
+          <input type="hidden" name="_csrf" value="757febc5a334ab9d1730592bdb615027b80b91be8bc0abb9">
+          <button class="btn btn-ghost btn-sm" type="submit">Déconnexion</button>
+        </form>
+      
+    </nav>
+  </div>
+</header>
+
+<div class="app">
+  <aside class="side no-print">
+    <div class="side-title">Mon espace</div>
+    <a href="espace.html" class="">🏠 Synthèse</a>
+    <a href="espace-versement.html" class="">⬇️ Alimenter</a>
+    <a href="espace-retrait.html" class="active">⬆️ Retrait</a>
+    <a href="espace-ouvrir.html" class="">➕ Ouvrir un livret</a>
+    <div class="side-title">Services</div>
+    <a href="espace-messages.html" class="">💬 Messagerie</a>
+    <a href="espace-parrainage.html" class="">🎁 Parrainage</a>
+    <a href="espace-profil.html" class="">👤 Mon profil</a>
+  </aside>
+  <main class="main">
+    
+    
+
+
+<div class="page-head"><h1>Demander un retrait</h1></div>
+<div class="grid grid-2">
+  <div class="card">
+    <h2>Nouveau retrait</h2>
+    
+    <form method="post" action="#" data-confirm="Confirmer la demande de retrait ?">
+      <input type="hidden" name="_csrf" value="757febc5a334ab9d1730592bdb615027b80b91be8bc0abb9">
+      <label for="account_id">Depuis le livret</label>
+      <select id="account_id" name="account_id">
+        <option value="1">Livret Boosté — disponible 14 715,68 €</option>
+      </select>
+      <label for="amount">Montant (€)</label>
+      <input id="amount" name="amount" inputmode="decimal" placeholder="0,00" required>
+      <label for="note">Motif (facultatif)</label>
+      <input id="note" name="note" maxlength="140">
+      <label>Vers mon compte de référence</label>
+      <div class="alert alert-info mono" style="margin:0">FR76 3000 4000 0112 3456 7890 173<br><span class="small" style="font-family:inherit">Camille Martin</span></div>
+      <button class="btn btn-violet btn-block" style="margin-top:18px" type="submit" >Valider le retrait</button>
+    </form>
+    <p class="small muted">Les fonds sont virés sous 24 à 48 h ouvrées. Les retraits sont uniquement possibles vers votre compte de référence, pour votre sécurité.</p>
+    
+  </div>
+  <div class="card">
+    <h2>Mes demandes</h2>
+    
+    <div class="table-wrap"><table>
+      
+      <tr>
+        <td>20/11/2026<div class="small muted">Livret Boosté</div></td>
+        <td class="amt-neg">500,00 €</td>
+        <td><span class="chip orange">En attente</span>
+          </td>
+        <td>
+          <form method="post" action="#" data-confirm="Annuler cette demande ?">
+            <input type="hidden" name="_csrf" value="757febc5a334ab9d1730592bdb615027b80b91be8bc0abb9"><button class="btn btn-light btn-sm">Annuler</button></form></td>
+      </tr>
+      
+    </table></div>
+  </div>
+</div>
+  </main>
+</div>
+<footer class="site-footer no-print">
+  <div class="container">
+    <div class="cols">
+      <div>
+        <a class="logo" href="index.html">
+          <img class="logo-mark" src="logo.svg" alt="">
+          <span class="logo-text"><strong>AURORA</strong><span>ÉPARGNE</span></span>
+        </a>
+        <p>L'épargne en ligne simple, rémunérée et sans frais.</p>
+      </div>
+      <div>
+        <p><a href="index.html#livrets">Nos livrets</a></p>
+        <p><a href="index.html#parrainage">Parrainage</a></p>
+        <p><a href="aide.html">Aide & FAQ</a></p>
+      </div>
+      <div>
+        <p><a href="connexion.html">Espace client</a></p>
+        <p><a href="mentions-legales.html">Mentions légales</a></p>
+        <p>01 00 00 00 00<br>support@exemple.fr</p>
+      </div>
+    </div>
+    <div class="legal">
+      Aurora Épargne SAS. Taux annuels bruts, avant prélèvements fiscaux et sociaux. Les intérêts sont calculés au jour le jour.
+      Offres soumises à conditions, voir <a href="aide.html">conditions</a>.
+    </div>
+  </div>
+</footer>
+
+<a class="help-btn no-print" href="espace-messages.html"><span class="q">?</span> BESOIN D'AIDE ?</a>
+
+<script src="app.js"></script>
+</body>
+</html>
+
+

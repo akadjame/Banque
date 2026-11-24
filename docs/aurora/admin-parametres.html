@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Offres &amp; paramètres — AURORA ÉPARGNE</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body><div class="demo-bar">Aperçu de démonstration · marque provisoire · les formulaires sont désactivés ·
+    <a href="index.html">Site public</a> · <a href="espace.html">Espace client</a> · <a href="admin.html">Administration</a></div><div class="demo-toast" id="demo-toast" hidden>Aperçu : cette action fonctionne sur la vraie version du site.</div>
+<header class="site-header">
+  <div class="container">
+    <a class="logo" href="index.html">
+      <img class="logo-mark" src="logo.svg" alt="">
+      <span class="logo-text"><strong>AURORA</strong><span>ÉPARGNE</span></span>
+    </a>
+    <nav class="nav">
+      
+        <a class="link" href="admin.html">Admin Démo</a>
+        <form method="post" action="#" style="margin:0">
+          <input type="hidden" name="_csrf" value="d2df93c051226762957507d1f53d2fd026686b0f18d580b2">
+          <button class="btn btn-ghost btn-sm" type="submit">Déconnexion</button>
+        </form>
+      
+    </nav>
+  </div>
+</header>
+
+<div class="app">
+  <aside class="side no-print">
+    <div class="side-title">Administration</div>
+    <a href="admin.html" class="">📊 Tableau de bord</a>
+    <a href="admin-clients.html" class="">👥 Clients<span class="count">2</span></a>
+    <a href="admin-retraits.html" class="">⬆️ Retraits<span class="count">1</span></a>
+    <a href="admin-messages.html" class="">💬 Messagerie</a>
+    <div class="side-title">Configuration</div>
+    <a href="admin-parametres.html" class="active">⚙️ Offres & taux</a>
+    <a href="admin-journal.html" class="">📜 Journal</a>
+  </aside>
+  <main class="main">
+    
+
+
+<div class="page-head"><h1>Offres & taux</h1></div>
+<form class="card" method="post" action="#">
+  <input type="hidden" name="_csrf" value="d2df93c051226762957507d1f53d2fd026686b0f18d580b2">
+  <h2>Primes & offre du moment</h2>
+  <div class="grid grid-4">
+    <div><label>Prime de bienvenue (€)</label><input name="welcome_bonus_cents" value="80,00"></div>
+    <div><label>Prime parrain (€)</label><input name="referrer_bonus_cents" value="80,00"></div>
+    <div><label>Prime filleul (€)</label><input name="referee_bonus_cents" value="80,00"></div>
+    <div><label>Fin de l'offre</label><input type="date" name="offer_end_date" value="2026-11-30"></div>
+  </div>
+  <button class="btn btn-violet btn-sm" style="margin-top:14px">Enregistrer</button>
+</form>
+
+<div class="alert alert-warn">Avant de modifier un taux, versez les intérêts acquis (tableau de bord) : le calcul des intérêts non versés utilise le taux en vigueur.</div>
+
+
+<form class="card" method="post" action="#">
+  <input type="hidden" name="_csrf" value="d2df93c051226762957507d1f53d2fd026686b0f18d580b2">
+  <div class="page-head" style="margin-bottom:4px"><h2 style="margin:0">Livret Boosté <span class="small muted mono">LIVRET_BOOST</span></h2>
+    <label class="check" style="margin:0"><input type="checkbox" name="active" value="1" checked> Proposé à l'ouverture</label></div>
+  <div class="row"><div><label>Nom</label><input name="name" value="Livret Boosté"></div><div><label>Description</label><input name="description" value="Taux boosté pendant 3 mois à l&#39;ouverture, puis taux de base. Sans frais, disponible à tout moment."></div></div>
+  <div class="grid grid-4">
+    <div><label>Taux de base (%)</label><input name="base_rate" value="2.25"></div>
+    <div><label>Taux boosté (%)</label><input name="boosted_rate" value="4.5" placeholder="aucun"></div>
+    <div><label>Durée du boost (mois)</label><input name="boost_months" type="number" min="0" value="3"></div>
+    <div><label>Plafond du boost (€)</label><input name="boost_cap" value="200000" placeholder="aucun"></div>
+    <div><label>Plafond de dépôt (€)</label><input name="max_balance" value="" placeholder="illimité"></div>
+  </div>
+  <button class="btn btn-light btn-sm" style="margin-top:14px">Mettre à jour</button>
+</form>
+
+<form class="card" method="post" action="#">
+  <input type="hidden" name="_csrf" value="d2df93c051226762957507d1f53d2fd026686b0f18d580b2">
+  <div class="page-head" style="margin-bottom:4px"><h2 style="margin:0">Livret Plus <span class="small muted mono">LIVRET_PLUS</span></h2>
+    <label class="check" style="margin:0"><input type="checkbox" name="active" value="1" checked> Proposé à l'ouverture</label></div>
+  <div class="row"><div><label>Nom</label><input name="name" value="Livret Plus"></div><div><label>Description</label><input name="description" value="Taux fixe garanti, sans plafond, sans frais."></div></div>
+  <div class="grid grid-4">
+    <div><label>Taux de base (%)</label><input name="base_rate" value="2.5"></div>
+    <div><label>Taux boosté (%)</label><input name="boosted_rate" value="" placeholder="aucun"></div>
+    <div><label>Durée du boost (mois)</label><input name="boost_months" type="number" min="0" value="0"></div>
+    <div><label>Plafond du boost (€)</label><input name="boost_cap" value="" placeholder="aucun"></div>
+    <div><label>Plafond de dépôt (€)</label><input name="max_balance" value="" placeholder="illimité"></div>
+  </div>
+  <button class="btn btn-light btn-sm" style="margin-top:14px">Mettre à jour</button>
+</form>
+
+<form method="post" action="#"><input type="hidden" name="_csrf" value="d2df93c051226762957507d1f53d2fd026686b0f18d580b2"><button class="btn btn-violet btn-sm">+ Créer un livret</button></form>
+  </main>
+</div>
+<footer class="site-footer no-print">
+  <div class="container">
+    <div class="cols">
+      <div>
+        <a class="logo" href="index.html">
+          <img class="logo-mark" src="logo.svg" alt="">
+          <span class="logo-text"><strong>AURORA</strong><span>ÉPARGNE</span></span>
+        </a>
+        <p>L'épargne en ligne simple, rémunérée et sans frais.</p>
+      </div>
+      <div>
+        <p><a href="index.html#livrets">Nos livrets</a></p>
+        <p><a href="index.html#parrainage">Parrainage</a></p>
+        <p><a href="aide.html">Aide & FAQ</a></p>
+      </div>
+      <div>
+        <p><a href="connexion.html">Espace client</a></p>
+        <p><a href="mentions-legales.html">Mentions légales</a></p>
+        <p>01 00 00 00 00<br>support@exemple.fr</p>
+      </div>
+    </div>
+    <div class="legal">
+      Aurora Épargne SAS. Taux annuels bruts, avant prélèvements fiscaux et sociaux. Les intérêts sont calculés au jour le jour.
+      Offres soumises à conditions, voir <a href="aide.html">conditions</a>.
+    </div>
+  </div>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>
+
+

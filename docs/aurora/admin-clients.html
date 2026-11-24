@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Clients — AURORA ÉPARGNE</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body><div class="demo-bar">Aperçu de démonstration · marque provisoire · les formulaires sont désactivés ·
+    <a href="index.html">Site public</a> · <a href="espace.html">Espace client</a> · <a href="admin.html">Administration</a></div><div class="demo-toast" id="demo-toast" hidden>Aperçu : cette action fonctionne sur la vraie version du site.</div>
+<header class="site-header">
+  <div class="container">
+    <a class="logo" href="index.html">
+      <img class="logo-mark" src="logo.svg" alt="">
+      <span class="logo-text"><strong>AURORA</strong><span>ÉPARGNE</span></span>
+    </a>
+    <nav class="nav">
+      
+        <a class="link" href="admin.html">Admin Démo</a>
+        <form method="post" action="#" style="margin:0">
+          <input type="hidden" name="_csrf" value="d2df93c051226762957507d1f53d2fd026686b0f18d580b2">
+          <button class="btn btn-ghost btn-sm" type="submit">Déconnexion</button>
+        </form>
+      
+    </nav>
+  </div>
+</header>
+
+<div class="app">
+  <aside class="side no-print">
+    <div class="side-title">Administration</div>
+    <a href="admin.html" class="">📊 Tableau de bord</a>
+    <a href="admin-clients.html" class="active">👥 Clients<span class="count">2</span></a>
+    <a href="admin-retraits.html" class="">⬆️ Retraits<span class="count">1</span></a>
+    <a href="admin-messages.html" class="">💬 Messagerie</a>
+    <div class="side-title">Configuration</div>
+    <a href="admin-parametres.html" class="">⚙️ Offres & taux</a>
+    <a href="admin-journal.html" class="">📜 Journal</a>
+  </aside>
+  <main class="main">
+    
+
+
+<div class="page-head"><h1>Clients</h1><a class="btn btn-violet btn-sm" href="admin-clients-nouveau.html">+ Nouveau client</a></div>
+<form class="card inline-form" method="get">
+  <div><label for="q">Recherche</label><input id="q" name="q" value="" placeholder="Nom, e-mail, n° client"></div>
+  <div><label for="status">Statut</label><select id="status" name="status"><option value="">Tous</option>
+    <option value="en_attente" >En attente</option><option value="actif" >Actif</option><option value="bloque" >Bloqué</option><option value="cloture" >Clôturé</option></select></div>
+  <div style="flex:0 0 auto"><button class="btn btn-light">Filtrer</button></div>
+</form>
+<div class="card table-wrap">
+  <table>
+    <thead><tr><th>Client</th><th>N° client</th><th>Inscription</th><th>Statut</th><th style="text-align:right">Épargne</th></tr></thead>
+    <tbody>
+    
+      <tr><td><a href="admin-clients-2.html"><strong>Camille Martin</strong></a><div class="small muted">client@demo.local</div></td>
+        <td class="mono small">95539913</td><td class="small">20/11/2026</td>
+        <td><span class="chip green">Actif</span></td>
+        <td style="text-align:right"><strong>15 215,68 €</strong></td></tr>
+    
+      <tr><td><a href="admin-clients-3.html"><strong>Hugo Bernard</strong></a><div class="small muted">filleul@demo.local</div></td>
+        <td class="mono small">51948856</td><td class="small">20/11/2026</td>
+        <td><span class="chip orange">En attente</span></td>
+        <td style="text-align:right"><strong>0,00 €</strong></td></tr>
+    
+      <tr><td><a href="admin-clients-4.html"><strong>Léa Dubois</strong></a><div class="small muted">lea@demo.local</div></td>
+        <td class="mono small">01403012</td><td class="small">20/11/2026</td>
+        <td><span class="chip green">Actif</span></td>
+        <td style="text-align:right"><strong>25 160,00 €</strong></td></tr>
+    
+      <tr><td><a href="admin-clients-5.html"><strong>Thomas Petit</strong></a><div class="small muted">thomas@demo.local</div></td>
+        <td class="mono small">80996335</td><td class="small">20/11/2026</td>
+        <td><span class="chip orange">En attente</span></td>
+        <td style="text-align:right"><strong>0,00 €</strong></td></tr>
+    
+    
+    </tbody>
+  </table>
+</div>
+  </main>
+</div>
+<footer class="site-footer no-print">
+  <div class="container">
+    <div class="cols">
+      <div>
+        <a class="logo" href="index.html">
+          <img class="logo-mark" src="logo.svg" alt="">
+          <span class="logo-text"><strong>AURORA</strong><span>ÉPARGNE</span></span>
+        </a>
+        <p>L'épargne en ligne simple, rémunérée et sans frais.</p>
+      </div>
+      <div>
+        <p><a href="index.html#livrets">Nos livrets</a></p>
+        <p><a href="index.html#parrainage">Parrainage</a></p>
+        <p><a href="aide.html">Aide & FAQ</a></p>
+      </div>
+      <div>
+        <p><a href="connexion.html">Espace client</a></p>
+        <p><a href="mentions-legales.html">Mentions légales</a></p>
+        <p>01 00 00 00 00<br>support@exemple.fr</p>
+      </div>
+    </div>
+    <div class="legal">
+      Aurora Épargne SAS. Taux annuels bruts, avant prélèvements fiscaux et sociaux. Les intérêts sont calculés au jour le jour.
+      Offres soumises à conditions, voir <a href="aide.html">conditions</a>.
+    </div>
+  </div>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>
+
+
