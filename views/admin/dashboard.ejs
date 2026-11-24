@@ -31,4 +31,21 @@
     <% }) %></table>
   </div>
 </div>
+<div class="grid grid-2">
+  <div class="card">
+    <h2>Versements programmés attendus</h2>
+    <% if (!orders.length) { %><p class="muted small">Aucun versement programmé.</p><% } %>
+    <table><% orders.forEach(o => { %>
+      <tr><td>le <%= o.day_of_month %></td><td><a href="/admin/clients/<%= o.user_id %>"><%= o.first_name %> <%= o.last_name %></a><div class="small muted"><%= o.product_name %></div></td><td style="text-align:right"><strong><%= eur(o.amount_cents) %></strong></td></tr>
+    <% }) %></table>
+    <% if (orders.length) { %><p class="small" style="margin-top:10px">Total mensuel attendu : <strong><%= eur(orders.reduce((s, o) => s + o.amount_cents, 0)) %></strong></p><% } %>
+  </div>
+  <div class="card">
+    <h2>Échéances des comptes à terme</h2>
+    <% if (!maturities.length) { %><p class="muted small">Aucun compte à terme alimenté.</p><% } %>
+    <table><% maturities.forEach(a => { %>
+      <tr><td><%= date(a.maturity_at) %></td><td><a href="/admin/clients/<%= a.user_id %>"><%= a.first_name %> <%= a.last_name %></a><div class="small muted"><%= a.product_name %></div></td><td style="text-align:right"><strong><%= eur(a.balance_cents) %></strong></td></tr>
+    <% }) %></table>
+  </div>
+</div>
 <%- include('../partials/admin-bottom') %>

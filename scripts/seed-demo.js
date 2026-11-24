@@ -31,5 +31,14 @@ db.prepare("UPDATE transactions SET created_at = ? WHERE account_id = ? AND type
 bank.payInterest(acc, adminId, new Date(Date.now() - 10 * 86400000));
 db.prepare('INSERT INTO messages (user_id, from_admin, body) VALUES (?,1,?)').run(c1, 'Bienvenue ! Votre livret est actif et votre prime de bienvenue a été versée.');
 
+// Compte à terme 24 mois, projets et versement programmé
+const cat = db.prepare("SELECT id FROM products WHERE code = 'CAT_24'").get().id;
+const catAcc = bank.openAccount(c1, cat);
+bank.adminOperation(adminId, catAcc, 'credit', 1000000, 'Virement reçu — Camille Martin');
+const insGoal = db.prepare('INSERT INTO goals (user_id, account_id, name, emoji, target_cents, target_date) VALUES (?,?,?,?,?,?)');
+insGoal.run(c1, acc, 'Voyage au Japon', '✈️', 1800000, '2027-09-01');
+insGoal.run(c1, null, 'Apport appartement', '🏠', 4000000, '2029-06-01');
+db.prepare('INSERT INTO standing_orders (user_id, account_id, amount_cents, day_of_month) VALUES (?,?,?,?)').run(c1, acc, 30000, 5);
+
 console.log('Données de démo créées. Mot de passe pour tous : Demo12345!');
 console.log('  admin@demo.local / client@demo.local / filleul@demo.local (code parrain', parrainCode + ')');

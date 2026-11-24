@@ -5,6 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title><%= title %> — <%= bank.name %> <%= bank.subtitle %></title>
   <link rel="icon" href="/static/img/logo.svg" type="image/svg+xml">
+  <link rel="manifest" href="/static/manifest.webmanifest">
+  <link rel="apple-touch-icon" href="/static/img/icon-192.png">
+  <meta name="theme-color" content="#1d2240">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="<%= bank.name %>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/static/css/style.css">
@@ -18,7 +23,7 @@
     </a>
     <nav class="nav">
       <% if (!user) { %>
-        <a class="link" href="/#livrets">Nos livrets</a>
+        <a class="link" href="/#livrets">Nos produits</a>
         <a class="link" href="/#simulateur">Simulateur</a>
         <a class="link" href="/aide">Aide</a>
         <a class="link" href="/connexion">Espace client</a>

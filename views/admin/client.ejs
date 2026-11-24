@@ -22,7 +22,7 @@
     </div>
     <div style="font-size:1.8rem;font-weight:800"><%= eur(a.balance_cents) %></div>
     <div class="small muted mono"><%= iban(a.iban) %></div>
-    <div class="small">Taux : <strong><%= rate(a.rate.rate) %></strong><%= a.rate.boosted ? ` (boosté jusqu'au ${a.rate.until.toLocaleDateString('fr-FR')})` : '' %> ·
+    <div class="small">Taux : <strong><%= rate(a.rate.rate) %></strong><%= a.rate.boosted ? ` (boosté jusqu'au ${a.rate.until.toLocaleDateString('fr-FR')})` : '' %><%= a.maturity ? ` (fixe, échéance ${a.maturity.toLocaleDateString('fr-FR')})` : '' %> ·
       Intérêts acquis : <strong class="amt-pos"><%= eur(a.accrued.cents) %></strong><% if (a.pending) { %> · <span class="chip orange"><%= eur(a.pending) %> en retrait</span><% } %></div>
 
     <% if (a.status !== 'cloture') { %>
@@ -75,6 +75,13 @@
     </div>
     <p class="small" style="margin-top:12px">Parrain : <% if (parrain) { %><a href="/admin/clients/<%= parrain.id %>"><%= parrain.first_name %> <%= parrain.last_name %></a><% } else { %>—<% } %> · Code de parrainage : <span class="mono"><%= customer.referral_code %></span></p>
     <% if (filleuls.length) { %><p class="small">Filleuls : <% filleuls.forEach((f, i) => { %><a href="/admin/clients/<%= f.id %>"><%= f.first_name %> <%= f.last_name %></a><%= f.referral_paid ? ' ✓' : '' %><%= i < filleuls.length - 1 ? ', ' : '' %><% }) %></p><% } %>
+  </div>
+
+  <div class="card">
+    <h2>Projets & versements programmés</h2>
+    <% if (!goals.length && !orders.length) { %><p class="muted small">Aucun.</p><% } %>
+    <% goals.forEach(g => { %><p class="small"><%= g.emoji %> <strong><%= g.name %></strong> : <%= eur(g.saved) %> / <%= eur(g.target_cents) %> (<%= g.pct %> %)</p><% }) %>
+    <% orders.forEach(o => { %><p class="small">🔁 <strong><%= eur(o.amount_cents) %></strong> le <%= o.day_of_month %> du mois → <%= o.product_name %></p><% }) %>
   </div>
 
   <div class="card">

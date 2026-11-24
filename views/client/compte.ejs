@@ -12,7 +12,7 @@
   <div class="stat"><div class="k">Disponible</div><div class="v"><%= eur(account.available) %></div><% if (account.pending) { %><div class="small muted"><%= eur(account.pending) %> en cours de retrait</div><% } %></div>
   <div class="stat"><div class="k">Intérêts acquis</div><div class="v amt-pos"><%= eur(account.accrued.cents) %></div><div class="small muted">depuis le <%= date(account.last_interest_at) %></div></div>
   <div class="stat"><div class="k">Taux actuel</div><div class="v"><%= rate(account.rate.rate) %></div>
-    <div class="small muted"><%= account.rate.boosted ? `boosté jusqu'au ${account.rate.until.toLocaleDateString('fr-FR')}` : 'taux de base' %></div></div>
+    <div class="small muted"><%= account.rate.boosted ? `boosté jusqu'au ${account.rate.until.toLocaleDateString('fr-FR')}` : account.maturity ? `fixe garanti jusqu'au ${account.maturity.toLocaleDateString('fr-FR')}` : 'taux de base' %></div></div>
 </div>
 
 <div class="card">

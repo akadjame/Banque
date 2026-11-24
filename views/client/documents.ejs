@@ -1,0 +1,25 @@
+<%- include('../partials/client-top') %>
+<div class="page-head"><h1>Mes documents</h1></div>
+<div class="grid grid-2">
+  <div class="card">
+    <h2>Récapitulatifs fiscaux</h2>
+    <p class="small muted">Le total des intérêts perçus chaque année, à reporter sur votre déclaration de revenus.</p>
+    <% if (!years.length) { %><p class="muted">Disponible après vos premières opérations.</p><% } %>
+    <% years.forEach(y => { %><p><a href="/espace/documents/fiscal/<%= y %>">📄 Récapitulatif fiscal <%= y %></a></p><% }) %>
+  </div>
+  <div class="card">
+    <h2>RIB</h2>
+    <% accounts.forEach(a => { %><p><a href="/espace/compte/<%= a.id %>/rib">📄 RIB — <%= a.product.name %></a></p><% }) %>
+  </div>
+</div>
+<div class="card">
+  <h2>Relevés mensuels</h2>
+  <% if (!months.length) { %><p class="muted">Aucun relevé pour le moment.</p><% } %>
+  <div class="table-wrap"><table>
+    <% months.forEach(r => { const a = accounts.find(x => x.id === r.account_id); if (!a) return; %>
+    <tr><td><%= new Date(r.m + '-01').toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' }) %></td><td class="muted"><%= a.product.name %></td>
+      <td style="text-align:right"><a class="btn btn-light btn-sm" href="/espace/compte/<%= a.id %>/releve?mois=<%= r.m %>">Voir</a></td></tr>
+    <% }) %>
+  </table></div>
+</div>
+<%- include('../partials/client-bottom') %>

@@ -1,0 +1,21 @@
+<%- include('../partials/client-top') %>
+<div class="print-doc">
+  <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:20px">
+    <div><strong><%= bank.name %> <%= bank.subtitle %></strong><br><span class="small"><%= bank.legalName %></span></div>
+    <div style="text-align:right"><%= user.civility || '' %> <%= user.first_name %> <%= user.last_name.toUpperCase() %><br><%= user.address %><br><%= user.postal_code %> <%= user.city %></div>
+  </div>
+  <h1 style="margin-top:30px">Récapitulatif des revenus de l'épargne — année <%= year %></h1>
+  <table>
+    <thead><tr><th>Produit</th><th>IBAN</th><th style="text-align:right">Intérêts perçus</th><th style="text-align:right">Primes</th></tr></thead>
+    <tbody>
+      <% rows.forEach(r => { %><tr><td><%= r.product_name %></td><td class="mono small"><%= iban(r.iban) %></td><td style="text-align:right"><%= eur(r.interest) %></td><td style="text-align:right"><%= eur(r.bonuses) %></td></tr><% }) %>
+      <tr><td colspan="2"><strong>Total</strong></td><td style="text-align:right"><strong><%= eur(total) %></strong></td><td style="text-align:right"><strong><%= eur(totalBonus) %></strong></td></tr>
+    </tbody>
+  </table>
+  <p class="small muted" style="margin-top:16px">Document récapitulatif établi à partir de vos opérations. Les montants sont bruts, avant prélèvements fiscaux et sociaux applicables selon la réglementation en vigueur. L'imprimé fiscal unique (IFU) officiel vous est adressé par l'établissement teneur de compte.</p>
+  <div class="actions no-print" style="margin-top:20px">
+    <button class="btn btn-violet btn-sm" data-print>Imprimer / PDF</button>
+    <a class="btn btn-light btn-sm" href="/espace/documents">Retour</a>
+  </div>
+</div>
+<%- include('../partials/client-bottom') %>

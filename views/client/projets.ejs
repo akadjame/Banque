@@ -1,0 +1,38 @@
+<%- include('../partials/client-top') %>
+<div class="page-head"><h1>Mes projets</h1></div>
+<p class="muted" style="margin-top:-10px">Donnez un but à votre épargne : voyage, voiture, apport immobilier… Suivez votre progression et l'effort mensuel à prévoir.</p>
+<div class="grid grid-2" style="margin-bottom:22px">
+  <% goals.forEach(g => { %>
+  <div class="card" style="margin:0">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px">
+      <div><span style="font-size:1.8rem"><%= g.emoji %></span> <strong style="font-size:1.15rem"><%= g.name %></strong>
+        <div class="small muted"><%= g.account ? g.account.product.name : 'Toute mon épargne' %><%= g.target_date ? ' · pour le ' + g.target_date.split('-').reverse().join('/') : '' %></div></div>
+      <form method="post" action="/espace/projets/<%= g.id %>/supprimer"><input type="hidden" name="_csrf" value="<%= csrf %>"><button class="btn btn-light btn-sm" title="Supprimer">✕</button></form>
+    </div>
+    <div style="display:flex;justify-content:space-between;margin:14px 0 6px"><strong><%= eur(g.saved) %></strong><span class="muted">sur <%= eur(g.target_cents) %></span></div>
+    <div class="progress"><div style="width:<%= g.pct %>%"></div></div>
+    <div class="small" style="margin-top:8px">
+      <% if (g.pct >= 100) { %><span class="chip green">Objectif atteint 🎉</span>
+      <% } else if (g.monthly) { %>Épargnez <strong><%= eur(g.monthly) %>/mois</strong> pour l'atteindre à temps.
+      <% } else { %><%= g.pct %> % de l'objectif<% } %>
+    </div>
+  </div>
+  <% }) %>
+  <% if (!goals.length) { %><div class="card" style="margin:0"><p class="muted">Aucun projet pour l'instant. Créez le premier ci-dessous.</p></div><% } %>
+</div>
+<form class="card" style="max-width:640px" method="post" action="/espace/projets">
+    <input type="hidden" name="_csrf" value="<%= csrf %>">
+    <h2>Nouveau projet</h2>
+    <div class="row-3" style="grid-template-columns:110px 1fr">
+      <div><label for="emoji">Icône</label><select id="emoji" name="emoji"><% ['🏠','🚗','✈️','🎓','💍','👶','🛟','🎁'].forEach(e => { %><option><%= e %></option><% }) %></select></div>
+      <div><label for="name">Nom</label><input id="name" name="name" placeholder="Ex : Voyage au Japon" required maxlength="60"></div>
+    </div>
+    <div class="row">
+      <div><label for="target">Objectif (€)</label><input id="target" name="target" inputmode="decimal" required placeholder="5 000"></div>
+      <div><label for="target_date">Pour quand ?</label><input type="date" id="target_date" name="target_date"></div>
+    </div>
+    <label for="account_id">Épargne suivie</label>
+    <select id="account_id" name="account_id"><option value="">Toute mon épargne</option><% accounts.forEach(a => { %><option value="<%= a.id %>"><%= a.product.name %></option><% }) %></select>
+    <button class="btn btn-violet" style="margin-top:14px">Créer le projet</button>
+</form>
+<%- include('../partials/client-bottom') %>

@@ -5,9 +5,12 @@
     <a href="/espace" class="<%= path === '/' ? 'active' : '' %>">🏠 Synthèse</a>
     <a href="/espace/versement" class="<%= path === '/versement' ? 'active' : '' %>">⬇️ Alimenter</a>
     <a href="/espace/retrait" class="<%= path === '/retrait' ? 'active' : '' %>">⬆️ Retrait</a>
-    <a href="/espace/ouvrir" class="<%= path === '/ouvrir' ? 'active' : '' %>">➕ Ouvrir un livret</a>
+    <a href="/espace/versements-programmes" class="<%= path === '/versements-programmes' ? 'active' : '' %>">🔁 Versements programmés</a>
+    <a href="/espace/projets" class="<%= path === '/projets' ? 'active' : '' %>">🎯 Mes projets</a>
+    <a href="/espace/ouvrir" class="<%= path === '/ouvrir' ? 'active' : '' %>">➕ Ouvrir un produit</a>
     <div class="side-title">Services</div>
     <a href="/espace/messages" class="<%= path === '/messages' ? 'active' : '' %>">💬 Messagerie<% if (unread) { %><span class="count"><%= unread %></span><% } %></a>
+    <a href="/espace/documents" class="<%= path.startsWith('/documents') ? 'active' : '' %>">📄 Documents</a>
     <a href="/espace/parrainage" class="<%= path === '/parrainage' ? 'active' : '' %>">🎁 Parrainage</a>
     <a href="/espace/profil" class="<%= path === '/profil' ? 'active' : '' %>">👤 Mon profil</a>
   </aside>

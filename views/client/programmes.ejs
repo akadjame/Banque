@@ -1,0 +1,26 @@
+<%- include('../partials/client-top') %>
+<div class="page-head"><h1>Versements programmés</h1></div>
+<div class="grid grid-2">
+  <div class="card">
+    <h2>Mes versements en place</h2>
+    <% if (!orders.length) { %><p class="muted">Aucun versement programmé. Épargner un peu chaque mois est le moyen le plus simple de faire grossir son épargne.</p><% } %>
+    <table><% orders.forEach(o => { %>
+      <tr><td><strong><%= eur(o.amount_cents) %></strong> / mois<div class="small muted">le <%= o.day_of_month %> du mois · <%= o.product_name %></div></td>
+        <td style="text-align:right"><form method="post" action="/espace/versements-programmes/<%= o.id %>/supprimer"><input type="hidden" name="_csrf" value="<%= csrf %>"><button class="btn btn-light btn-sm">Arrêter</button></form></td></tr>
+    <% }) %></table>
+    <% if (orders.length) { %><p class="small" style="margin-top:12px">Total : <strong><%= eur(orders.reduce((s, o) => s + o.amount_cents, 0)) %> par mois</strong>, soit <%= eur(orders.reduce((s, o) => s + o.amount_cents, 0) * 12) %> par an.</p><% } %>
+  </div>
+  <form class="card" method="post" action="/espace/versements-programmes">
+    <input type="hidden" name="_csrf" value="<%= csrf %>">
+    <h2>Programmer un versement</h2>
+    <label for="account_id">Vers</label>
+    <select id="account_id" name="account_id"><% accounts.forEach(a => { %><option value="<%= a.id %>"><%= a.product.name %> — <%= iban(a.iban).slice(-14) %></option><% }) %></select>
+    <div class="row">
+      <div><label for="amount">Montant mensuel (€)</label><input id="amount" name="amount" inputmode="decimal" placeholder="100" required></div>
+      <div><label for="day">Jour du mois</label><input type="number" id="day" name="day" min="1" max="28" value="5" required></div>
+    </div>
+    <button class="btn btn-violet" style="margin-top:14px">Enregistrer</button>
+    <p class="small muted">Mettez en place le virement permanent correspondant depuis votre compte de référence vers l'IBAN de votre livret. Chaque versement est crédité dès sa réception.</p>
+  </form>
+</div>
+<%- include('../partials/client-bottom') %>

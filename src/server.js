@@ -44,6 +44,11 @@ app.locals.iban = m.formatIban;
 app.locals.rate = m.formatRate;
 app.locals.date = (d) => (d ? m.parseDbDate(d).toLocaleDateString('fr-FR', { timeZone: 'Europe/Paris' }) : '—');
 app.locals.datetime = (d) => (d ? m.parseDbDate(d).toLocaleString('fr-FR', { timeZone: 'Europe/Paris', dateStyle: 'short', timeStyle: 'short' }) : '—');
+// Description courte du taux d'un produit
+app.locals.productRateText = (p) => p.kind === 'cat'
+  ? `taux fixe garanti ${p.term_months} mois`
+  : p.boosted_rate ? `pendant ${p.boost_months} mois, puis ${m.formatRate(p.base_rate)}` : 'taux annuel brut';
+app.locals.headlineRate = (p) => p.boosted_rate || p.base_rate;
 app.locals.txLabels = { depot: 'Versement', retrait: 'Retrait', interets: 'Intérêts', prime: 'Prime', parrainage: 'Parrainage', ajustement: 'Régularisation' };
 app.locals.statusLabels = { en_attente: 'En attente', actif: 'Actif', bloque: 'Bloqué', cloture: 'Clôturé', effectue: 'Effectué', refuse: 'Refusé', annule: 'Annulé' };
 
@@ -164,7 +169,7 @@ espace.get('/', (req, res) => {
   const totalAccrued = accounts.reduce((s, a) => s + a.accrued.cents, 0);
   const interestYear = db.prepare(`SELECT COALESCE(SUM(t.amount_cents),0) AS s FROM transactions t JOIN accounts a ON a.id = t.account_id
     WHERE a.user_id = ? AND t.type = 'interets' AND strftime('%Y', t.created_at) = strftime('%Y','now')`).get(req.user.id).s;
-  res.render('client/dashboard', { title: 'Mon espace', accounts, recent, total, totalAccrued, interestYear });
+  res.render('client/dashboard', { title: 'Mon espace', accounts, recent, total, totalAccrued, interestYear, goals: bank.userGoals(req.user.id) });
 });
 
 espace.get('/compte/:id', handle((req, res) => {
@@ -226,7 +231,7 @@ espace.post('/ouvrir', handle((req, res) => {
   const pid = Number(req.body.product_id);
   if (db.prepare("SELECT 1 FROM accounts WHERE user_id = ? AND product_id = ? AND status != 'cloture'").get(req.user.id, pid)) throw new bank.BankError('Vous détenez déjà ce livret.');
   bank.openAccount(req.user.id, pid);
-  req.flash('success', 'Votre nouveau livret est ouvert.');
+  req.flash('success', 'Votre nouveau produit d’épargne est ouvert.');
   res.redirect('/espace');
 }));
 
@@ -276,6 +281,67 @@ espace.post('/messages', handle((req, res) => {
   res.redirect('/espace/messages');
 }));
 
+// ----- Projets d'épargne -----
+espace.get('/projets', (req, res) => {
+  res.render('client/projets', { title: 'Mes projets', goals: bank.userGoals(req.user.id), accounts: bank.userAccounts(req.user.id) });
+});
+espace.post('/projets', handle((req, res) => {
+  const name = str(req.body.name, 60);
+  const target = m.parseEuros(req.body.target);
+  if (!name) throw new bank.BankError('Donnez un nom à votre projet.');
+  if (!target) throw new bank.BankError('Montant objectif invalide.');
+  const date = /^\d{4}-\d{2}-\d{2}$/.test(req.body.target_date || '') ? req.body.target_date : null;
+  let accountId = Number(req.body.account_id) || null;
+  if (accountId && !db.prepare('SELECT 1 FROM accounts WHERE id = ? AND user_id = ?').get(accountId, req.user.id)) accountId = null;
+  const emoji = ['🏠', '🚗', '✈️', '🎓', '💍', '👶', '🛟', '🎁'].includes(req.body.emoji) ? req.body.emoji : '🎯';
+  db.prepare('INSERT INTO goals (user_id, account_id, name, emoji, target_cents, target_date) VALUES (?,?,?,?,?,?)').run(req.user.id, accountId, name, emoji, target, date);
+  req.flash('success', `Projet « ${name} » créé.`);
+  res.redirect('/espace/projets');
+}));
+espace.post('/projets/:id/supprimer', handle((req, res) => {
+  db.prepare('DELETE FROM goals WHERE id = ? AND user_id = ?').run(Number(req.params.id), req.user.id);
+  req.flash('success', 'Projet supprimé.');
+  res.redirect('/espace/projets');
+}));
+
+// ----- Versements programmés -----
+espace.get('/versements-programmes', (req, res) => {
+  res.render('client/programmes', { title: 'Versements programmés', orders: bank.userStandingOrders(req.user.id),
+    accounts: bank.userAccounts(req.user.id).filter((a) => a.status === 'actif' && a.product.kind !== 'cat') });
+});
+espace.post('/versements-programmes', handle((req, res) => {
+  const amount = m.parseEuros(req.body.amount);
+  const day = Number(req.body.day);
+  const acc = db.prepare("SELECT a.* FROM accounts a JOIN products p ON p.id = a.product_id WHERE a.id = ? AND a.user_id = ? AND a.status = 'actif' AND p.kind != 'cat'").get(Number(req.body.account_id), req.user.id);
+  if (!acc) throw new bank.BankError('Choisissez un livret.');
+  if (!amount || amount < 1000) throw new bank.BankError('Montant minimum : 10 €.');
+  if (!(day >= 1 && day <= 28)) throw new bank.BankError('Jour invalide (1 à 28).');
+  db.prepare('INSERT INTO standing_orders (user_id, account_id, amount_cents, day_of_month) VALUES (?,?,?,?)').run(req.user.id, acc.id, amount, day);
+  req.flash('success', `Versement programmé de ${m.formatEuros(amount)} le ${day} de chaque mois enregistré.`);
+  res.redirect('/espace/versements-programmes');
+}));
+espace.post('/versements-programmes/:id/supprimer', handle((req, res) => {
+  db.prepare('UPDATE standing_orders SET active = 0 WHERE id = ? AND user_id = ?').run(Number(req.params.id), req.user.id);
+  req.flash('success', 'Versement programmé arrêté.');
+  res.redirect('/espace/versements-programmes');
+}));
+
+// ----- Documents -----
+espace.get('/documents', (req, res) => {
+  const accounts = bank.userAccounts(req.user.id);
+  const months = db.prepare(`SELECT DISTINCT t.account_id, strftime('%Y-%m', t.created_at) AS m FROM transactions t JOIN accounts a ON a.id = t.account_id
+    WHERE a.user_id = ? ORDER BY m DESC`).all(req.user.id);
+  const years = [...new Set(months.map((r) => r.m.slice(0, 4)))];
+  res.render('client/documents', { title: 'Mes documents', accounts, months, years });
+});
+espace.get('/documents/fiscal/:year', handle((req, res) => {
+  const year = Number(req.params.year);
+  if (!(year >= 2000 && year <= 2100)) throw new bank.BankError('Année invalide.');
+  const rows = bank.taxSummary(req.user.id, year);
+  res.render('client/fiscal', { title: `Récapitulatif fiscal ${year}`, year, rows,
+    total: rows.reduce((s, r) => s + r.interest, 0), totalBonus: rows.reduce((s, r) => s + r.bonuses, 0) });
+}));
+
 app.use('/espace', espace);
 
 // ======================= ADMINISTRATION =======================
@@ -303,7 +369,11 @@ admin.get('/', (req, res) => {
   const recentUsers = db.prepare("SELECT * FROM users WHERE role='client' ORDER BY created_at DESC LIMIT 6").all();
   const recentTx = db.prepare(`SELECT t.*, u.first_name, u.last_name, u.id AS user_id FROM transactions t JOIN accounts a ON a.id = t.account_id JOIN users u ON u.id = a.user_id
     ORDER BY t.created_at DESC, t.id DESC LIMIT 10`).all();
-  res.render('admin/dashboard', { title: 'Tableau de bord', stats, accrued, recentUsers, recentTx });
+  const orders = db.prepare(`SELECT s.*, u.first_name, u.last_name, p.name AS product_name FROM standing_orders s JOIN users u ON u.id = s.user_id
+    JOIN accounts a ON a.id = s.account_id JOIN products p ON p.id = a.product_id WHERE s.active = 1 ORDER BY s.day_of_month LIMIT 50`).all();
+  const maturities = db.prepare(`SELECT a.*, u.first_name, u.last_name, p.name AS product_name FROM accounts a JOIN users u ON u.id = a.user_id
+    JOIN products p ON p.id = a.product_id WHERE a.maturity_at IS NOT NULL AND a.status = 'actif' AND a.balance_cents > 0 ORDER BY a.maturity_at LIMIT 20`).all();
+  res.render('admin/dashboard', { title: 'Tableau de bord', stats, accrued, recentUsers, recentTx, orders, maturities });
 });
 
 admin.get('/clients', (req, res) => {
@@ -350,8 +420,10 @@ admin.get('/clients/:id', handle((req, res) => {
   const filleuls = db.prepare('SELECT id, first_name, last_name, referral_paid FROM users WHERE referred_by = ?').all(client.id);
   const msgs = db.prepare('SELECT * FROM messages WHERE user_id = ? ORDER BY created_at, id').all(client.id);
   db.prepare("UPDATE messages SET read_at = datetime('now') WHERE user_id = ? AND from_admin = 0 AND read_at IS NULL").run(client.id);
+  const goals = bank.userGoals(client.id);
+  const orders = bank.userStandingOrders(client.id);
   const ownedProducts = accounts.filter((a) => a.status !== 'cloture').map((a) => a.product_id);
-  res.render('admin/client', { title: `${client.first_name} ${client.last_name}`, customer: client, accounts, txs, withdrawals, parrain, filleuls, msgs,
+  res.render('admin/client', { title: `${client.first_name} ${client.last_name}`, customer: client, goals, orders, accounts, txs, withdrawals, parrain, filleuls, msgs,
     openable: bank.listProducts().filter((p) => !ownedProducts.includes(p.id)) });
 }));
 
@@ -498,8 +570,11 @@ admin.post('/produits/:id', handle((req, res) => {
   if (boosted !== null && (isNaN(boosted) || boosted < 0 || boosted > 20)) throw new bank.BankError('Taux boosté invalide.');
   const cap = b.boost_cap ? m.parseEuros(b.boost_cap) : null;
   const max = b.max_balance ? m.parseEuros(b.max_balance) : null;
-  db.prepare('UPDATE products SET name = ?, description = ?, base_rate = ?, boosted_rate = ?, boost_months = ?, boost_cap_cents = ?, max_balance_cents = ?, active = ? WHERE id = ?')
-    .run(str(b.name, 60) || 'Livret', str(b.description, 300), base, boosted, Math.max(0, Number(b.boost_months) || 0), cap, max, b.active ? 1 : 0, id);
+  const kind = b.kind === 'cat' ? 'cat' : 'livret';
+  const term = kind === 'cat' ? Math.max(1, Number(b.term_months) || 12) : null;
+  const min = b.min_deposit ? m.parseEuros(b.min_deposit) : 0;
+  db.prepare('UPDATE products SET name = ?, description = ?, base_rate = ?, boosted_rate = ?, boost_months = ?, boost_cap_cents = ?, max_balance_cents = ?, active = ?, kind = ?, term_months = ?, min_deposit_cents = ? WHERE id = ?')
+    .run(str(b.name, 60) || 'Livret', str(b.description, 300), base, kind === 'cat' ? null : boosted, kind === 'cat' ? 0 : Math.max(0, Number(b.boost_months) || 0), cap, max, b.active ? 1 : 0, kind, term, min || 0, id);
   bank.audit(req.user.id, 'produit', { id, base, boosted });
   req.flash('success', 'Livret mis à jour. Pensez à verser les intérêts acquis avant tout changement de taux.');
   res.redirect('/admin/parametres');

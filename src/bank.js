@@ -40,7 +40,14 @@ function listProducts(activeOnly = true) {
 function openAccount(userId, productId) {
   const p = getProduct(productId);
   if (!p || !p.active) throw new BankError('Produit indisponible.');
-  const r = db.prepare('INSERT INTO accounts (user_id, product_id, iban) VALUES (?,?,?)').run(userId, p.id, newIban());
+  let fixedRate = null, maturity = null;
+  if (p.kind === 'cat') {
+    // Compte à terme : taux figé à l'ouverture, échéance fixe
+    fixedRate = p.base_rate;
+    maturity = m.toDbDate(m.addMonths(new Date(), p.term_months || 12));
+  }
+  const r = db.prepare('INSERT INTO accounts (user_id, product_id, iban, fixed_rate, maturity_at) VALUES (?,?,?,?,?)')
+    .run(userId, p.id, newIban(), fixedRate, maturity);
   return Number(r.lastInsertRowid);
 }
 
@@ -107,6 +114,9 @@ function requestWithdrawal(user, accountId, amountCents, note) {
   if (acc.status !== 'actif') throw new BankError("Ce compte n'est pas actif.");
   if (!user.reference_iban) throw new BankError('Ajoutez d’abord un compte de référence dans votre profil.');
   if (!amountCents || amountCents <= 0) throw new BankError('Montant invalide.');
+  if (acc.maturity_at && m.parseDbDate(acc.maturity_at) > new Date()) {
+    throw new BankError(`Compte à terme : fonds disponibles à l’échéance du ${m.parseDbDate(acc.maturity_at).toLocaleDateString('fr-FR')}.`);
+  }
   const available = acc.balance_cents - pendingWithdrawalsCents(acc.id);
   if (amountCents > available) throw new BankError(`Montant supérieur au solde disponible (${m.formatEuros(available)}).`);
   db.prepare('INSERT INTO withdrawals (account_id, amount_cents, destination_iban, client_note) VALUES (?,?,?,?)')
@@ -136,7 +146,16 @@ function processWithdrawal(adminId, withdrawalId, approve, note) {
   });
 }
 
+// Produit « effectif » d'un compte : un compte à terme garde son taux figé à l'ouverture
+function effectiveProduct(acc, product = getProduct(acc.product_id)) {
+  if (acc.fixed_rate == null) return product;
+  return { ...product, base_rate: acc.fixed_rate, boosted_rate: null, boost_months: 0 };
+}
+
 function accruedInterest(acc, product = getProduct(acc.product_id), now = new Date()) {
+  product = effectiveProduct(acc, product);
+  // Un compte à terme cesse de produire des intérêts à son échéance
+  if (acc.maturity_at && m.parseDbDate(acc.maturity_at) < now) now = m.parseDbDate(acc.maturity_at);
   const txs = db.prepare('SELECT created_at, amount_cents FROM transactions WHERE account_id = ? AND created_at > ?').all(acc.id, acc.last_interest_at);
   return m.computeInterest(acc, product, txs, now);
 }
@@ -204,16 +223,50 @@ function payReferral(adminId, userId) {
 function accountView(acc) {
   const product = getProduct(acc.product_id);
   const accrued = accruedInterest(acc, product);
-  const rate = m.currentRate(acc, product);
+  const rate = m.currentRate(acc, effectiveProduct(acc, product));
   const pending = pendingWithdrawalsCents(acc.id);
-  return { ...acc, product, accrued, rate, pending, available: acc.balance_cents - pending };
+  const maturity = acc.maturity_at ? m.parseDbDate(acc.maturity_at) : null;
+  const locked = !!(maturity && maturity > new Date());
+  return { ...acc, product, accrued, rate, pending, maturity, locked, available: locked ? 0 : acc.balance_cents - pending };
 }
 
 function userAccounts(userId) {
   return db.prepare("SELECT * FROM accounts WHERE user_id = ? AND status != 'cloture' ORDER BY id").all(userId).map(accountView);
 }
 
+// ---------- Projets d'épargne ----------
+function userGoals(userId) {
+  const accounts = Object.fromEntries(userAccounts(userId).map((a) => [a.id, a]));
+  const total = Object.values(accounts).reduce((s, a) => s + a.balance_cents, 0);
+  return db.prepare('SELECT * FROM goals WHERE user_id = ? ORDER BY created_at').all(userId).map((g) => {
+    const saved = g.account_id && accounts[g.account_id] ? accounts[g.account_id].balance_cents : total;
+    const pct = Math.min(100, Math.round((saved / g.target_cents) * 100));
+    let monthly = null;
+    if (g.target_date && saved < g.target_cents) {
+      const months = Math.max(1, Math.round((new Date(g.target_date) - new Date()) / (30.44 * 86400000)));
+      monthly = Math.ceil((g.target_cents - saved) / months);
+    }
+    return { ...g, saved, pct, monthly, account: g.account_id ? accounts[g.account_id] : null };
+  });
+}
+
+// ---------- Versements programmés ----------
+function userStandingOrders(userId) {
+  return db.prepare(`SELECT s.*, a.iban, p.name AS product_name FROM standing_orders s JOIN accounts a ON a.id = s.account_id
+    JOIN products p ON p.id = a.product_id WHERE s.user_id = ? AND s.active = 1 ORDER BY s.day_of_month`).all(userId);
+}
+
+// ---------- Attestation fiscale ----------
+function taxSummary(userId, year) {
+  return db.prepare(`SELECT a.id, a.iban, p.name AS product_name, COALESCE(SUM(CASE WHEN t.type = 'interets' THEN t.amount_cents END),0) AS interest,
+    COALESCE(SUM(CASE WHEN t.type IN ('prime','parrainage') THEN t.amount_cents END),0) AS bonuses
+    FROM accounts a JOIN products p ON p.id = a.product_id
+    LEFT JOIN transactions t ON t.account_id = a.id AND strftime('%Y', t.created_at) = ?
+    WHERE a.user_id = ? GROUP BY a.id ORDER BY a.id`).all(String(year), userId);
+}
+
 module.exports = {
+  userGoals, userStandingOrders, taxSummary, effectiveProduct,
   BankError, createUser, openAccount, listProducts, getProduct, postTransaction, adminOperation,
   requestWithdrawal, cancelWithdrawal, processWithdrawal, pendingWithdrawalsCents,
   payInterest, payAllInterest, payWelcomeBonus, payReferral, accountView, userAccounts, audit, accruedInterest,

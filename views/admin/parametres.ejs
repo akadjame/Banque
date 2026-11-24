@@ -21,7 +21,10 @@
     <label class="check" style="margin:0"><input type="checkbox" name="active" value="1" <%= p.active ? 'checked' : '' %>> Proposé à l'ouverture</label></div>
   <div class="row"><div><label>Nom</label><input name="name" value="<%= p.name %>"></div><div><label>Description</label><input name="description" value="<%= p.description || '' %>"></div></div>
   <div class="grid grid-4">
-    <div><label>Taux de base (%)</label><input name="base_rate" value="<%= p.base_rate %>"></div>
+    <div><label>Type</label><select name="kind"><option value="livret" <%= p.kind !== 'cat' ? 'selected' : '' %>>Livret (disponible)</option><option value="cat" <%= p.kind === 'cat' ? 'selected' : '' %>>Compte à terme</option></select></div>
+    <div><label>Durée du terme (mois)</label><input name="term_months" type="number" min="1" value="<%= p.term_months || '' %>" placeholder="CAT uniquement"></div>
+    <div><label>Versement minimum (€)</label><input name="min_deposit" value="<%= p.min_deposit_cents ? p.min_deposit_cents / 100 : '' %>"></div>
+    <div><label>Taux de base / fixe (%)</label><input name="base_rate" value="<%= p.base_rate %>"></div>
     <div><label>Taux boosté (%)</label><input name="boosted_rate" value="<%= p.boosted_rate ?? '' %>" placeholder="aucun"></div>
     <div><label>Durée du boost (mois)</label><input name="boost_months" type="number" min="0" value="<%= p.boost_months %>"></div>
     <div><label>Plafond du boost (€)</label><input name="boost_cap" value="<%= p.boost_cap_cents ? p.boost_cap_cents / 100 : '' %>" placeholder="aucun"></div>

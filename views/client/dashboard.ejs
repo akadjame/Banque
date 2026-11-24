@@ -17,23 +17,42 @@
   </div>
 </div>
 
-<h2 style="font-size:1.2rem">Mes livrets</h2>
+<h2 style="font-size:1.2rem">Mes comptes d'épargne</h2>
 <div class="grid grid-2" style="margin-bottom:22px">
   <% accounts.forEach(a => { %>
   <a class="acct" href="/espace/compte/<%= a.id %>">
     <div style="display:flex;justify-content:space-between;align-items:center;gap:8px">
       <span class="name"><%= a.product.name %></span>
-      <% if (a.rate.boosted) { %><span class="chip violet">Boosté <%= rate(a.rate.rate) %></span><% } else { %><span class="chip"><%= rate(a.rate.rate) %></span><% } %>
+      <% if (a.rate.boosted) { %><span class="chip violet">Boosté <%= rate(a.rate.rate) %></span><% } else if (a.maturity) { %><span class="chip cyan">Fixe <%= rate(a.rate.rate) %></span><% } else { %><span class="chip"><%= rate(a.rate.rate) %></span><% } %>
     </div>
     <div class="bal"><%= eur(a.balance_cents) %></div>
     <div class="small muted mono"><%= iban(a.iban) %></div>
     <div class="small" style="margin-top:6px">Intérêts acquis : <strong class="amt-pos"><%= eur(a.accrued.cents) %></strong></div>
     <% if (a.rate.boosted) { %><div class="small muted">Taux boosté jusqu'au <%= a.rate.until.toLocaleDateString('fr-FR') %></div><% } %>
+    <% if (a.maturity) { %><div class="small muted"><%= a.locked ? 'Échéance le' : 'Arrivé à échéance le' %> <%= a.maturity.toLocaleDateString('fr-FR') %></div><% } %>
     <% if (a.status !== 'actif') { %><span class="chip red"><%= statusLabels[a.status] %></span><% } %>
   </a>
   <% }) %>
   <% if (!accounts.length) { %><div class="card">Aucun livret. <a href="/espace/ouvrir">Ouvrir un livret</a></div><% } %>
 </div>
+
+<% if (goals.length) { %>
+<div class="card">
+  <div class="page-head" style="margin-bottom:8px"><h2 style="margin:0">Mes projets</h2><a class="btn btn-light btn-sm" href="/espace/projets">Gérer</a></div>
+  <div class="grid grid-3">
+  <% goals.slice(0, 3).forEach(g => { %>
+    <div><div><%= g.emoji %> <strong><%= g.name %></strong> <span class="small muted"><%= g.pct %> %</span></div>
+      <div class="progress" style="margin-top:6px"><div style="width:<%= g.pct %>%"></div></div>
+      <div class="small muted" style="margin-top:4px"><%= eur(g.saved) %> / <%= eur(g.target_cents) %></div></div>
+  <% }) %>
+  </div>
+</div>
+<% } else { %>
+<div class="card" style="display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap">
+  <div><strong>🎯 Donnez un but à votre épargne</strong><div class="small muted">Voyage, voiture, apport… suivez votre progression mois après mois.</div></div>
+  <a class="btn btn-violet btn-sm" href="/espace/projets">Créer un projet</a>
+</div>
+<% } %>
 
 <div class="card">
   <h2>Dernières opérations</h2>

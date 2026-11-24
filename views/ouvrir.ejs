@@ -7,11 +7,11 @@
     <% if (error) { %><div class="alert alert-error"><%= error %></div><% } %>
 
     <fieldset>
-      <legend>1. Mon livret</legend>
+      <legend>1. Mon produit d'épargne</legend>
       <div class="choice">
         <% offer.products.forEach((p, i) => { %>
         <label><input type="radio" name="product_id" value="<%= p.id %>" <%= (values.product_id ? values.product_id == p.id : i === 0) ? 'checked' : '' %>>
-          <span><strong><%= p.name %></strong><br><span class="small muted"><%= rate(p.boosted_rate || p.base_rate) %><%= p.boosted_rate ? ` ${p.boost_months} mois puis ${rate(p.base_rate)}` : '' %></span></span></label>
+          <span><strong><%= p.name %></strong><br><span class="small muted"><%= rate(headlineRate(p)) %> · <%= productRateText(p) %></span></span></label>
         <% }) %>
       </div>
     </fieldset>

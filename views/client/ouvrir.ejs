@@ -1,16 +1,16 @@
 <%- include('../partials/client-top') %>
-<div class="page-head"><h1>Ouvrir un nouveau livret</h1></div>
+<div class="page-head"><h1>Ouvrir un nouveau produit</h1></div>
 <% if (!products.length) { %><div class="card">Vous détenez déjà tous nos livrets.</div><% } %>
 <div class="grid grid-2">
   <% products.forEach(p => { %>
   <div class="card">
     <h2><%= p.name %></h2>
-    <div style="font-size:2.4rem;font-weight:800;color:var(--violet)"><%= rate(p.boosted_rate || p.base_rate) %></div>
-    <p class="small muted"><%= p.boosted_rate ? `pendant ${p.boost_months} mois, puis ${rate(p.base_rate)}` : 'taux annuel brut' %></p>
+    <div style="font-size:2.4rem;font-weight:800;color:var(--violet)"><%= rate(headlineRate(p)) %></div>
+    <p class="small muted"><%= productRateText(p) %><%= p.min_deposit_cents ? ' · dès ' + eur(p.min_deposit_cents) : '' %></p>
     <p><%= p.description %></p>
     <form method="post" action="/espace/ouvrir" data-confirm="Ouvrir le <%= p.name %> ?">
       <input type="hidden" name="_csrf" value="<%= csrf %>"><input type="hidden" name="product_id" value="<%= p.id %>">
-      <button class="btn btn-violet">Ouvrir ce livret</button>
+      <button class="btn btn-violet">Ouvrir</button>
     </form>
   </div>
   <% }) %>
