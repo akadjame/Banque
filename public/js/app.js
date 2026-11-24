@@ -47,3 +47,27 @@ document.addEventListener('click', function (e) {
 document.addEventListener('click', function (e) {
   if (e.target.closest('[data-print]')) window.print();
 });
+
+// Inscription : particulier / entreprise
+(function () {
+  const choice = document.getElementById('type-choice');
+  if (!choice) return;
+  function apply() {
+    const pro = (choice.querySelector('input:checked') || {}).value === 'pro';
+    document.getElementById('company-fields').hidden = !pro;
+    document.getElementById('identity-title').textContent = pro ? 'Le représentant légal' : 'Mon identité';
+    let firstVisible = null, checkedVisible = false;
+    document.querySelectorAll('label[data-audience]').forEach(function (l) {
+      const a = l.getAttribute('data-audience');
+      const show = a === 'tous' || (a === 'pro') === pro;
+      l.hidden = !show;
+      const input = l.querySelector('input');
+      if (!show && input.checked) input.checked = false;
+      if (show && !firstVisible) firstVisible = input;
+      if (show && input.checked) checkedVisible = true;
+    });
+    if (!checkedVisible && firstVisible) firstVisible.checked = true;
+  }
+  choice.addEventListener('change', apply);
+  apply();
+})();

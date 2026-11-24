@@ -3,6 +3,21 @@
 <form class="card" method="post" action="/admin/clients/nouveau" style="max-width:760px">
   <input type="hidden" name="_csrf" value="<%= csrf %>">
   <% if (error) { %><div class="alert alert-error"><%= error %></div><% } %>
+  <div class="choice" id="type-choice" style="margin-bottom:10px">
+    <label><input type="radio" name="account_type" value="particulier" <%= values.account_type !== 'pro' ? 'checked' : '' %>> <strong>Particulier</strong></label>
+    <label><input type="radio" name="account_type" value="pro" <%= values.account_type === 'pro' ? 'checked' : '' %>> <strong>Entreprise</strong></label>
+  </div>
+  <fieldset id="company-fields" style="margin:0" <%= values.account_type === 'pro' ? '' : 'hidden' %>>
+    <div class="row">
+      <div><label>Raison sociale</label><input name="company_name" value="<%= values.company_name || '' %>"></div>
+      <div><label>SIREN</label><input name="siren" value="<%= values.siren || '' %>" inputmode="numeric"></div>
+    </div>
+    <div class="row">
+      <div><label>Forme juridique</label><select name="legal_form"><option value="">Choisir…</option><% LEGAL_FORMS.forEach(f => { %><option <%= values.legal_form === f ? 'selected' : '' %>><%= f %></option><% }) %></select></div>
+      <div><label>Fonction du représentant</label><input name="company_role" value="<%= values.company_role || '' %>"></div>
+    </div>
+  </fieldset>
+  <span id="identity-title" hidden></span>
   <div class="row-3">
     <div><label for="civility">Civilité</label><select id="civility" name="civility"><option>M.</option><option <%= values.civility === 'Mme' ? 'selected' : '' %>>Mme</option></select></div>
     <div><label for="birth_date">Date de naissance</label><input type="date" id="birth_date" name="birth_date" value="<%= values.birth_date || '' %>"></div>
@@ -23,7 +38,7 @@
     <div><label for="reference_holder">Titulaire</label><input id="reference_holder" name="reference_holder" value="<%= values.reference_holder || '' %>"></div>
   </div>
   <div class="row">
-    <div><label for="product_id">Livret</label><select id="product_id" name="product_id"><% offer.products.forEach(p => { %><option value="<%= p.id %>"><%= p.name %></option><% }) %></select></div>
+    <div><label for="product_id">Produit</label><select id="product_id" name="product_id"><% offer.products.filter(p => p.kind !== 'junior').forEach(p => { %><option value="<%= p.id %>"><%= p.name %><%= p.audience === 'pro' ? ' (entreprises)' : '' %></option><% }) %></select></div>
     <div><label for="password">Mot de passe provisoire</label><input id="password" name="password" required minlength="10"></div>
   </div>
   <button class="btn btn-violet" style="margin-top:18px">Créer le client (statut actif)</button>

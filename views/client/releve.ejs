@@ -5,7 +5,7 @@
     <div style="text-align:right"><%= user.civility || '' %> <%= user.first_name %> <%= user.last_name.toUpperCase() %><br><%= user.address %><br><%= user.postal_code %> <%= user.city %></div>
   </div>
   <h1 style="margin-top:30px">Relevé de compte — <%= new Date(month + '-01').toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' }) %></h1>
-  <p><%= account.product.name %> — <span class="mono"><%= iban(account.iban) %></span></p>
+  <p><%= account.displayName %> — <span class="mono"><%= iban(account.iban) %></span></p>
   <table>
     <thead><tr><th>Date</th><th>Libellé</th><th style="text-align:right">Débit</th><th style="text-align:right">Crédit</th></tr></thead>
     <tbody>

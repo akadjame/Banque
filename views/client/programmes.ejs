@@ -14,7 +14,7 @@
     <input type="hidden" name="_csrf" value="<%= csrf %>">
     <h2>Programmer un versement</h2>
     <label for="account_id">Vers</label>
-    <select id="account_id" name="account_id"><% accounts.forEach(a => { %><option value="<%= a.id %>"><%= a.product.name %> — <%= iban(a.iban).slice(-14) %></option><% }) %></select>
+    <select id="account_id" name="account_id"><% accounts.forEach(a => { %><option value="<%= a.id %>"><%= a.displayName %> — <%= iban(a.iban).slice(-14) %></option><% }) %></select>
     <div class="row">
       <div><label for="amount">Montant mensuel (€)</label><input id="amount" name="amount" inputmode="decimal" placeholder="100" required></div>
       <div><label for="day">Jour du mois</label><input type="number" id="day" name="day" min="1" max="28" value="5" required></div>

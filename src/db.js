@@ -123,6 +123,32 @@ addColumn('products', 'kind', "TEXT NOT NULL DEFAULT 'livret'"); // livret | cat
 addColumn('products', 'term_months', 'INTEGER');                  // durée d'un compte à terme
 addColumn('accounts', 'fixed_rate', 'REAL');                      // taux garanti figé à l'ouverture (CAT)
 addColumn('accounts', 'maturity_at', 'TEXT');                     // échéance (CAT)
+// Compte joint : second titulaire
+addColumn('accounts', 'co_user_id', 'INTEGER REFERENCES users(id)');
+// Livret enfant : bénéficiaire mineur (le compte est géré par le représentant légal)
+addColumn('accounts', 'beneficiary_first_name', 'TEXT');
+addColumn('accounts', 'beneficiary_last_name', 'TEXT');
+addColumn('accounts', 'beneficiary_birth_date', 'TEXT');
+// Clients professionnels
+addColumn('users', 'account_type', "TEXT NOT NULL DEFAULT 'particulier'"); // particulier | pro
+addColumn('users', 'company_name', 'TEXT');
+addColumn('users', 'siren', 'TEXT');
+addColumn('users', 'legal_form', 'TEXT');
+addColumn('users', 'company_role', 'TEXT');
+// Public visé par un produit
+addColumn('products', 'audience', "TEXT NOT NULL DEFAULT 'particulier'"); // particulier | pro | tous
+
+db.exec(`
+CREATE TABLE IF NOT EXISTS joint_invites (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  account_id INTEGER NOT NULL REFERENCES accounts(id),
+  from_user_id INTEGER NOT NULL REFERENCES users(id),
+  to_email TEXT NOT NULL,
+  status TEXT NOT NULL DEFAULT 'en_attente' CHECK (status IN ('en_attente','acceptee','refusee','annulee')),
+  created_at TEXT NOT NULL DEFAULT (datetime('now')),
+  answered_at TEXT
+);
+`);
 
 db.exec(`
 CREATE TABLE IF NOT EXISTS goals (
@@ -162,6 +188,18 @@ if (!db.prepare("SELECT 1 FROM products WHERE kind = 'cat'").get()) {
   ins.run('CAT_12', 'Compte à terme 12 mois', 'Taux fixe garanti pendant 12 mois. Capital et intérêts versés à l’échéance.', 3.0, 12);
   ins.run('CAT_24', 'Compte à terme 24 mois', 'Taux fixe garanti pendant 24 mois. Capital et intérêts versés à l’échéance.', 3.1, 24);
   ins.run('CAT_36', 'Compte à terme 36 mois', 'Taux fixe garanti pendant 36 mois. Capital et intérêts versés à l’échéance.', 3.2, 36);
+}
+
+// Livret enfant et offre professionnelle
+if (!db.prepare("SELECT 1 FROM products WHERE kind = 'junior'").get()) {
+  db.prepare(`INSERT INTO products (code,name,description,base_rate,boost_months,max_balance_cents,min_deposit_cents,kind,audience)
+    VALUES ('LIVRET_JUNIOR','Livret Junior','Le livret de vos enfants, ouvert et géré par un parent jusqu’à leurs 18 ans. Sans frais.',3.0,0,5000000,1000,'junior','particulier')`).run();
+}
+if (!db.prepare("SELECT 1 FROM products WHERE audience = 'pro'").get()) {
+  const ins = db.prepare(`INSERT INTO products (code,name,description,base_rate,boosted_rate,boost_months,boost_cap_cents,min_deposit_cents,kind,term_months,audience)
+    VALUES (?,?,?,?,?,?,?,?,?,?,'pro')`);
+  ins.run('LIVRET_PRO', 'Livret Pro', 'Placez la trésorerie de votre entreprise sans la bloquer. Sans plafond, sans frais.', 2.0, 3.0, 3, 100000000, 100000, 'livret', null);
+  ins.run('CAT_PRO_12', 'Compte à terme Pro 12 mois', 'Trésorerie excédentaire placée 12 mois à taux fixe garanti.', 3.0, null, 0, null, 1000000, 'cat', 12);
 }
 
 const defaults = require('./config').defaults;

@@ -9,7 +9,7 @@
   </div>
   <div class="card">
     <h2>RIB</h2>
-    <% accounts.forEach(a => { %><p><a href="/espace/compte/<%= a.id %>/rib">📄 RIB — <%= a.product.name %></a></p><% }) %>
+    <% accounts.forEach(a => { %><p><a href="/espace/compte/<%= a.id %>/rib">📄 RIB — <%= a.displayName %></a></p><% }) %>
   </div>
 </div>
 <div class="card">
@@ -17,7 +17,7 @@
   <% if (!months.length) { %><p class="muted">Aucun relevé pour le moment.</p><% } %>
   <div class="table-wrap"><table>
     <% months.forEach(r => { const a = accounts.find(x => x.id === r.account_id); if (!a) return; %>
-    <tr><td><%= new Date(r.m + '-01').toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' }) %></td><td class="muted"><%= a.product.name %></td>
+    <tr><td><%= new Date(r.m + '-01').toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' }) %></td><td class="muted"><%= a.displayName %></td>
       <td style="text-align:right"><a class="btn btn-light btn-sm" href="/espace/compte/<%= a.id %>/releve?mois=<%= r.m %>">Voir</a></td></tr>
     <% }) %>
   </table></div>

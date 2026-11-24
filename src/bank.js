@@ -33,36 +33,51 @@ function newIban() {
 }
 
 function getProduct(id) { return db.prepare('SELECT * FROM products WHERE id = ?').get(id); }
-function listProducts(activeOnly = true) {
-  return db.prepare(`SELECT * FROM products ${activeOnly ? 'WHERE active = 1' : ''} ORDER BY id`).all();
+function listProducts(activeOnly = true, audience = null) {
+  const rows = db.prepare(`SELECT * FROM products ${activeOnly ? 'WHERE active = 1' : ''} ORDER BY id`).all();
+  return audience ? rows.filter((p) => p.audience === 'tous' || p.audience === audience) : rows;
 }
 
-function openAccount(userId, productId) {
+function openAccount(userId, productId, opts = {}) {
   const p = getProduct(productId);
   if (!p || !p.active) throw new BankError('Produit indisponible.');
+  const owner = db.prepare('SELECT account_type FROM users WHERE id = ?').get(userId);
+  if (owner && p.audience !== 'tous' && p.audience !== owner.account_type) {
+    throw new BankError(p.audience === 'pro' ? 'Ce produit est réservé aux entreprises.' : 'Ce produit est réservé aux particuliers.');
+  }
+  let ben = { first: null, last: null, birth: null };
+  if (p.kind === 'junior') {
+    ben = { first: String(opts.beneficiary_first_name || '').trim().slice(0, 60), last: String(opts.beneficiary_last_name || '').trim().slice(0, 60), birth: opts.beneficiary_birth_date || '' };
+    const age = m.ageOn(ben.birth);
+    if (!ben.first || !ben.last) throw new BankError("Indiquez le prénom et le nom de l'enfant.");
+    if (age === null || age < 0 || age >= 18) throw new BankError("Le Livret Junior est réservé aux enfants de moins de 18 ans.");
+  }
   let fixedRate = null, maturity = null;
   if (p.kind === 'cat') {
     // Compte à terme : taux figé à l'ouverture, échéance fixe
     fixedRate = p.base_rate;
     maturity = m.toDbDate(m.addMonths(new Date(), p.term_months || 12));
   }
-  const r = db.prepare('INSERT INTO accounts (user_id, product_id, iban, fixed_rate, maturity_at) VALUES (?,?,?,?,?)')
-    .run(userId, p.id, newIban(), fixedRate, maturity);
+  const r = db.prepare(`INSERT INTO accounts (user_id, product_id, iban, fixed_rate, maturity_at, beneficiary_first_name, beneficiary_last_name, beneficiary_birth_date)
+    VALUES (?,?,?,?,?,?,?,?)`).run(userId, p.id, newIban(), fixedRate, maturity, ben.first, ben.last, ben.birth || null);
   return Number(r.lastInsertRowid);
 }
 
 function createUser(data, { role = 'client', status = 'en_attente' } = {}) {
   return tx(() => {
-    const r = db.prepare(`INSERT INTO users (email,password_hash,role,status,civility,first_name,last_name,birth_date,phone,address,postal_code,city,reference_iban,reference_holder,client_number,referral_code,referred_by)
-      VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`).run(
+    const r = db.prepare(`INSERT INTO users (email,password_hash,role,status,civility,first_name,last_name,birth_date,phone,address,postal_code,city,reference_iban,reference_holder,client_number,referral_code,referred_by,
+      account_type,company_name,siren,legal_form,company_role)
+      VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`).run(
       data.email.toLowerCase(), data.password_hash, role, status, data.civility || null, data.first_name, data.last_name,
       data.birth_date || null, data.phone || null, data.address || null, data.postal_code || null, data.city || null,
       data.reference_iban ? m.normalizeIban(data.reference_iban) : null, data.reference_holder || null,
       role === 'client' ? newClientNumber() : null, role === 'client' ? newReferralCode(data.last_name) : null,
       data.referred_by || null,
+      data.account_type === 'pro' ? 'pro' : 'particulier', data.company_name || null, data.siren ? String(data.siren).replace(/\s+/g, '') : null,
+      data.legal_form || null, data.company_role || null,
     );
     const userId = Number(r.lastInsertRowid);
-    if (role === 'client' && data.product_id) openAccount(userId, data.product_id);
+    if (role === 'client' && data.product_id) openAccount(userId, data.product_id, data);
     return userId;
   });
 }
@@ -109,7 +124,7 @@ function pendingWithdrawalsCents(accountId) {
 }
 
 function requestWithdrawal(user, accountId, amountCents, note) {
-  const acc = db.prepare('SELECT * FROM accounts WHERE id = ? AND user_id = ?').get(accountId, user.id);
+  const acc = db.prepare('SELECT * FROM accounts WHERE id = ? AND ? IN (user_id, co_user_id)').get(accountId, user.id);
   if (!acc) throw new BankError('Compte introuvable.');
   if (acc.status !== 'actif') throw new BankError("Ce compte n'est pas actif.");
   if (!user.reference_iban) throw new BankError('Ajoutez d’abord un compte de référence dans votre profil.');
@@ -125,7 +140,7 @@ function requestWithdrawal(user, accountId, amountCents, note) {
 
 function cancelWithdrawal(user, withdrawalId) {
   const w = db.prepare(`SELECT w.* FROM withdrawals w JOIN accounts a ON a.id = w.account_id
-    WHERE w.id = ? AND a.user_id = ? AND w.status = 'en_attente'`).get(withdrawalId, user.id);
+    WHERE w.id = ? AND ? IN (a.user_id, a.co_user_id) AND w.status = 'en_attente'`).get(withdrawalId, user.id);
   if (!w) throw new BankError('Demande introuvable ou déjà traitée.');
   db.prepare("UPDATE withdrawals SET status = 'annule', processed_at = datetime('now') WHERE id = ?").run(w.id);
 }
@@ -227,11 +242,64 @@ function accountView(acc) {
   const pending = pendingWithdrawalsCents(acc.id);
   const maturity = acc.maturity_at ? m.parseDbDate(acc.maturity_at) : null;
   const locked = !!(maturity && maturity > new Date());
-  return { ...acc, product, accrued, rate, pending, maturity, locked, available: locked ? 0 : acc.balance_cents - pending };
+  const holders = db.prepare('SELECT id, first_name, last_name, company_name, account_type FROM users WHERE id IN (?, ?)').all(acc.user_id, acc.co_user_id || 0);
+  const holder = holders.find((h) => h.id === acc.user_id);
+  const coHolder = holders.find((h) => h.id === acc.co_user_id) || null;
+  const displayName = product.kind === 'junior' && acc.beneficiary_first_name ? `${product.name} — ${acc.beneficiary_first_name}`
+    : coHolder ? `${product.name} (joint)` : product.name;
+  return { ...acc, product, accrued, rate, pending, maturity, locked, holder, coHolder, displayName, available: locked ? 0 : acc.balance_cents - pending };
 }
 
 function userAccounts(userId) {
-  return db.prepare("SELECT * FROM accounts WHERE user_id = ? AND status != 'cloture' ORDER BY id").all(userId).map(accountView);
+  return db.prepare("SELECT * FROM accounts WHERE ? IN (user_id, co_user_id) AND status != 'cloture' ORDER BY id").all(userId).map(accountView);
+}
+
+// ---------- Compte joint ----------
+function inviteCoHolder(user, accountId, email) {
+  const acc = db.prepare('SELECT a.*, p.kind FROM accounts a JOIN products p ON p.id = a.product_id WHERE a.id = ? AND a.user_id = ?').get(accountId, user.id);
+  if (!acc) throw new BankError('Seul le titulaire principal peut ajouter un cotitulaire.');
+  if (acc.kind === 'junior') throw new BankError('Un Livret Junior ne peut pas être joint.');
+  if (acc.co_user_id) throw new BankError('Ce compte a déjà un cotitulaire.');
+  if (user.account_type === 'pro') throw new BankError('Les comptes joints sont réservés aux particuliers.');
+  const to = String(email || '').trim().toLowerCase();
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(to)) throw new BankError('Adresse e-mail invalide.');
+  if (to === user.email) throw new BankError('Vous ne pouvez pas vous inviter vous-même.');
+  if (db.prepare("SELECT 1 FROM joint_invites WHERE account_id = ? AND status = 'en_attente'").get(acc.id)) throw new BankError('Une invitation est déjà en attente pour ce compte.');
+  db.prepare('INSERT INTO joint_invites (account_id, from_user_id, to_email) VALUES (?,?,?)').run(acc.id, user.id, to);
+}
+
+function invitesFor(user) {
+  return db.prepare(`SELECT i.*, u.first_name, u.last_name, p.name AS product_name FROM joint_invites i JOIN users u ON u.id = i.from_user_id
+    JOIN accounts a ON a.id = i.account_id JOIN products p ON p.id = a.product_id WHERE i.to_email = ? AND i.status = 'en_attente'`).all(user.email);
+}
+
+function answerInvite(user, inviteId, accept) {
+  return tx(() => {
+    const inv = db.prepare("SELECT * FROM joint_invites WHERE id = ? AND to_email = ? AND status = 'en_attente'").get(inviteId, user.email);
+    if (!inv) throw new BankError('Invitation introuvable ou déjà traitée.');
+    if (accept) {
+      if (user.status !== 'actif') throw new BankError('Votre dossier doit être validé avant de rejoindre un compte joint.');
+      if (user.account_type === 'pro') throw new BankError('Les comptes joints sont réservés aux particuliers.');
+      const acc = db.prepare('SELECT * FROM accounts WHERE id = ?').get(inv.account_id);
+      if (!acc || acc.co_user_id) throw new BankError('Ce compte a déjà un cotitulaire.');
+      db.prepare('UPDATE accounts SET co_user_id = ? WHERE id = ?').run(user.id, acc.id);
+    }
+    db.prepare("UPDATE joint_invites SET status = ?, answered_at = datetime('now') WHERE id = ?").run(accept ? 'acceptee' : 'refusee', inv.id);
+  });
+}
+
+function sentInvites(user) {
+  return db.prepare(`SELECT i.*, p.name AS product_name FROM joint_invites i JOIN accounts a ON a.id = i.account_id JOIN products p ON p.id = a.product_id
+    WHERE i.from_user_id = ? ORDER BY i.created_at DESC LIMIT 20`).all(user.id);
+}
+
+function cancelInvite(user, inviteId) {
+  db.prepare("UPDATE joint_invites SET status = 'annulee', answered_at = datetime('now') WHERE id = ? AND from_user_id = ? AND status = 'en_attente'").run(inviteId, user.id);
+}
+
+// Nom affiché d'un client (raison sociale pour une entreprise)
+function clientName(u) {
+  return u.account_type === 'pro' && u.company_name ? u.company_name : `${u.first_name} ${u.last_name}`;
 }
 
 // ---------- Projets d'épargne ----------
@@ -262,10 +330,11 @@ function taxSummary(userId, year) {
     COALESCE(SUM(CASE WHEN t.type IN ('prime','parrainage') THEN t.amount_cents END),0) AS bonuses
     FROM accounts a JOIN products p ON p.id = a.product_id
     LEFT JOIN transactions t ON t.account_id = a.id AND strftime('%Y', t.created_at) = ?
-    WHERE a.user_id = ? GROUP BY a.id ORDER BY a.id`).all(String(year), userId);
+    WHERE ? IN (a.user_id, a.co_user_id) GROUP BY a.id ORDER BY a.id`).all(String(year), userId);
 }
 
 module.exports = {
+  inviteCoHolder, invitesFor, answerInvite, sentInvites, cancelInvite, clientName,
   userGoals, userStandingOrders, taxSummary, effectiveProduct,
   BankError, createUser, openAccount, listProducts, getProduct, postTransaction, adminOperation,
   requestWithdrawal, cancelWithdrawal, processWithdrawal, pendingWithdrawalsCents,

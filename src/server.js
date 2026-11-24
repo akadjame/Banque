@@ -49,6 +49,8 @@ app.locals.productRateText = (p) => p.kind === 'cat'
   ? `taux fixe garanti ${p.term_months} mois`
   : p.boosted_rate ? `pendant ${p.boost_months} mois, puis ${m.formatRate(p.base_rate)}` : 'taux annuel brut';
 app.locals.headlineRate = (p) => p.boosted_rate || p.base_rate;
+app.locals.clientName = bank.clientName;
+app.locals.audienceLabel = (p) => p.kind === 'junior' ? 'Enfants' : p.audience === 'pro' ? 'Entreprises' : p.kind === 'cat' ? 'Compte à terme' : 'Livret disponible';
 app.locals.txLabels = { depot: 'Versement', retrait: 'Retrait', interets: 'Intérêts', prime: 'Prime', parrainage: 'Parrainage', ajustement: 'Régularisation' };
 app.locals.statusLabels = { en_attente: 'En attente', actif: 'Actif', bloque: 'Bloqué', cloture: 'Clôturé', effectue: 'Effectué', refuse: 'Refusé', annule: 'Annulé' };
 
@@ -74,6 +76,29 @@ const handle = (fn) => async (req, res, next) => {
 };
 const str = (v, max = 200) => String(v ?? '').trim().slice(0, max);
 
+// Champs entreprise d'un formulaire d'inscription ; renvoie un message d'erreur ou null
+function companyFields(b, values) {
+  values.account_type = b.account_type === 'pro' ? 'pro' : 'particulier';
+  values.company_name = str(b.company_name, 120);
+  values.siren = String(b.siren || '').replace(/\s+/g, '').slice(0, 9);
+  values.legal_form = str(b.legal_form, 20);
+  values.company_role = str(b.company_role, 60);
+  if (values.account_type !== 'pro') return null;
+  if (!values.company_name) return 'Raison sociale obligatoire.';
+  if (!m.isValidSiren(values.siren)) return 'Numéro SIREN invalide (9 chiffres).';
+  if (!values.legal_form) return 'Forme juridique obligatoire.';
+  return null;
+}
+// Produit choisi à l'inscription : actif, adapté au type de client, hors Livret Junior (ouvert ensuite depuis l'espace)
+function signupProductProblem(values) {
+  const p = bank.getProduct(values.product_id);
+  if (!p || !p.active || p.kind === 'junior') return 'Choisissez un produit.';
+  if (p.audience !== 'tous' && p.audience !== values.account_type) return p.audience === 'pro' ? 'Ce produit est réservé aux entreprises.' : 'Ce produit est réservé aux particuliers.';
+  return null;
+}
+const LEGAL_FORMS = ['EI', 'EURL', 'SARL', 'SAS', 'SASU', 'SA', 'SCI', 'SNC', 'Association', 'Autre'];
+app.locals.LEGAL_FORMS = LEGAL_FORMS;
+
 // ======================= SITE PUBLIC =======================
 app.get('/', (req, res) => res.render('index', { title: 'Épargne en ligne' }));
 app.get('/aide', (req, res) => res.render('aide', { title: 'Aide & FAQ' }));
@@ -81,7 +106,7 @@ app.get('/mentions-legales', (req, res) => res.render('mentions', { title: 'Ment
 
 app.get('/ouvrir-un-livret', (req, res) => {
   if (req.user) return res.redirect(req.user.role === 'admin' ? '/admin' : '/espace/ouvrir');
-  res.render('ouvrir', { title: 'Ouvrir un livret', values: { parrain: str(req.query.parrain, 20) }, error: null });
+  res.render('ouvrir', { title: 'Ouvrir un compte', values: { parrain: str(req.query.parrain, 20), account_type: req.query.type === 'pro' ? 'pro' : 'particulier' }, error: null });
 });
 
 app.post('/ouvrir-un-livret', (req, res) => {
@@ -92,15 +117,18 @@ app.post('/ouvrir-un-livret', (req, res) => {
     city: str(b.city, 80), reference_iban: m.normalizeIban(b.reference_iban), reference_holder: str(b.reference_holder, 120),
     product_id: Number(b.product_id), parrain: str(b.parrain, 20).toUpperCase(),
   };
-  const fail = (error) => res.status(400).render('ouvrir', { title: 'Ouvrir un livret', values, error });
+  const fail = (error) => res.status(400).render('ouvrir', { title: 'Ouvrir un compte', values, error });
 
+  const companyProblem = companyFields(b, values);
   if (!values.first_name || !values.last_name) return fail('Nom et prénom obligatoires.');
+  if (companyProblem) return fail(companyProblem);
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email)) return fail('Adresse e-mail invalide.');
   const birth = new Date(values.birth_date);
   if (isNaN(birth) || (Date.now() - birth) / (365.25 * 86400000) < 18) return fail('Vous devez être majeur pour ouvrir un livret en ligne.');
   if (!values.address || !values.postal_code || !values.city) return fail('Adresse complète obligatoire.');
   if (!m.isValidIban(values.reference_iban)) return fail('IBAN du compte de référence invalide.');
-  if (!bank.getProduct(values.product_id)) return fail('Choisissez un livret.');
+  const productProblem = signupProductProblem(values);
+  if (productProblem) return fail(productProblem);
   const pwProblem = auth.passwordProblem(b.password);
   if (pwProblem) return fail(pwProblem);
   if (b.password !== b.password2) return fail('Les deux mots de passe ne correspondent pas.');
@@ -150,12 +178,13 @@ const espace = express.Router();
 espace.use(auth.requireClient);
 espace.use((req, res, next) => {
   res.locals.path = req.path;
+  res.locals.invites = bank.invitesFor(req.user);
   res.locals.unread = db.prepare('SELECT COUNT(*) AS n FROM messages WHERE user_id = ? AND from_admin = 1 AND read_at IS NULL').get(req.user.id).n;
   next();
 });
 
 function ownAccount(req) {
-  const acc = db.prepare('SELECT * FROM accounts WHERE id = ? AND user_id = ?').get(Number(req.params.id), req.user.id);
+  const acc = db.prepare('SELECT * FROM accounts WHERE id = ? AND ? IN (user_id, co_user_id)').get(Number(req.params.id), req.user.id);
   if (!acc) throw new bank.BankError('Compte introuvable.');
   return bank.accountView(acc);
 }
@@ -164,11 +193,11 @@ espace.get('/', (req, res) => {
   const accounts = bank.userAccounts(req.user.id);
   const ids = accounts.map((a) => a.id);
   const recent = ids.length ? db.prepare(`SELECT t.*, p.name AS product_name FROM transactions t JOIN accounts a ON a.id = t.account_id JOIN products p ON p.id = a.product_id
-    WHERE a.user_id = ? ORDER BY t.created_at DESC, t.id DESC LIMIT 8`).all(req.user.id) : [];
+    WHERE ? IN (a.user_id, a.co_user_id) ORDER BY t.created_at DESC, t.id DESC LIMIT 8`).all(req.user.id) : [];
   const total = accounts.reduce((s, a) => s + a.balance_cents, 0);
   const totalAccrued = accounts.reduce((s, a) => s + a.accrued.cents, 0);
   const interestYear = db.prepare(`SELECT COALESCE(SUM(t.amount_cents),0) AS s FROM transactions t JOIN accounts a ON a.id = t.account_id
-    WHERE a.user_id = ? AND t.type = 'interets' AND strftime('%Y', t.created_at) = strftime('%Y','now')`).get(req.user.id).s;
+    WHERE ? IN (a.user_id, a.co_user_id) AND t.type = 'interets' AND strftime('%Y', t.created_at) = strftime('%Y','now')`).get(req.user.id).s;
   res.render('client/dashboard', { title: 'Mon espace', accounts, recent, total, totalAccrued, interestYear, goals: bank.userGoals(req.user.id) });
 });
 
@@ -181,7 +210,7 @@ espace.get('/compte/:id', handle((req, res) => {
   const count = db.prepare(`SELECT COUNT(*) AS n FROM transactions WHERE account_id = ? ${where}`).get(...params).n;
   const txs = db.prepare(`SELECT * FROM transactions WHERE account_id = ? ${where} ORDER BY created_at DESC, id DESC LIMIT 25 OFFSET ?`).all(...params, (page - 1) * 25);
   const months = db.prepare("SELECT DISTINCT strftime('%Y-%m', created_at) AS m FROM transactions WHERE account_id = ? ORDER BY m DESC").all(account.id).map((r) => r.m);
-  res.render('client/compte', { title: account.product.name, account, txs, type, page, pages: Math.max(1, Math.ceil(count / 25)), months });
+  res.render('client/compte', { title: account.displayName, account, txs, type, page, pages: Math.max(1, Math.ceil(count / 25)), months });
 }));
 
 espace.get('/compte/:id/rib', handle((req, res) => {
@@ -201,7 +230,7 @@ espace.get('/compte/:id/releve', handle((req, res) => {
 espace.get('/retrait', (req, res) => {
   const accounts = bank.userAccounts(req.user.id);
   const requests = db.prepare(`SELECT w.*, p.name AS product_name FROM withdrawals w JOIN accounts a ON a.id = w.account_id JOIN products p ON p.id = a.product_id
-    WHERE a.user_id = ? ORDER BY w.created_at DESC LIMIT 30`).all(req.user.id);
+    WHERE ? IN (a.user_id, a.co_user_id) ORDER BY w.created_at DESC LIMIT 30`).all(req.user.id);
   res.render('client/retrait', { title: 'Retrait', accounts, requests });
 });
 
@@ -224,13 +253,14 @@ espace.get('/versement', (req, res) => {
 });
 
 espace.get('/ouvrir', (req, res) => {
-  const owned = db.prepare("SELECT product_id FROM accounts WHERE user_id = ? AND status != 'cloture'").all(req.user.id).map((r) => r.product_id);
-  res.render('client/ouvrir', { title: 'Ouvrir un livret', products: bank.listProducts().filter((p) => !owned.includes(p.id)) });
+  const owned = db.prepare("SELECT product_id FROM accounts WHERE ? IN (user_id, co_user_id) AND status != 'cloture'").all(req.user.id).map((r) => r.product_id);
+  res.render('client/ouvrir', { title: 'Ouvrir un produit', products: bank.listProducts(true, req.user.account_type).filter((p) => p.kind === 'junior' || !owned.includes(p.id)) });
 });
 espace.post('/ouvrir', handle((req, res) => {
   const pid = Number(req.body.product_id);
-  if (db.prepare("SELECT 1 FROM accounts WHERE user_id = ? AND product_id = ? AND status != 'cloture'").get(req.user.id, pid)) throw new bank.BankError('Vous détenez déjà ce livret.');
-  bank.openAccount(req.user.id, pid);
+  const product = bank.getProduct(pid);
+  if (product && product.kind !== 'junior' && db.prepare("SELECT 1 FROM accounts WHERE ? IN (user_id, co_user_id) AND product_id = ? AND status != 'cloture'").get(req.user.id, pid)) throw new bank.BankError('Vous détenez déjà ce produit.');
+  bank.openAccount(req.user.id, pid, req.body);
   req.flash('success', 'Votre nouveau produit d’épargne est ouvert.');
   res.redirect('/espace');
 }));
@@ -246,7 +276,7 @@ espace.post('/profil', handle((req, res) => {
     if (!auth.verifyPassword(String(b.password || ''), req.user.password_hash)) throw new bank.BankError('Mot de passe incorrect.');
     const ib = m.normalizeIban(b.reference_iban);
     if (!m.isValidIban(ib)) throw new bank.BankError('IBAN invalide.');
-    if (db.prepare("SELECT 1 FROM withdrawals w JOIN accounts a ON a.id = w.account_id WHERE a.user_id = ? AND w.status = 'en_attente'").get(req.user.id)) {
+    if (db.prepare("SELECT 1 FROM withdrawals w JOIN accounts a ON a.id = w.account_id WHERE ? IN (a.user_id, a.co_user_id) AND w.status = 'en_attente'").get(req.user.id)) {
       throw new bank.BankError('Impossible de modifier le compte de référence tant qu’un retrait est en attente.');
     }
     db.prepare('UPDATE users SET reference_iban = ?, reference_holder = ? WHERE id = ?').run(ib, str(b.reference_holder, 120), req.user.id);
@@ -281,6 +311,25 @@ espace.post('/messages', handle((req, res) => {
   res.redirect('/espace/messages');
 }));
 
+// ----- Compte joint -----
+espace.get('/compte-joint', (req, res) => {
+  const own = bank.userAccounts(req.user.id).filter((a) => a.user_id === req.user.id && !a.co_user_id && a.product.kind !== 'junior');
+  const joint = bank.userAccounts(req.user.id).filter((a) => a.co_user_id);
+  res.render('client/joint', { title: 'Compte joint', own, joint, sent: bank.sentInvites(req.user) });
+});
+espace.post('/compte-joint', handle((req, res) => {
+  bank.inviteCoHolder(req.user, Number(req.body.account_id), req.body.email);
+  req.flash('success', 'Invitation envoyée. Votre cotitulaire la verra dans son espace client et devra l’accepter.');
+  res.redirect('/espace/compte-joint');
+}));
+espace.post('/compte-joint/:id/:action', handle((req, res) => {
+  const id = Number(req.params.id);
+  if (req.params.action === 'accepter') { bank.answerInvite(req.user, id, true); req.flash('success', 'Vous êtes maintenant cotitulaire de ce compte.'); }
+  else if (req.params.action === 'refuser') { bank.answerInvite(req.user, id, false); req.flash('success', 'Invitation refusée.'); }
+  else if (req.params.action === 'annuler') { bank.cancelInvite(req.user, id); req.flash('success', 'Invitation annulée.'); }
+  res.redirect('/espace/compte-joint');
+}));
+
 // ----- Projets d'épargne -----
 espace.get('/projets', (req, res) => {
   res.render('client/projets', { title: 'Mes projets', goals: bank.userGoals(req.user.id), accounts: bank.userAccounts(req.user.id) });
@@ -292,7 +341,7 @@ espace.post('/projets', handle((req, res) => {
   if (!target) throw new bank.BankError('Montant objectif invalide.');
   const date = /^\d{4}-\d{2}-\d{2}$/.test(req.body.target_date || '') ? req.body.target_date : null;
   let accountId = Number(req.body.account_id) || null;
-  if (accountId && !db.prepare('SELECT 1 FROM accounts WHERE id = ? AND user_id = ?').get(accountId, req.user.id)) accountId = null;
+  if (accountId && !db.prepare('SELECT 1 FROM accounts WHERE id = ? AND ? IN (user_id, co_user_id)').get(accountId, req.user.id)) accountId = null;
   const emoji = ['🏠', '🚗', '✈️', '🎓', '💍', '👶', '🛟', '🎁'].includes(req.body.emoji) ? req.body.emoji : '🎯';
   db.prepare('INSERT INTO goals (user_id, account_id, name, emoji, target_cents, target_date) VALUES (?,?,?,?,?,?)').run(req.user.id, accountId, name, emoji, target, date);
   req.flash('success', `Projet « ${name} » créé.`);
@@ -312,7 +361,7 @@ espace.get('/versements-programmes', (req, res) => {
 espace.post('/versements-programmes', handle((req, res) => {
   const amount = m.parseEuros(req.body.amount);
   const day = Number(req.body.day);
-  const acc = db.prepare("SELECT a.* FROM accounts a JOIN products p ON p.id = a.product_id WHERE a.id = ? AND a.user_id = ? AND a.status = 'actif' AND p.kind != 'cat'").get(Number(req.body.account_id), req.user.id);
+  const acc = db.prepare("SELECT a.* FROM accounts a JOIN products p ON p.id = a.product_id WHERE a.id = ? AND ? IN (a.user_id, a.co_user_id) AND a.status = 'actif' AND p.kind != 'cat'").get(Number(req.body.account_id), req.user.id);
   if (!acc) throw new bank.BankError('Choisissez un livret.');
   if (!amount || amount < 1000) throw new bank.BankError('Montant minimum : 10 €.');
   if (!(day >= 1 && day <= 28)) throw new bank.BankError('Jour invalide (1 à 28).');
@@ -330,7 +379,7 @@ espace.post('/versements-programmes/:id/supprimer', handle((req, res) => {
 espace.get('/documents', (req, res) => {
   const accounts = bank.userAccounts(req.user.id);
   const months = db.prepare(`SELECT DISTINCT t.account_id, strftime('%Y-%m', t.created_at) AS m FROM transactions t JOIN accounts a ON a.id = t.account_id
-    WHERE a.user_id = ? ORDER BY m DESC`).all(req.user.id);
+    WHERE ? IN (a.user_id, a.co_user_id) ORDER BY m DESC`).all(req.user.id);
   const years = [...new Set(months.map((r) => r.m.slice(0, 4)))];
   res.render('client/documents', { title: 'Mes documents', accounts, months, years });
 });
@@ -396,11 +445,14 @@ admin.post('/clients/nouveau', (req, res) => {
     reference_iban: m.normalizeIban(b.reference_iban), reference_holder: str(b.reference_holder, 120), product_id: Number(b.product_id),
   };
   const fail = (error) => res.status(400).render('admin/nouveau', { title: 'Nouveau client', error, values });
+  const companyProblem = companyFields(b, values);
   if (!values.first_name || !values.last_name) return fail('Nom et prénom obligatoires.');
+  if (companyProblem) return fail(companyProblem);
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email)) return fail('E-mail invalide.');
   if (db.prepare('SELECT 1 FROM users WHERE email = ?').get(values.email)) return fail('E-mail déjà utilisé.');
   if (values.reference_iban && !m.isValidIban(values.reference_iban)) return fail('IBAN de référence invalide.');
-  if (!bank.getProduct(values.product_id)) return fail('Choisissez un livret.');
+  const productProblem = signupProductProblem(values);
+  if (productProblem) return fail(productProblem);
   const p = auth.passwordProblem(b.password);
   if (p) return fail(p);
   const id = bank.createUser({ ...values, password_hash: auth.hashPassword(b.password) }, { status: 'actif' });
@@ -412,10 +464,10 @@ admin.post('/clients/nouveau', (req, res) => {
 admin.get('/clients/:id', handle((req, res) => {
   const client = db.prepare("SELECT * FROM users WHERE id = ? AND role = 'client'").get(Number(req.params.id));
   if (!client) throw new bank.BankError('Client introuvable.');
-  const accounts = db.prepare('SELECT * FROM accounts WHERE user_id = ? ORDER BY id').all(client.id).map(bank.accountView);
+  const accounts = db.prepare('SELECT * FROM accounts WHERE ? IN (user_id, co_user_id) ORDER BY id').all(client.id).map(bank.accountView);
   const txs = db.prepare(`SELECT t.*, p.name AS product_name, adm.first_name AS admin_name FROM transactions t JOIN accounts a ON a.id = t.account_id
-    JOIN products p ON p.id = a.product_id LEFT JOIN users adm ON adm.id = t.created_by WHERE a.user_id = ? ORDER BY t.created_at DESC, t.id DESC LIMIT 50`).all(client.id);
-  const withdrawals = db.prepare('SELECT w.* FROM withdrawals w JOIN accounts a ON a.id = w.account_id WHERE a.user_id = ? ORDER BY w.created_at DESC LIMIT 20').all(client.id);
+    JOIN products p ON p.id = a.product_id LEFT JOIN users adm ON adm.id = t.created_by WHERE ? IN (a.user_id, a.co_user_id) ORDER BY t.created_at DESC, t.id DESC LIMIT 50`).all(client.id);
+  const withdrawals = db.prepare('SELECT w.* FROM withdrawals w JOIN accounts a ON a.id = w.account_id WHERE ? IN (a.user_id, a.co_user_id) ORDER BY w.created_at DESC LIMIT 20').all(client.id);
   const parrain = client.referred_by ? db.prepare('SELECT id, first_name, last_name FROM users WHERE id = ?').get(client.referred_by) : null;
   const filleuls = db.prepare('SELECT id, first_name, last_name, referral_paid FROM users WHERE referred_by = ?').all(client.id);
   const msgs = db.prepare('SELECT * FROM messages WHERE user_id = ? ORDER BY created_at, id').all(client.id);
@@ -424,7 +476,8 @@ admin.get('/clients/:id', handle((req, res) => {
   const orders = bank.userStandingOrders(client.id);
   const ownedProducts = accounts.filter((a) => a.status !== 'cloture').map((a) => a.product_id);
   res.render('admin/client', { title: `${client.first_name} ${client.last_name}`, customer: client, goals, orders, accounts, txs, withdrawals, parrain, filleuls, msgs,
-    openable: bank.listProducts().filter((p) => !ownedProducts.includes(p.id)) });
+    openable: bank.listProducts(true, client.account_type).filter((p) => p.kind === 'junior' || !ownedProducts.includes(p.id)),
+    coHolders: db.prepare('SELECT DISTINCT u.id, u.first_name, u.last_name FROM accounts a JOIN users u ON u.id = CASE WHEN a.user_id = ? THEN a.co_user_id ELSE a.user_id END WHERE ? IN (a.user_id, a.co_user_id) AND a.co_user_id IS NOT NULL').all(client.id, client.id) });
 }));
 
 admin.post('/clients/:id/statut', handle((req, res) => {
@@ -462,7 +515,7 @@ admin.post('/clients/:id/mot-de-passe', handle((req, res) => {
 
 admin.post('/clients/:id/ouvrir', handle((req, res) => {
   const id = Number(req.params.id);
-  bank.openAccount(id, Number(req.body.product_id));
+  bank.openAccount(id, Number(req.body.product_id), req.body);
   bank.audit(req.user.id, 'compte_ouvert', { userId: id, productId: Number(req.body.product_id) });
   req.flash('success', 'Livret ouvert.');
   res.redirect('/admin/clients/' + id);

@@ -8,7 +8,7 @@
 <div class="grid grid-2">
   <% accounts.filter(a => a.status === 'actif').forEach(a => { %>
   <div class="card">
-    <h2><%= a.product.name %></h2>
+    <h2><%= a.displayName %></h2>
     <dl class="kv">
       <dt>Bénéficiaire</dt><dd><%= user.first_name %> <%= user.last_name.toUpperCase() %></dd>
       <dt>IBAN</dt><dd class="mono"><%= iban(a.iban) %></dd>

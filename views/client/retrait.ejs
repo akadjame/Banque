@@ -10,7 +10,7 @@
       <input type="hidden" name="_csrf" value="<%= csrf %>">
       <label for="account_id">Depuis le livret</label>
       <select id="account_id" name="account_id">
-        <% accounts.filter(a => a.status === 'actif' && !a.locked).forEach(a => { %><option value="<%= a.id %>"><%= a.product.name %> — disponible <%= eur(a.available) %></option><% }) %>
+        <% accounts.filter(a => a.status === 'actif' && !a.locked).forEach(a => { %><option value="<%= a.id %>"><%= a.displayName %> — disponible <%= eur(a.available) %></option><% }) %>
       </select>
       <label for="amount">Montant (€)</label>
       <input id="amount" name="amount" inputmode="decimal" placeholder="0,00" required>
@@ -20,7 +20,7 @@
       <div class="alert alert-info mono" style="margin:0"><%= iban(user.reference_iban) %><br><span class="small" style="font-family:inherit"><%= user.reference_holder %></span></div>
       <button class="btn btn-violet btn-block" style="margin-top:18px" type="submit" <%= user.status !== 'actif' ? 'disabled' : '' %>>Valider le retrait</button>
     </form>
-    <% accounts.filter(a => a.locked).forEach(a => { %><p class="small muted">🔒 <%= a.product.name %> : fonds disponibles à l'échéance du <%= a.maturity.toLocaleDateString('fr-FR') %>.</p><% }) %>
+    <% accounts.filter(a => a.locked).forEach(a => { %><p class="small muted">🔒 <%= a.displayName %> : fonds disponibles à l'échéance du <%= a.maturity.toLocaleDateString('fr-FR') %>.</p><% }) %>
     <p class="small muted">Les fonds sont virés sous 24 à 48 h ouvrées. Les retraits sont uniquement possibles vers votre compte de référence, pour votre sécurité.</p>
     <% } %>
   </div>

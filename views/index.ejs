@@ -63,7 +63,7 @@
       <div class="grid grid-2">
         <% offer.products.forEach(p => { %>
         <div class="product">
-          <span class="chip <%= p.kind === 'cat' ? 'cyan' : 'violet' %>" style="align-self:flex-start;margin-bottom:10px"><%= p.kind === 'cat' ? 'Compte à terme' : 'Livret disponible' %></span>
+          <span class="chip <%= p.audience === 'pro' ? 'orange' : p.kind === 'cat' ? 'cyan' : p.kind === 'junior' ? 'green' : 'violet' %>" style="align-self:flex-start;margin-bottom:10px"><%= audienceLabel(p) %></span>
           <h3><%= p.name %></h3>
           <div class="rate"><%= fmtRate(headlineRate(p)) %>%</div>
           <p class="small" style="color:#b9bce0">taux annuel brut, <%= productRateText(p) %></p>
@@ -73,9 +73,22 @@
             <% if (p.kind === 'cat') { %><li>Taux connu et garanti dès l'ouverture</li><% } else { %><li><%= p.max_balance_cents ? 'Plafond : ' + eur(p.max_balance_cents) : 'Sans plafond de dépôt' %></li><li>Argent disponible à tout moment</li><% } %>
             <li>Ouverture 100 % en ligne, sans frais</li>
           </ul>
-          <a class="btn btn-cyan" href="/ouvrir-un-livret">Ouvrir</a>
+          <a class="btn btn-cyan" href="/ouvrir-un-livret<%= p.audience === 'pro' ? '?type=pro' : '' %>">Ouvrir</a>
         </div>
         <% }) %>
+      </div>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="container">
+      <h2 class="section-title">Une offre pour chacun</h2>
+      <p class="section-sub">Seul, à deux, pour vos enfants ou pour votre entreprise.</p>
+      <div class="grid grid-4">
+        <div class="feature"><div class="ico">🙋</div><h3>Particuliers</h3><p>Livrets disponibles et comptes à terme, ouverts en 5 minutes.</p></div>
+        <div class="feature"><div class="ico">👥</div><h3>Compte joint</h3><p>Épargnez à deux sur le même livret, chacun avec son accès et son compte de référence.</p></div>
+        <div class="feature"><div class="ico">👶</div><h3>Livret Junior</h3><p>Préparez l'avenir de vos enfants : un livret par enfant, géré par vous jusqu'à ses 18 ans.</p></div>
+        <div class="feature"><div class="ico">🏢</div><h3>Entreprises</h3><p>Livret Pro et compte à terme Pro pour faire travailler la trésorerie de votre société. <a href="/ouvrir-un-livret?type=pro">Ouvrir un compte pro</a></p></div>
       </div>
     </div>
   </section>

@@ -5,8 +5,13 @@
     <strong><%= bank.name %> <%= bank.subtitle %></strong>
   </div>
   <dl class="kv" style="margin-top:20px">
-    <dt>Titulaire</dt><dd><%= user.civility || '' %> <%= user.first_name %> <%= user.last_name.toUpperCase() %><br><%= user.address %>, <%= user.postal_code %> <%= user.city %></dd>
-    <dt>Livret</dt><dd><%= account.product.name %></dd>
+    <dt>Titulaire<%= account.coHolder ? 's' : '' %></dt><dd>
+      <% if (account.product.kind === 'junior') { %><%= account.beneficiary_first_name %> <%= account.beneficiary_last_name.toUpperCase() %>, représenté(e) par <%= user.first_name %> <%= user.last_name.toUpperCase() %>
+      <% } else if (user.account_type === 'pro') { %><%= user.company_name %> (<%= user.legal_form %>) — SIREN <%= user.siren %>
+      <% } else if (account.coHolder) { %><%= account.holder.first_name %> <%= account.holder.last_name.toUpperCase() %> ou <%= account.coHolder.first_name %> <%= account.coHolder.last_name.toUpperCase() %>
+      <% } else { %><%= user.civility || '' %> <%= user.first_name %> <%= user.last_name.toUpperCase() %><% } %>
+      <br><%= user.address %>, <%= user.postal_code %> <%= user.city %></dd>
+    <dt>Livret</dt><dd><%= account.displayName %></dd>
     <dt>IBAN</dt><dd class="mono"><%= iban(account.iban) %></dd>
     <dt>Code banque</dt><dd class="mono"><%= account.iban.slice(4, 9) %></dd>
     <dt>Code guichet</dt><dd class="mono"><%= account.iban.slice(9, 14) %></dd>

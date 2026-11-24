@@ -51,6 +51,27 @@ function generateFrenchIban(bankCode, branchCode, accountNumber) {
   return 'FR' + String(check).padStart(2, '0') + bban;
 }
 
+// SIREN : 9 chiffres, clé de Luhn
+function isValidSiren(siren) {
+  const s = String(siren || '').replace(/\s+/g, '');
+  if (!/^\d{9}$/.test(s)) return false;
+  let sum = 0;
+  for (let i = 0; i < 9; i++) {
+    let d = Number(s[8 - i]);
+    if (i % 2 === 1) { d *= 2; if (d > 9) d -= 9; }
+    sum += d;
+  }
+  return sum % 10 === 0;
+}
+
+function ageOn(birthDate, on = new Date()) {
+  const b = new Date(birthDate);
+  if (isNaN(b)) return null;
+  let age = on.getFullYear() - b.getFullYear();
+  if (on.getMonth() < b.getMonth() || (on.getMonth() === b.getMonth() && on.getDate() < b.getDate())) age--;
+  return age;
+}
+
 // ---------- Dates ----------
 function parseDbDate(s) {
   if (s instanceof Date) return s;
@@ -111,7 +132,7 @@ function currentRate(account, product, now = new Date()) {
 
 module.exports = {
   formatEuros, parseEuros, formatRate,
-  isValidIban, normalizeIban, formatIban, generateFrenchIban,
+  isValidIban, isValidSiren, ageOn, normalizeIban, formatIban, generateFrenchIban,
   parseDbDate, toDbDate, addMonths, boostEndDate,
   computeInterest, currentRate, DAY_MS,
 };

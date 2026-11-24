@@ -31,6 +31,18 @@ db.prepare("UPDATE transactions SET created_at = ? WHERE account_id = ? AND type
 bank.payInterest(acc, adminId, new Date(Date.now() - 10 * 86400000));
 db.prepare('INSERT INTO messages (user_id, from_admin, body) VALUES (?,1,?)').run(c1, 'Bienvenue ! Votre livret est actif et votre prime de bienvenue a été versée.');
 
+// Livret Junior pour l'enfant de Camille
+const junior = db.prepare("SELECT id FROM products WHERE code = 'LIVRET_JUNIOR'").get().id;
+const jAcc = bank.openAccount(c1, junior, { beneficiary_first_name: 'Léo', beneficiary_last_name: 'Martin', beneficiary_birth_date: '2018-03-14' });
+bank.adminOperation(adminId, jAcc, 'credit', 250000, 'Virement reçu — Camille Martin');
+
+// Client entreprise
+const livretPro = db.prepare("SELECT id FROM products WHERE code = 'LIVRET_PRO'").get().id;
+const pro = bank.createUser({ email: 'pro@demo.local', password_hash: pw, civility: 'M.', first_name: 'Karim', last_name: 'Benali', birth_date: '1975-11-20',
+  address: '22 rue du Commerce', postal_code: '33000', city: 'Bordeaux', reference_iban: m.generateFrenchIban('30004', '00820', '55566677788'), reference_holder: 'Boulangerie Benali SARL',
+  account_type: 'pro', company_name: 'Boulangerie Benali', siren: '732829320', legal_form: 'SARL', company_role: 'Gérant', product_id: livretPro }, { status: 'actif' });
+bank.adminOperation(adminId, db.prepare('SELECT id FROM accounts WHERE user_id = ?').get(pro).id, 'credit', 4500000, 'Virement reçu — Boulangerie Benali');
+
 // Compte à terme 24 mois, projets et versement programmé
 const cat = db.prepare("SELECT id FROM products WHERE code = 'CAT_24'").get().id;
 const catAcc = bank.openAccount(c1, cat);

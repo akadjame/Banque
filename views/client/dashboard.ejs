@@ -1,6 +1,6 @@
 <%- include('../partials/client-top') %>
 <div class="page-head">
-  <h1>Bonjour <%= user.first_name %> 👋</h1>
+  <h1>Bonjour <%= user.first_name %> 👋<% if (user.account_type === 'pro') { %> <span class="chip violet" style="vertical-align:middle"><%= user.company_name %></span><% } %></h1>
   <span class="muted small">N° client <span class="mono"><%= user.client_number %></span></span>
 </div>
 
@@ -22,11 +22,13 @@
   <% accounts.forEach(a => { %>
   <a class="acct" href="/espace/compte/<%= a.id %>">
     <div style="display:flex;justify-content:space-between;align-items:center;gap:8px">
-      <span class="name"><%= a.product.name %></span>
+      <span class="name"><%= a.displayName %></span>
       <% if (a.rate.boosted) { %><span class="chip violet">Boosté <%= rate(a.rate.rate) %></span><% } else if (a.maturity) { %><span class="chip cyan">Fixe <%= rate(a.rate.rate) %></span><% } else { %><span class="chip"><%= rate(a.rate.rate) %></span><% } %>
     </div>
     <div class="bal"><%= eur(a.balance_cents) %></div>
     <div class="small muted mono"><%= iban(a.iban) %></div>
+    <% if (a.coHolder) { %><div class="small muted">👥 Compte joint avec <%= (a.user_id === user.id ? a.coHolder : a.holder).first_name %> <%= (a.user_id === user.id ? a.coHolder : a.holder).last_name %></div><% } %>
+    <% if (a.product.kind === 'junior') { %><div class="small muted">👶 Pour <%= a.beneficiary_first_name %>, né(e) le <%= a.beneficiary_birth_date.split('-').reverse().join('/') %></div><% } %>
     <div class="small" style="margin-top:6px">Intérêts acquis : <strong class="amt-pos"><%= eur(a.accrued.cents) %></strong></div>
     <% if (a.rate.boosted) { %><div class="small muted">Taux boosté jusqu'au <%= a.rate.until.toLocaleDateString('fr-FR') %></div><% } %>
     <% if (a.maturity) { %><div class="small muted"><%= a.locked ? 'Échéance le' : 'Arrivé à échéance le' %> <%= a.maturity.toLocaleDateString('fr-FR') %></div><% } %>

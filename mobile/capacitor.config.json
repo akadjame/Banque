@@ -1,0 +1,11 @@
+{
+  "appId": "fr.aurora.epargne",
+  "appName": "Aurora Épargne",
+  "webDir": "www",
+  "server": {
+    "url": "https://REMPLACER-PAR-L-ADRESSE-DU-SITE/espace",
+    "cleartext": false
+  },
+  "ios": { "contentInset": "always", "backgroundColor": "#1d2240" },
+  "android": { "backgroundColor": "#1d2240" }
+}

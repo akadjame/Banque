@@ -7,6 +7,7 @@
     <a href="/espace/retrait" class="<%= path === '/retrait' ? 'active' : '' %>">⬆️ Retrait</a>
     <a href="/espace/versements-programmes" class="<%= path === '/versements-programmes' ? 'active' : '' %>">🔁 Versements programmés</a>
     <a href="/espace/projets" class="<%= path === '/projets' ? 'active' : '' %>">🎯 Mes projets</a>
+    <% if (user.account_type !== 'pro') { %><a href="/espace/compte-joint" class="<%= path === '/compte-joint' ? 'active' : '' %>">👥 Compte joint<% if (invites.length) { %><span class="count"><%= invites.length %></span><% } %></a><% } %>
     <a href="/espace/ouvrir" class="<%= path === '/ouvrir' ? 'active' : '' %>">➕ Ouvrir un produit</a>
     <div class="side-title">Services</div>
     <a href="/espace/messages" class="<%= path === '/messages' ? 'active' : '' %>">💬 Messagerie<% if (unread) { %><span class="count"><%= unread %></span><% } %></a>
@@ -17,5 +18,8 @@
   <main class="main">
     <% if (user.status === 'en_attente') { %>
       <div class="alert alert-warn no-print">Votre dossier est en cours de validation par nos équipes. Vous pourrez demander des retraits dès sa validation.</div>
+    <% } %>
+    <% if (invites.length && path !== '/compte-joint') { %>
+      <div class="alert alert-info no-print">👥 <%= invites[0].first_name %> <%= invites[0].last_name %> vous invite à devenir cotitulaire de son <%= invites[0].product_name %>. <a href="/espace/compte-joint"><strong>Répondre</strong></a></div>
     <% } %>
     <%- include('flash') %>

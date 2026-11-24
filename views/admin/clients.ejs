@@ -11,7 +11,7 @@
     <thead><tr><th>Client</th><th>N° client</th><th>Inscription</th><th>Statut</th><th style="text-align:right">Épargne</th></tr></thead>
     <tbody>
     <% clients.forEach(c => { %>
-      <tr><td><a href="/admin/clients/<%= c.id %>"><strong><%= c.first_name %> <%= c.last_name %></strong></a><div class="small muted"><%= c.email %></div></td>
+      <tr><td><a href="/admin/clients/<%= c.id %>"><strong><%= c.first_name %> <%= c.last_name %></strong></a><% if (c.account_type === 'pro') { %> <span class="chip violet"><%= c.company_name %></span><% } %><div class="small muted"><%= c.email %></div></td>
         <td class="mono small"><%= c.client_number %></td><td class="small"><%= date(c.created_at) %></td>
         <td><span class="chip <%= { en_attente: 'orange', actif: 'green', bloque: 'red', cloture: '' }[c.status] %>"><%= statusLabels[c.status] %></span></td>
         <td style="text-align:right"><strong><%= eur(c.total) %></strong></td></tr>

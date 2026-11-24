@@ -1,7 +1,8 @@
 <%- include('../partials/admin-top') %>
 <div class="page-head">
   <div>
-    <h1><%= customer.civility || '' %> <%= customer.first_name %> <%= customer.last_name %></h1>
+    <h1><%= customer.civility || '' %> <%= customer.first_name %> <%= customer.last_name %><% if (customer.account_type === 'pro') { %> <span class="chip violet" style="vertical-align:middle">Entreprise</span><% } %></h1>
+    <% if (customer.account_type === 'pro') { %><div><strong><%= customer.company_name %></strong> · <%= customer.legal_form %> · SIREN <span class="mono"><%= customer.siren %></span><%= customer.company_role ? ' · ' + customer.company_role : '' %></div><% } %>
     <span class="chip <%= { en_attente: 'orange', actif: 'green', bloque: 'red', cloture: '' }[customer.status] %>"><%= statusLabels[customer.status] %></span>
     <span class="small muted">N° <span class="mono"><%= customer.client_number %></span> · inscrit le <%= date(customer.created_at) %> · dernière connexion <%= datetime(customer.last_login_at) %></span>
   </div>
@@ -17,11 +18,13 @@
 <% accounts.forEach(a => { %>
   <div class="card" style="margin:0">
     <div style="display:flex;justify-content:space-between;gap:8px;align-items:center">
-      <strong><%= a.product.name %></strong>
+      <strong><%= a.displayName %></strong>
       <span class="chip <%= a.status === 'actif' ? 'green' : 'red' %>"><%= statusLabels[a.status] %></span>
     </div>
     <div style="font-size:1.8rem;font-weight:800"><%= eur(a.balance_cents) %></div>
     <div class="small muted mono"><%= iban(a.iban) %></div>
+    <% if (a.coHolder) { const other = a.user_id === customer.id ? a.coHolder : a.holder; %><div class="small">👥 Joint avec <a href="/admin/clients/<%= other.id %>"><%= other.first_name %> <%= other.last_name %></a><%= a.user_id === customer.id ? '' : ' (titulaire principal)' %></div><% } %>
+    <% if (a.product.kind === 'junior') { %><div class="small">👶 Bénéficiaire : <%= a.beneficiary_first_name %> <%= a.beneficiary_last_name %>, né(e) le <%= a.beneficiary_birth_date.split('-').reverse().join('/') %></div><% } %>
     <div class="small">Taux : <strong><%= rate(a.rate.rate) %></strong><%= a.rate.boosted ? ` (boosté jusqu'au ${a.rate.until.toLocaleDateString('fr-FR')})` : '' %><%= a.maturity ? ` (fixe, échéance ${a.maturity.toLocaleDateString('fr-FR')})` : '' %> ·
       Intérêts acquis : <strong class="amt-pos"><%= eur(a.accrued.cents) %></strong><% if (a.pending) { %> · <span class="chip orange"><%= eur(a.pending) %> en retrait</span><% } %></div>
 
@@ -53,6 +56,11 @@
     <input type="hidden" name="_csrf" value="<%= csrf %>">
     <h2>Ouvrir un livret</h2>
     <select name="product_id"><% openable.forEach(p => { %><option value="<%= p.id %>"><%= p.name %></option><% }) %></select>
+    <% if (openable.some(p => p.kind === 'junior')) { %>
+    <p class="small muted" style="margin:10px 0 0">Pour un Livret Junior, renseignez l'enfant :</p>
+    <div class="row"><input name="beneficiary_first_name" placeholder="Prénom de l'enfant"><input name="beneficiary_last_name" placeholder="Nom de l'enfant"></div>
+    <input type="date" name="beneficiary_birth_date" style="margin-top:8px">
+    <% } %>
     <button class="btn btn-light btn-sm" style="margin-top:10px">Ouvrir</button>
   </form>
   <% } %>

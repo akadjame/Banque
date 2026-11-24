@@ -1,6 +1,6 @@
 <%- include('../partials/client-top') %>
 <div class="page-head">
-  <div><h1><%= account.product.name %></h1><div class="small muted mono"><%= iban(account.iban) %></div></div>
+  <div><h1><%= account.displayName %></h1><div class="small muted mono"><%= iban(account.iban) %></div></div>
   <div class="actions">
     <a class="btn btn-light btn-sm" href="/espace/compte/<%= account.id %>/rib">RIB</a>
     <a class="btn btn-violet btn-sm" href="/espace/retrait">Retrait</a>

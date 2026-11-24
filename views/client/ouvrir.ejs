@@ -8,9 +8,17 @@
     <div style="font-size:2.4rem;font-weight:800;color:var(--violet)"><%= rate(headlineRate(p)) %></div>
     <p class="small muted"><%= productRateText(p) %><%= p.min_deposit_cents ? ' · dès ' + eur(p.min_deposit_cents) : '' %></p>
     <p><%= p.description %></p>
-    <form method="post" action="/espace/ouvrir" data-confirm="Ouvrir le <%= p.name %> ?">
+    <form method="post" action="/espace/ouvrir">
       <input type="hidden" name="_csrf" value="<%= csrf %>"><input type="hidden" name="product_id" value="<%= p.id %>">
-      <button class="btn btn-violet">Ouvrir</button>
+      <% if (p.kind === 'junior') { %>
+        <div class="row">
+          <div><label for="bf<%= p.id %>">Prénom de l'enfant</label><input id="bf<%= p.id %>" name="beneficiary_first_name" required maxlength="60"></div>
+          <div><label for="bl<%= p.id %>">Nom de l'enfant</label><input id="bl<%= p.id %>" name="beneficiary_last_name" value="<%= user.last_name %>" required maxlength="60"></div>
+        </div>
+        <label for="bb<%= p.id %>">Date de naissance</label><input type="date" id="bb<%= p.id %>" name="beneficiary_birth_date" required>
+        <p class="small muted">Vous gérez le livret en tant que représentant légal jusqu'aux 18 ans de l'enfant. Un livret par enfant.</p>
+      <% } %>
+      <button class="btn btn-violet" style="margin-top:10px">Ouvrir</button>
     </form>
   </div>
   <% }) %>

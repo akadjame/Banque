@@ -40,3 +40,11 @@ test('intérêts : versement en cours de période', () => {
   // jours 1-4 : 10k (1 €/j), jours 5-10 : 20k (2 €/j) -> 4 + 12 = 16 €
   assert.strictEqual(r.cents, 1600);
 });
+
+test('SIREN et âge', () => {
+  assert.ok(m.isValidSiren('732 829 320'));
+  assert.ok(!m.isValidSiren('732829321'));
+  assert.ok(!m.isValidSiren('12345'));
+  assert.strictEqual(m.ageOn('2010-06-15', new Date('2026-06-14')), 15);
+  assert.strictEqual(m.ageOn('2010-06-15', new Date('2026-06-15')), 16);
+});
