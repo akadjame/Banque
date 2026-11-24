@@ -5,6 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Nouveau client — AURORA ÉPARGNE</title>
   
+  <link rel="manifest" href="#">
+  <link rel="apple-touch-icon" href="#">
+  <meta name="theme-color" content="#1d2240">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="AURORA">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
@@ -21,7 +26,7 @@
       
         <a class="link" href="admin.html">Admin Démo</a>
         <form method="post" action="#" style="margin:0">
-          <input type="hidden" name="_csrf" value="d2df93c051226762957507d1f53d2fd026686b0f18d580b2">
+          <input type="hidden" name="_csrf" value="1c1bebcbe466504b039a4a03dd53ed06ae92fadf3add5c90">
           <button class="btn btn-ghost btn-sm" type="submit">Déconnexion</button>
         </form>
       
@@ -35,7 +40,7 @@
     <a href="admin.html" class="">📊 Tableau de bord</a>
     <a href="admin-clients.html" class="active">👥 Clients<span class="count">2</span></a>
     <a href="admin-retraits.html" class="">⬆️ Retraits<span class="count">1</span></a>
-    <a href="admin-messages.html" class="">💬 Messagerie</a>
+    <a href="admin-messages.html" class="">💬 Messagerie<span class="count">1</span></a>
     <div class="side-title">Configuration</div>
     <a href="admin-parametres.html" class="">⚙️ Offres & taux</a>
     <a href="admin-journal.html" class="">📜 Journal</a>
@@ -46,7 +51,7 @@
 
 <div class="page-head"><h1>Nouveau client</h1></div>
 <form class="card" method="post" action="#" style="max-width:760px">
-  <input type="hidden" name="_csrf" value="d2df93c051226762957507d1f53d2fd026686b0f18d580b2">
+  <input type="hidden" name="_csrf" value="1c1bebcbe466504b039a4a03dd53ed06ae92fadf3add5c90">
   
   <div class="row-3">
     <div><label for="civility">Civilité</label><select id="civility" name="civility"><option>M.</option><option >Mme</option></select></div>
@@ -68,7 +73,7 @@
     <div><label for="reference_holder">Titulaire</label><input id="reference_holder" name="reference_holder" value=""></div>
   </div>
   <div class="row">
-    <div><label for="product_id">Livret</label><select id="product_id" name="product_id"><option value="1">Livret Boosté</option><option value="2">Livret Plus</option></select></div>
+    <div><label for="product_id">Livret</label><select id="product_id" name="product_id"><option value="1">Livret Boosté</option><option value="2">Livret Plus</option><option value="3">Compte à terme 12 mois</option><option value="4">Compte à terme 24 mois</option><option value="5">Compte à terme 36 mois</option></select></div>
     <div><label for="password">Mot de passe provisoire</label><input id="password" name="password" required minlength="10"></div>
   </div>
   <button class="btn btn-violet" style="margin-top:18px">Créer le client (statut actif)</button>
@@ -86,7 +91,7 @@
         <p>L'épargne en ligne simple, rémunérée et sans frais.</p>
       </div>
       <div>
-        <p><a href="index.html#livrets">Nos livrets</a></p>
+        <p><a href="index.html#livrets">Nos produits</a></p>
         <p><a href="index.html#parrainage">Parrainage</a></p>
         <p><a href="aide.html">Aide & FAQ</a></p>
       </div>

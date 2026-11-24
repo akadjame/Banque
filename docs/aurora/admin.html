@@ -5,6 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Tableau de bord — AURORA ÉPARGNE</title>
   
+  <link rel="manifest" href="#">
+  <link rel="apple-touch-icon" href="#">
+  <meta name="theme-color" content="#1d2240">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="AURORA">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
@@ -21,7 +26,7 @@
       
         <a class="link" href="admin.html">Admin Démo</a>
         <form method="post" action="#" style="margin:0">
-          <input type="hidden" name="_csrf" value="d2df93c051226762957507d1f53d2fd026686b0f18d580b2">
+          <input type="hidden" name="_csrf" value="1c1bebcbe466504b039a4a03dd53ed06ae92fadf3add5c90">
           <button class="btn btn-ghost btn-sm" type="submit">Déconnexion</button>
         </form>
       
@@ -35,7 +40,7 @@
     <a href="admin.html" class="active">📊 Tableau de bord</a>
     <a href="admin-clients.html" class="">👥 Clients<span class="count">2</span></a>
     <a href="admin-retraits.html" class="">⬆️ Retraits<span class="count">1</span></a>
-    <a href="admin-messages.html" class="">💬 Messagerie</a>
+    <a href="admin-messages.html" class="">💬 Messagerie<span class="count">1</span></a>
     <div class="side-title">Configuration</div>
     <a href="admin-parametres.html" class="">⚙️ Offres & taux</a>
     <a href="admin-journal.html" class="">📜 Journal</a>
@@ -47,14 +52,14 @@
 <div class="page-head">
   <h1>Tableau de bord</h1>
   <form method="post" action="#" data-confirm="Verser les intérêts acquis sur tous les livrets ?">
-    <input type="hidden" name="_csrf" value="d2df93c051226762957507d1f53d2fd026686b0f18d580b2">
-    <button class="btn btn-violet btn-sm">Verser les intérêts (33,53 €)</button>
+    <input type="hidden" name="_csrf" value="1c1bebcbe466504b039a4a03dd53ed06ae92fadf3add5c90">
+    <button class="btn btn-violet btn-sm">Verser les intérêts (18,60 €)</button>
   </form>
 </div>
 <div class="grid grid-4" style="margin-bottom:22px">
-  <div class="stat"><div class="k">Encours total</div><div class="v">40 375,68 €</div><div class="small muted">4 livrets</div></div>
+  <div class="stat"><div class="k">Encours total</div><div class="v">50 375,68 €</div><div class="small muted">5 livrets</div></div>
   <div class="stat"><div class="k">Clients</div><div class="v">4</div><div class="small muted">2 actifs</div></div>
-  <div class="stat"><div class="k">Intérêts acquis à verser</div><div class="v">33,53 €</div><div class="small muted">55,68 € versés ce mois</div></div>
+  <div class="stat"><div class="k">Intérêts acquis à verser</div><div class="v">18,60 €</div><div class="small muted">55,68 € versés ce mois</div></div>
   <div class="stat"><div class="k">À traiter</div><div class="v">3</div>
     <div class="small muted"><a href="admin-clients.html">2 dossiers</a> · <a href="admin-retraits.html">1 retraits</a></div></div>
 </div>
@@ -63,19 +68,19 @@
     <div class="page-head" style="margin-bottom:6px"><h2 style="margin:0">Derniers clients</h2><a class="btn btn-light btn-sm" href="admin-clients-nouveau.html">+ Nouveau client</a></div>
     <table>
       <tr><td><a href="admin-clients-2.html">Camille Martin</a><div class="small muted">client@demo.local</div></td>
-        <td class="small muted">20/11/2026</td>
+        <td class="small muted">24/11/2026</td>
         <td><span class="chip green">Actif</span></td></tr>
     
       <tr><td><a href="admin-clients-3.html">Hugo Bernard</a><div class="small muted">filleul@demo.local</div></td>
-        <td class="small muted">20/11/2026</td>
+        <td class="small muted">24/11/2026</td>
         <td><span class="chip orange">En attente</span></td></tr>
     
       <tr><td><a href="admin-clients-4.html">Léa Dubois</a><div class="small muted">lea@demo.local</div></td>
-        <td class="small muted">20/11/2026</td>
+        <td class="small muted">24/11/2026</td>
         <td><span class="chip green">Actif</span></td></tr>
     
       <tr><td><a href="admin-clients-5.html">Thomas Petit</a><div class="small muted">thomas@demo.local</div></td>
-        <td class="small muted">20/11/2026</td>
+        <td class="small muted">24/11/2026</td>
         <td><span class="chip orange">En attente</span></td></tr>
     </table>
   </div>
@@ -83,32 +88,53 @@
     <h2>Dernières opérations</h2>
     <table>
       <tr><td><a href="admin-clients-2.html">Camille Martin</a><div class="small muted">Prime parrain — filleul Léa D.</div></td>
-        <td class="small muted">20/11/2026</td>
+        <td class="small muted">24/11/2026</td>
         <td style="text-align:right" class="amt-pos">+80,00 €</td></tr>
     
       <tr><td><a href="admin-clients-4.html">Léa Dubois</a><div class="small muted">Prime filleul — parrainé par Camille M.</div></td>
-        <td class="small muted">20/11/2026</td>
+        <td class="small muted">24/11/2026</td>
         <td style="text-align:right" class="amt-pos">+80,00 €</td></tr>
     
       <tr><td><a href="admin-clients-4.html">Léa Dubois</a><div class="small muted">Prime de bienvenue</div></td>
-        <td class="small muted">20/11/2026</td>
+        <td class="small muted">24/11/2026</td>
         <td style="text-align:right" class="amt-pos">+80,00 €</td></tr>
     
       <tr><td><a href="admin-clients-4.html">Léa Dubois</a><div class="small muted">Virement reçu — L. Dubois</div></td>
-        <td class="small muted">20/11/2026</td>
+        <td class="small muted">24/11/2026</td>
         <td style="text-align:right" class="amt-pos">+25 000,00 €</td></tr>
     
-      <tr><td><a href="admin-clients-2.html">Camille Martin</a><div class="small muted">Intérêts du 11/10/2026 au 10/11/2026</div></td>
-        <td class="small muted">20/11/2026</td>
+      <tr><td><a href="admin-clients-2.html">Camille Martin</a><div class="small muted">Virement reçu — Camille Martin</div></td>
+        <td class="small muted">24/11/2026</td>
+        <td style="text-align:right" class="amt-pos">+10 000,00 €</td></tr>
+    
+      <tr><td><a href="admin-clients-2.html">Camille Martin</a><div class="small muted">Intérêts du 15/10/2026 au 14/11/2026</div></td>
+        <td class="small muted">24/11/2026</td>
         <td style="text-align:right" class="amt-pos">+55,68 €</td></tr>
     
       <tr><td><a href="admin-clients-2.html">Camille Martin</a><div class="small muted">Prime de bienvenue</div></td>
-        <td class="small muted">21/10/2026</td>
+        <td class="small muted">25/10/2026</td>
         <td style="text-align:right" class="amt-pos">+80,00 €</td></tr>
     
       <tr><td><a href="admin-clients-2.html">Camille Martin</a><div class="small muted">Virement reçu — Camille Martin</div></td>
-        <td class="small muted">12/10/2026</td>
+        <td class="small muted">16/10/2026</td>
         <td style="text-align:right" class="amt-pos">+15 000,00 €</td></tr>
+    </table>
+  </div>
+</div>
+<div class="grid grid-2">
+  <div class="card">
+    <h2>Versements programmés attendus</h2>
+    
+    <table>
+      <tr><td>le 5</td><td><a href="admin-clients-2.html">Camille Martin</a><div class="small muted">Livret Boosté</div></td><td style="text-align:right"><strong>300,00 €</strong></td></tr>
+    </table>
+    <p class="small" style="margin-top:10px">Total mensuel attendu : <strong>300,00 €</strong></p>
+  </div>
+  <div class="card">
+    <h2>Échéances des comptes à terme</h2>
+    
+    <table>
+      <tr><td>24/11/2028</td><td><a href="admin-clients-2.html">Camille Martin</a><div class="small muted">Compte à terme 24 mois</div></td><td style="text-align:right"><strong>10 000,00 €</strong></td></tr>
     </table>
   </div>
 </div>
@@ -125,7 +151,7 @@
         <p>L'épargne en ligne simple, rémunérée et sans frais.</p>
       </div>
       <div>
-        <p><a href="index.html#livrets">Nos livrets</a></p>
+        <p><a href="index.html#livrets">Nos produits</a></p>
         <p><a href="index.html#parrainage">Parrainage</a></p>
         <p><a href="aide.html">Aide & FAQ</a></p>
       </div>

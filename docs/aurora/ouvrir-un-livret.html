@@ -5,6 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Ouvrir un livret — AURORA ÉPARGNE</title>
   
+  <link rel="manifest" href="#">
+  <link rel="apple-touch-icon" href="#">
+  <meta name="theme-color" content="#1d2240">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="AURORA">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
@@ -19,7 +24,7 @@
     </a>
     <nav class="nav">
       
-        <a class="link" href="index.html#livrets">Nos livrets</a>
+        <a class="link" href="index.html#livrets">Nos produits</a>
         <a class="link" href="index.html#simulateur">Simulateur</a>
         <a class="link" href="aide.html">Aide</a>
         <a class="link" href="connexion.html">Espace client</a>
@@ -31,20 +36,29 @@
 
 <main class="form-page"><div class="container">
   <form class="form-card" method="post" action="#" autocomplete="on">
-    <input type="hidden" name="_csrf" value="c43083b8d08a323da092226237a8c3742d427ff5b7e1b9d6">
+    <input type="hidden" name="_csrf" value="8a10037287772a38930331cdc208d739350c54518f5e489e">
     <h1>Ouvrir mon livret</h1>
     <p class="muted">Gratuit, sans engagement, en 5 minutes.</p>
     
 
     <fieldset>
-      <legend>1. Mon livret</legend>
+      <legend>1. Mon produit d'épargne</legend>
       <div class="choice">
         
         <label><input type="radio" name="product_id" value="1" checked>
-          <span><strong>Livret Boosté</strong><br><span class="small muted">4,50 % 3 mois puis 2,25 %</span></span></label>
+          <span><strong>Livret Boosté</strong><br><span class="small muted">4,50 % · pendant 3 mois, puis 2,25 %</span></span></label>
         
         <label><input type="radio" name="product_id" value="2" >
-          <span><strong>Livret Plus</strong><br><span class="small muted">2,50 %</span></span></label>
+          <span><strong>Livret Plus</strong><br><span class="small muted">2,50 % · taux annuel brut</span></span></label>
+        
+        <label><input type="radio" name="product_id" value="3" >
+          <span><strong>Compte à terme 12 mois</strong><br><span class="small muted">3,00 % · taux fixe garanti 12 mois</span></span></label>
+        
+        <label><input type="radio" name="product_id" value="4" >
+          <span><strong>Compte à terme 24 mois</strong><br><span class="small muted">3,10 % · taux fixe garanti 24 mois</span></span></label>
+        
+        <label><input type="radio" name="product_id" value="5" >
+          <span><strong>Compte à terme 36 mois</strong><br><span class="small muted">3,20 % · taux fixe garanti 36 mois</span></span></label>
         
       </div>
     </fieldset>
@@ -104,7 +118,7 @@
         <p>L'épargne en ligne simple, rémunérée et sans frais.</p>
       </div>
       <div>
-        <p><a href="index.html#livrets">Nos livrets</a></p>
+        <p><a href="index.html#livrets">Nos produits</a></p>
         <p><a href="index.html#parrainage">Parrainage</a></p>
         <p><a href="aide.html">Aide & FAQ</a></p>
       </div>

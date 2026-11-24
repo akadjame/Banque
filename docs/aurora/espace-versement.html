@@ -5,6 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Alimenter mon livret — AURORA ÉPARGNE</title>
   
+  <link rel="manifest" href="#">
+  <link rel="apple-touch-icon" href="#">
+  <meta name="theme-color" content="#1d2240">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="AURORA">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
@@ -21,7 +26,7 @@
       
         <a class="link" href="espace.html">Camille Martin</a>
         <form method="post" action="#" style="margin:0">
-          <input type="hidden" name="_csrf" value="757febc5a334ab9d1730592bdb615027b80b91be8bc0abb9">
+          <input type="hidden" name="_csrf" value="2f5f891804dcb1f9f5ed86fa401e2f9f132cd23d5a9c5a67">
           <button class="btn btn-ghost btn-sm" type="submit">Déconnexion</button>
         </form>
       
@@ -35,9 +40,12 @@
     <a href="espace.html" class="">🏠 Synthèse</a>
     <a href="espace-versement.html" class="active">⬇️ Alimenter</a>
     <a href="espace-retrait.html" class="">⬆️ Retrait</a>
-    <a href="espace-ouvrir.html" class="">➕ Ouvrir un livret</a>
+    <a href="espace-versements-programmes.html" class="">🔁 Versements programmés</a>
+    <a href="espace-projets.html" class="">🎯 Mes projets</a>
+    <a href="espace-ouvrir.html" class="">➕ Ouvrir un produit</a>
     <div class="side-title">Services</div>
-    <a href="espace-messages.html" class="">💬 Messagerie</a>
+    <a href="espace-messages.html" class="">💬 Messagerie<span class="count">1</span></a>
+    <a href="espace-documents.html" class="">📄 Documents</a>
     <a href="espace-parrainage.html" class="">🎁 Parrainage</a>
     <a href="espace-profil.html" class="">👤 Mon profil</a>
   </aside>
@@ -58,15 +66,31 @@
     <h2>Livret Boosté</h2>
     <dl class="kv">
       <dt>Bénéficiaire</dt><dd>Camille MARTIN</dd>
-      <dt>IBAN</dt><dd class="mono">FR76 9999 9000 0177 2105 1407 658</dd>
+      <dt>IBAN</dt><dd class="mono">FR76 9999 9000 0187 1562 6467 753</dd>
       <dt>Banque</dt><dd>Aurora Épargne SAS</dd>
-      <dt>Référence</dt><dd class="mono">95539913</dd>
+      <dt>Référence</dt><dd class="mono">17350277</dd>
       <dt>Minimum</dt><dd>10,00 €</dd>
       
     </dl>
     <div class="actions" style="margin-top:14px">
-      <button class="btn btn-violet btn-sm" data-copy="FR7699999000017721051407658">Copier l'IBAN</button>
+      <button class="btn btn-violet btn-sm" data-copy="FR7699999000018715626467753">Copier l'IBAN</button>
       <a class="btn btn-light btn-sm" href="espace-compte-1-rib.html">Télécharger le RIB</a>
+    </div>
+  </div>
+  
+  <div class="card">
+    <h2>Compte à terme 24 mois</h2>
+    <dl class="kv">
+      <dt>Bénéficiaire</dt><dd>Camille MARTIN</dd>
+      <dt>IBAN</dt><dd class="mono">FR76 9999 9000 0115 7223 8154 902</dd>
+      <dt>Banque</dt><dd>Aurora Épargne SAS</dd>
+      <dt>Référence</dt><dd class="mono">17350277</dd>
+      <dt>Minimum</dt><dd>5 000,00 €</dd>
+      
+    </dl>
+    <div class="actions" style="margin-top:14px">
+      <button class="btn btn-violet btn-sm" data-copy="FR7699999000011572238154902">Copier l'IBAN</button>
+      <a class="btn btn-light btn-sm" href="espace-compte-3-rib.html">Télécharger le RIB</a>
     </div>
   </div>
   
@@ -84,7 +108,7 @@
         <p>L'épargne en ligne simple, rémunérée et sans frais.</p>
       </div>
       <div>
-        <p><a href="index.html#livrets">Nos livrets</a></p>
+        <p><a href="index.html#livrets">Nos produits</a></p>
         <p><a href="index.html#parrainage">Parrainage</a></p>
         <p><a href="aide.html">Aide & FAQ</a></p>
       </div>

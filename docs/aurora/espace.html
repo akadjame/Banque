@@ -5,6 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Mon espace — AURORA ÉPARGNE</title>
   
+  <link rel="manifest" href="#">
+  <link rel="apple-touch-icon" href="#">
+  <meta name="theme-color" content="#1d2240">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="AURORA">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
@@ -21,7 +26,7 @@
       
         <a class="link" href="espace.html">Camille Martin</a>
         <form method="post" action="#" style="margin:0">
-          <input type="hidden" name="_csrf" value="757febc5a334ab9d1730592bdb615027b80b91be8bc0abb9">
+          <input type="hidden" name="_csrf" value="2f5f891804dcb1f9f5ed86fa401e2f9f132cd23d5a9c5a67">
           <button class="btn btn-ghost btn-sm" type="submit">Déconnexion</button>
         </form>
       
@@ -35,9 +40,12 @@
     <a href="espace.html" class="active">🏠 Synthèse</a>
     <a href="espace-versement.html" class="">⬇️ Alimenter</a>
     <a href="espace-retrait.html" class="">⬆️ Retrait</a>
-    <a href="espace-ouvrir.html" class="">➕ Ouvrir un livret</a>
+    <a href="espace-versements-programmes.html" class="">🔁 Versements programmés</a>
+    <a href="espace-projets.html" class="">🎯 Mes projets</a>
+    <a href="espace-ouvrir.html" class="">➕ Ouvrir un produit</a>
     <div class="side-title">Services</div>
-    <a href="espace-messages.html" class="">💬 Messagerie</a>
+    <a href="espace-messages.html" class="">💬 Messagerie<span class="count">1</span></a>
+    <a href="espace-documents.html" class="">📄 Documents</a>
     <a href="espace-parrainage.html" class="">🎁 Parrainage</a>
     <a href="espace-profil.html" class="">👤 Mon profil</a>
   </aside>
@@ -48,14 +56,14 @@
 
 <div class="page-head">
   <h1>Bonjour Camille 👋</h1>
-  <span class="muted small">N° client <span class="mono">95539913</span></span>
+  <span class="muted small">N° client <span class="mono">17350277</span></span>
 </div>
 
 <div class="grid grid-2" style="margin-bottom:22px">
   <div class="balance-card">
     <div class="label">Épargne totale</div>
-    <div class="value">15 215,68 €</div>
-    <div class="label" style="margin-top:10px">Intérêts acquis non encore versés : <strong>24,23 €</strong></div>
+    <div class="value">25 215,68 €</div>
+    <div class="label" style="margin-top:10px">Intérêts acquis non encore versés : <strong>18,60 €</strong></div>
     <div class="label">Intérêts versés cette année : <strong>55,68 €</strong></div>
   </div>
   <div class="card" style="margin:0;display:flex;flex-direction:column;justify-content:center;gap:10px">
@@ -64,7 +72,7 @@
   </div>
 </div>
 
-<h2 style="font-size:1.2rem">Mes livrets</h2>
+<h2 style="font-size:1.2rem">Mes comptes d'épargne</h2>
 <div class="grid grid-2" style="margin-bottom:22px">
   
   <a class="acct" href="espace-compte-1.html">
@@ -73,14 +81,45 @@
       <span class="chip violet">Boosté 4,50 %</span>
     </div>
     <div class="bal">15 215,68 €</div>
-    <div class="small muted mono">FR76 9999 9000 0177 2105 1407 658</div>
-    <div class="small" style="margin-top:6px">Intérêts acquis : <strong class="amt-pos">24,23 €</strong></div>
-    <div class="small muted">Taux boosté jusqu'au 11/01/2027</div>
+    <div class="small muted mono">FR76 9999 9000 0187 1562 6467 753</div>
+    <div class="small" style="margin-top:6px">Intérêts acquis : <strong class="amt-pos">18,60 €</strong></div>
+    <div class="small muted">Taux boosté jusqu'au 15/01/2027</div>
+    
+    
+  </a>
+  
+  <a class="acct" href="espace-compte-3.html">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:8px">
+      <span class="name">Compte à terme 24 mois</span>
+      <span class="chip cyan">Fixe 3,10 %</span>
+    </div>
+    <div class="bal">10 000,00 €</div>
+    <div class="small muted mono">FR76 9999 9000 0115 7223 8154 902</div>
+    <div class="small" style="margin-top:6px">Intérêts acquis : <strong class="amt-pos">0,00 €</strong></div>
+    
+    <div class="small muted">Échéance le 24/11/2028</div>
     
   </a>
   
   
 </div>
+
+
+<div class="card">
+  <div class="page-head" style="margin-bottom:8px"><h2 style="margin:0">Mes projets</h2><a class="btn btn-light btn-sm" href="espace-projets.html">Gérer</a></div>
+  <div class="grid grid-3">
+  
+    <div><div>✈️ <strong>Voyage au Japon</strong> <span class="small muted">85 %</span></div>
+      <div class="progress" style="margin-top:6px"><div style="width:85%"></div></div>
+      <div class="small muted" style="margin-top:4px">15 215,68 € / 18 000,00 €</div></div>
+  
+    <div><div>🏠 <strong>Apport appartement</strong> <span class="small muted">63 %</span></div>
+      <div class="progress" style="margin-top:6px"><div style="width:63%"></div></div>
+      <div class="small muted" style="margin-top:4px">25 215,68 € / 40 000,00 €</div></div>
+  
+  </div>
+</div>
+
 
 <div class="card">
   <h2>Dernières opérations</h2>
@@ -89,16 +128,19 @@
     <thead><tr><th>Date</th><th>Libellé</th><th>Livret</th><th style="text-align:right">Montant</th></tr></thead>
     <tbody>
     
-      <tr><td>20/11/2026</td><td>Prime parrain — filleul Léa D.</td><td class="small muted">Livret Boosté</td>
+      <tr><td>24/11/2026</td><td>Prime parrain — filleul Léa D.</td><td class="small muted">Livret Boosté</td>
         <td style="text-align:right" class="amt-pos">+80,00 €</td></tr>
     
-      <tr><td>20/11/2026</td><td>Intérêts du 11/10/2026 au 10/11/2026</td><td class="small muted">Livret Boosté</td>
+      <tr><td>24/11/2026</td><td>Virement reçu — Camille Martin</td><td class="small muted">Compte à terme 24 mois</td>
+        <td style="text-align:right" class="amt-pos">+10 000,00 €</td></tr>
+    
+      <tr><td>24/11/2026</td><td>Intérêts du 15/10/2026 au 14/11/2026</td><td class="small muted">Livret Boosté</td>
         <td style="text-align:right" class="amt-pos">+55,68 €</td></tr>
     
-      <tr><td>21/10/2026</td><td>Prime de bienvenue</td><td class="small muted">Livret Boosté</td>
+      <tr><td>25/10/2026</td><td>Prime de bienvenue</td><td class="small muted">Livret Boosté</td>
         <td style="text-align:right" class="amt-pos">+80,00 €</td></tr>
     
-      <tr><td>12/10/2026</td><td>Virement reçu — Camille Martin</td><td class="small muted">Livret Boosté</td>
+      <tr><td>16/10/2026</td><td>Virement reçu — Camille Martin</td><td class="small muted">Livret Boosté</td>
         <td style="text-align:right" class="amt-pos">+15 000,00 €</td></tr>
     
     </tbody>
@@ -118,7 +160,7 @@
         <p>L'épargne en ligne simple, rémunérée et sans frais.</p>
       </div>
       <div>
-        <p><a href="index.html#livrets">Nos livrets</a></p>
+        <p><a href="index.html#livrets">Nos produits</a></p>
         <p><a href="index.html#parrainage">Parrainage</a></p>
         <p><a href="aide.html">Aide & FAQ</a></p>
       </div>

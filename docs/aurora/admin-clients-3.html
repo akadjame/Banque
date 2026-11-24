@@ -5,6 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Hugo Bernard — AURORA ÉPARGNE</title>
   
+  <link rel="manifest" href="#">
+  <link rel="apple-touch-icon" href="#">
+  <meta name="theme-color" content="#1d2240">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="AURORA">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
@@ -21,7 +26,7 @@
       
         <a class="link" href="admin.html">Admin Démo</a>
         <form method="post" action="#" style="margin:0">
-          <input type="hidden" name="_csrf" value="d2df93c051226762957507d1f53d2fd026686b0f18d580b2">
+          <input type="hidden" name="_csrf" value="1c1bebcbe466504b039a4a03dd53ed06ae92fadf3add5c90">
           <button class="btn btn-ghost btn-sm" type="submit">Déconnexion</button>
         </form>
       
@@ -48,10 +53,10 @@
   <div>
     <h1>M. Hugo Bernard</h1>
     <span class="chip orange">En attente</span>
-    <span class="small muted">N° <span class="mono">51948856</span> · inscrit le 20/11/2026 · dernière connexion —</span>
+    <span class="small muted">N° <span class="mono">89425743</span> · inscrit le 24/11/2026 · dernière connexion —</span>
   </div>
   <form method="post" action="#" class="actions">
-    <input type="hidden" name="_csrf" value="d2df93c051226762957507d1f53d2fd026686b0f18d580b2">
+    <input type="hidden" name="_csrf" value="1c1bebcbe466504b039a4a03dd53ed06ae92fadf3add5c90">
     <button class="btn btn-success btn-sm" name="status" value="actif">Valider / activer</button>
     <button class="btn btn-danger btn-sm" name="status" value="bloque" data-confirm="Bloquer ce client ?">Bloquer</button>
   </form>
@@ -66,13 +71,13 @@
       <span class="chip green">Actif</span>
     </div>
     <div style="font-size:1.8rem;font-weight:800">0,00 €</div>
-    <div class="small muted mono">FR76 9999 9000 0100 2387 6966 827</div>
-    <div class="small">Taux : <strong>4,50 %</strong> (boosté jusqu&#39;au 20/02/2027) ·
+    <div class="small muted mono">FR76 9999 9000 0108 6575 0519 263</div>
+    <div class="small">Taux : <strong>4,50 %</strong> (boosté jusqu&#39;au 24/02/2027) ·
       Intérêts acquis : <strong class="amt-pos">0,00 €</strong></div>
 
     
     <form method="post" action="#" style="margin-top:14px" data-confirm="Confirmer l'opération ?">
-      <input type="hidden" name="_csrf" value="d2df93c051226762957507d1f53d2fd026686b0f18d580b2">
+      <input type="hidden" name="_csrf" value="1c1bebcbe466504b039a4a03dd53ed06ae92fadf3add5c90">
       <div class="inline-form">
         <div><label>Opération</label><select name="kind">
           <option value="credit">Créditer (versement reçu)</option>
@@ -85,8 +90,8 @@
       <button class="btn btn-violet btn-sm" style="margin-top:10px">Enregistrer</button>
     </form>
     <div class="actions" style="margin-top:10px">
-      <form method="post" action="#"><input type="hidden" name="_csrf" value="d2df93c051226762957507d1f53d2fd026686b0f18d580b2"><button class="btn btn-light btn-sm">Verser les intérêts</button></form>
-      <form method="post" action="#"><input type="hidden" name="_csrf" value="d2df93c051226762957507d1f53d2fd026686b0f18d580b2">
+      <form method="post" action="#"><input type="hidden" name="_csrf" value="1c1bebcbe466504b039a4a03dd53ed06ae92fadf3add5c90"><button class="btn btn-light btn-sm">Verser les intérêts</button></form>
+      <form method="post" action="#"><input type="hidden" name="_csrf" value="1c1bebcbe466504b039a4a03dd53ed06ae92fadf3add5c90">
         <button class="btn btn-light btn-sm" name="status" value="bloque">Bloquer le livret</button>
         <button class="btn btn-light btn-sm" name="status" value="cloture" data-confirm="Clôturer ce livret ? (solde à zéro requis)">Clôturer</button></form>
     </div>
@@ -95,9 +100,9 @@
 
   
   <form class="card" style="margin:0" method="post" action="#">
-    <input type="hidden" name="_csrf" value="d2df93c051226762957507d1f53d2fd026686b0f18d580b2">
+    <input type="hidden" name="_csrf" value="1c1bebcbe466504b039a4a03dd53ed06ae92fadf3add5c90">
     <h2>Ouvrir un livret</h2>
-    <select name="product_id"><option value="2">Livret Plus</option></select>
+    <select name="product_id"><option value="2">Livret Plus</option><option value="3">Compte à terme 12 mois</option><option value="4">Compte à terme 24 mois</option><option value="5">Compte à terme 36 mois</option></select>
     <button class="btn btn-light btn-sm" style="margin-top:10px">Ouvrir</button>
   </form>
   
@@ -108,17 +113,24 @@
     <h2>Primes</h2>
     <div class="actions">
       <form method="post" action="#" data-confirm="Verser la prime de bienvenue (80,00 €) ?">
-        <input type="hidden" name="_csrf" value="d2df93c051226762957507d1f53d2fd026686b0f18d580b2">
+        <input type="hidden" name="_csrf" value="1c1bebcbe466504b039a4a03dd53ed06ae92fadf3add5c90">
         <button class="btn btn-sm btn-violet" >Verser la prime de bienvenue (80,00 €)</button>
       </form>
       
       <form method="post" action="#" data-confirm="Verser les primes de parrainage ?">
-        <input type="hidden" name="_csrf" value="d2df93c051226762957507d1f53d2fd026686b0f18d580b2">
+        <input type="hidden" name="_csrf" value="1c1bebcbe466504b039a4a03dd53ed06ae92fadf3add5c90">
         <button class="btn btn-sm btn-violet" >Verser le parrainage</button>
       </form>
       
     </div>
-    <p class="small" style="margin-top:12px">Parrain : <a href="admin-clients-2.html">Camille Martin</a> · Code de parrainage : <span class="mono">BERNA3412</span></p>
+    <p class="small" style="margin-top:12px">Parrain : <a href="admin-clients-2.html">Camille Martin</a> · Code de parrainage : <span class="mono">BERNA7548</span></p>
+    
+  </div>
+
+  <div class="card">
+    <h2>Projets & versements programmés</h2>
+    <p class="muted small">Aucun.</p>
+    
     
   </div>
 
@@ -132,7 +144,7 @@
 
 <div class="grid grid-2">
   <form class="card" method="post" action="#">
-    <input type="hidden" name="_csrf" value="d2df93c051226762957507d1f53d2fd026686b0f18d580b2">
+    <input type="hidden" name="_csrf" value="1c1bebcbe466504b039a4a03dd53ed06ae92fadf3add5c90">
     <h2>Informations</h2>
     <dl class="kv"><dt>E-mail</dt><dd>filleul@demo.local</dd><dt>Naissance</dt><dd>30/09/1985</dd></dl>
     <label>Téléphone</label><input name="phone" value="">
@@ -150,13 +162,13 @@
         
       </div>
       <form method="post" action="#" style="margin-top:12px">
-        <input type="hidden" name="_csrf" value="d2df93c051226762957507d1f53d2fd026686b0f18d580b2">
+        <input type="hidden" name="_csrf" value="1c1bebcbe466504b039a4a03dd53ed06ae92fadf3add5c90">
         <textarea name="body" rows="3" required placeholder="Répondre au client…"></textarea>
         <button class="btn btn-violet btn-sm" style="margin-top:8px">Envoyer</button>
       </form>
     </div>
     <form class="card" method="post" action="#" data-confirm="Réinitialiser le mot de passe ?">
-      <input type="hidden" name="_csrf" value="d2df93c051226762957507d1f53d2fd026686b0f18d580b2">
+      <input type="hidden" name="_csrf" value="1c1bebcbe466504b039a4a03dd53ed06ae92fadf3add5c90">
       <h2>Réinitialiser le mot de passe</h2>
       <input name="password" placeholder="Nouveau mot de passe provisoire" minlength="10" required>
       <button class="btn btn-light btn-sm" style="margin-top:8px">Réinitialiser</button>
@@ -184,7 +196,7 @@
         <p>L'épargne en ligne simple, rémunérée et sans frais.</p>
       </div>
       <div>
-        <p><a href="index.html#livrets">Nos livrets</a></p>
+        <p><a href="index.html#livrets">Nos produits</a></p>
         <p><a href="index.html#parrainage">Parrainage</a></p>
         <p><a href="aide.html">Aide & FAQ</a></p>
       </div>

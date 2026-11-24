@@ -5,6 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Aurora Épargne</title>
   
+  <link rel="manifest" href="#">
+  <link rel="apple-touch-icon" href="#">
+  <meta name="theme-color" content="#1d2240">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="AURORA">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
@@ -19,7 +24,7 @@
     </a>
     <nav class="nav">
       
-        <a class="link" href="index.html#livrets">Nos livrets</a>
+        <a class="link" href="index.html#livrets">Nos produits</a>
         <a class="link" href="index.html#simulateur">Simulateur</a>
         <a class="link" href="aide.html">Aide</a>
         <a class="link" href="connexion.html">Espace client</a>
@@ -71,8 +76,12 @@
         <div class="feature"><div class="ico">📈</div><h3>Intérêts au jour le jour</h3><p>Chaque euro rapporte dès le premier jour, pas à la quinzaine. Suivez vos intérêts acquis en temps réel.</p></div>
         <div class="feature"><div class="ico">🔓</div><h3>Argent disponible</h3><p>Pas de durée de blocage. Demandez un retrait vers votre compte de référence à tout moment.</p></div>
         <div class="feature"><div class="ico">0€</div><h3>Zéro frais</h3><p>Ni frais d'ouverture, ni frais de gestion, ni frais de clôture.</p></div>
+        <div class="feature"><div class="ico">🎯</div><h3>Des projets, pas juste un solde</h3><p>Créez vos objectifs (voyage, voiture, apport) et voyez chaque mois combien il vous reste à épargner.</p></div>
+        <div class="feature"><div class="ico">🔒</div><h3>Comptes à terme à taux fixe</h3><p>Bloquez une partie de votre épargne 12, 24 ou 36 mois à un taux garanti dès l'ouverture.</p></div>
+        <div class="feature"><div class="ico">🔁</div><h3>Versements programmés</h3><p>Épargnez automatiquement chaque mois, sans y penser, et suivez vos versements dans votre espace.</p></div>
+        <div class="feature"><div class="ico">📱</div><h3>Sur votre téléphone</h3><p>Ajoutez votre espace client à l'écran d'accueil de votre téléphone et accédez-y comme à une application.</p></div>
         <div class="feature"><div class="ico">💬</div><h3>Un conseiller qui répond</h3><p>Messagerie sécurisée dans votre espace client, réponse sous 24 h ouvrées.</p></div>
-        <div class="feature"><div class="ico">📄</div><h3>Relevés & RIB</h3><p>Relevés mensuels et RIB téléchargeables à tout moment depuis votre espace.</p></div>
+        <div class="feature"><div class="ico">📄</div><h3>Relevés, RIB et fiscalité</h3><p>Relevés mensuels, RIB et récapitulatif fiscal annuel disponibles à tout moment dans votre espace.</p></div>
         <div class="feature"><div class="ico">🎁</div><h3>Parrainage illimité</h3><p>Parrainez vos proches : vous êtes récompensés tous les deux, sans limite de filleuls.</p></div>
       </div>
     </div>
@@ -80,34 +89,78 @@
 
   <section class="block" id="livrets">
     <div class="container">
-      <h2 class="section-title">Nos livrets</h2>
-      <p class="section-sub">Choisissez le livret qui vous correspond. Vous pouvez en détenir plusieurs.</p>
+      <h2 class="section-title">Nos produits d'épargne</h2>
+      <p class="section-sub">Livrets disponibles à tout moment ou comptes à terme à taux fixe garanti. Combinez-les librement.</p>
       <div class="grid grid-2">
         
         <div class="product">
+          <span class="chip violet" style="align-self:flex-start;margin-bottom:10px">Livret disponible</span>
           <h3>Livret Boosté</h3>
           <div class="rate">4,5%</div>
-          <p class="small" style="color:#b9bce0">taux annuel brut pendant 3 mois, puis 2,25 %</p>
+          <p class="small" style="color:#b9bce0">taux annuel brut, pendant 3 mois, puis 2,25 %</p>
           <ul>
             <li>Taux boosté pendant 3 mois à l&#39;ouverture, puis taux de base. Sans frais, disponible à tout moment.</li>
             <li>Versement minimum : 10,00 €</li>
-            <li>Sans plafond de dépôt</li>
-            <li>Ouverture 100 % en ligne</li>
+            <li>Sans plafond de dépôt</li><li>Argent disponible à tout moment</li>
+            <li>Ouverture 100 % en ligne, sans frais</li>
           </ul>
-          <a class="btn btn-cyan" href="ouvrir-un-livret.html">Ouvrir ce livret</a>
+          <a class="btn btn-cyan" href="ouvrir-un-livret.html">Ouvrir</a>
         </div>
         
         <div class="product">
+          <span class="chip violet" style="align-self:flex-start;margin-bottom:10px">Livret disponible</span>
           <h3>Livret Plus</h3>
           <div class="rate">2,5%</div>
-          <p class="small" style="color:#b9bce0">taux annuel brut</p>
+          <p class="small" style="color:#b9bce0">taux annuel brut, taux annuel brut</p>
           <ul>
             <li>Taux fixe garanti, sans plafond, sans frais.</li>
             <li>Versement minimum : 10,00 €</li>
-            <li>Sans plafond de dépôt</li>
-            <li>Ouverture 100 % en ligne</li>
+            <li>Sans plafond de dépôt</li><li>Argent disponible à tout moment</li>
+            <li>Ouverture 100 % en ligne, sans frais</li>
           </ul>
-          <a class="btn btn-cyan" href="ouvrir-un-livret.html">Ouvrir ce livret</a>
+          <a class="btn btn-cyan" href="ouvrir-un-livret.html">Ouvrir</a>
+        </div>
+        
+        <div class="product">
+          <span class="chip cyan" style="align-self:flex-start;margin-bottom:10px">Compte à terme</span>
+          <h3>Compte à terme 12 mois</h3>
+          <div class="rate">3%</div>
+          <p class="small" style="color:#b9bce0">taux annuel brut, taux fixe garanti 12 mois</p>
+          <ul>
+            <li>Taux fixe garanti pendant 12 mois. Capital et intérêts versés à l’échéance.</li>
+            <li>Versement minimum : 5 000,00 €</li>
+            <li>Taux connu et garanti dès l'ouverture</li>
+            <li>Ouverture 100 % en ligne, sans frais</li>
+          </ul>
+          <a class="btn btn-cyan" href="ouvrir-un-livret.html">Ouvrir</a>
+        </div>
+        
+        <div class="product">
+          <span class="chip cyan" style="align-self:flex-start;margin-bottom:10px">Compte à terme</span>
+          <h3>Compte à terme 24 mois</h3>
+          <div class="rate">3,1%</div>
+          <p class="small" style="color:#b9bce0">taux annuel brut, taux fixe garanti 24 mois</p>
+          <ul>
+            <li>Taux fixe garanti pendant 24 mois. Capital et intérêts versés à l’échéance.</li>
+            <li>Versement minimum : 5 000,00 €</li>
+            <li>Taux connu et garanti dès l'ouverture</li>
+            <li>Ouverture 100 % en ligne, sans frais</li>
+          </ul>
+          <a class="btn btn-cyan" href="ouvrir-un-livret.html">Ouvrir</a>
+        </div>
+        
+        <div class="product">
+          <span class="chip cyan" style="align-self:flex-start;margin-bottom:10px">Compte à terme</span>
+          <h3>Compte à terme 36 mois</h3>
+          <div class="rate">3,2%</div>
+          <p class="small" style="color:#b9bce0">taux annuel brut, taux fixe garanti 36 mois</p>
+          <ul>
+            <li>Taux fixe garanti pendant 36 mois. Capital et intérêts versés à l’échéance.</li>
+            <li>Versement minimum : 5 000,00 €</li>
+            <li>Taux connu et garanti dès l'ouverture</li>
+            <li>Ouverture 100 % en ligne, sans frais</li>
+          </ul>
+          <a class="btn btn-cyan" href="ouvrir-un-livret.html">Ouvrir</a>
         </div>
         
       </div>
@@ -176,7 +229,7 @@
         <p>L'épargne en ligne simple, rémunérée et sans frais.</p>
       </div>
       <div>
-        <p><a href="index.html#livrets">Nos livrets</a></p>
+        <p><a href="index.html#livrets">Nos produits</a></p>
         <p><a href="index.html#parrainage">Parrainage</a></p>
         <p><a href="aide.html">Aide & FAQ</a></p>
       </div>

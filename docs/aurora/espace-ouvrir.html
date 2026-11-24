@@ -5,6 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Ouvrir un livret — AURORA ÉPARGNE</title>
   
+  <link rel="manifest" href="#">
+  <link rel="apple-touch-icon" href="#">
+  <meta name="theme-color" content="#1d2240">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="AURORA">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
@@ -21,7 +26,7 @@
       
         <a class="link" href="espace.html">Camille Martin</a>
         <form method="post" action="#" style="margin:0">
-          <input type="hidden" name="_csrf" value="757febc5a334ab9d1730592bdb615027b80b91be8bc0abb9">
+          <input type="hidden" name="_csrf" value="2f5f891804dcb1f9f5ed86fa401e2f9f132cd23d5a9c5a67">
           <button class="btn btn-ghost btn-sm" type="submit">Déconnexion</button>
         </form>
       
@@ -35,9 +40,12 @@
     <a href="espace.html" class="">🏠 Synthèse</a>
     <a href="espace-versement.html" class="">⬇️ Alimenter</a>
     <a href="espace-retrait.html" class="">⬆️ Retrait</a>
-    <a href="espace-ouvrir.html" class="active">➕ Ouvrir un livret</a>
+    <a href="espace-versements-programmes.html" class="">🔁 Versements programmés</a>
+    <a href="espace-projets.html" class="">🎯 Mes projets</a>
+    <a href="espace-ouvrir.html" class="active">➕ Ouvrir un produit</a>
     <div class="side-title">Services</div>
-    <a href="espace-messages.html" class="">💬 Messagerie</a>
+    <a href="espace-messages.html" class="">💬 Messagerie<span class="count">1</span></a>
+    <a href="espace-documents.html" class="">📄 Documents</a>
     <a href="espace-parrainage.html" class="">🎁 Parrainage</a>
     <a href="espace-profil.html" class="">👤 Mon profil</a>
   </aside>
@@ -46,18 +54,40 @@
     
 
 
-<div class="page-head"><h1>Ouvrir un nouveau livret</h1></div>
+<div class="page-head"><h1>Ouvrir un nouveau produit</h1></div>
 
 <div class="grid grid-2">
   
   <div class="card">
     <h2>Livret Plus</h2>
     <div style="font-size:2.4rem;font-weight:800;color:var(--violet)">2,50 %</div>
-    <p class="small muted">taux annuel brut</p>
+    <p class="small muted">taux annuel brut · dès 10,00 €</p>
     <p>Taux fixe garanti, sans plafond, sans frais.</p>
     <form method="post" action="#" data-confirm="Ouvrir le Livret Plus ?">
-      <input type="hidden" name="_csrf" value="757febc5a334ab9d1730592bdb615027b80b91be8bc0abb9"><input type="hidden" name="product_id" value="2">
-      <button class="btn btn-violet">Ouvrir ce livret</button>
+      <input type="hidden" name="_csrf" value="2f5f891804dcb1f9f5ed86fa401e2f9f132cd23d5a9c5a67"><input type="hidden" name="product_id" value="2">
+      <button class="btn btn-violet">Ouvrir</button>
+    </form>
+  </div>
+  
+  <div class="card">
+    <h2>Compte à terme 12 mois</h2>
+    <div style="font-size:2.4rem;font-weight:800;color:var(--violet)">3,00 %</div>
+    <p class="small muted">taux fixe garanti 12 mois · dès 5 000,00 €</p>
+    <p>Taux fixe garanti pendant 12 mois. Capital et intérêts versés à l’échéance.</p>
+    <form method="post" action="#" data-confirm="Ouvrir le Compte à terme 12 mois ?">
+      <input type="hidden" name="_csrf" value="2f5f891804dcb1f9f5ed86fa401e2f9f132cd23d5a9c5a67"><input type="hidden" name="product_id" value="3">
+      <button class="btn btn-violet">Ouvrir</button>
+    </form>
+  </div>
+  
+  <div class="card">
+    <h2>Compte à terme 36 mois</h2>
+    <div style="font-size:2.4rem;font-weight:800;color:var(--violet)">3,20 %</div>
+    <p class="small muted">taux fixe garanti 36 mois · dès 5 000,00 €</p>
+    <p>Taux fixe garanti pendant 36 mois. Capital et intérêts versés à l’échéance.</p>
+    <form method="post" action="#" data-confirm="Ouvrir le Compte à terme 36 mois ?">
+      <input type="hidden" name="_csrf" value="2f5f891804dcb1f9f5ed86fa401e2f9f132cd23d5a9c5a67"><input type="hidden" name="product_id" value="5">
+      <button class="btn btn-violet">Ouvrir</button>
     </form>
   </div>
   
@@ -75,7 +105,7 @@
         <p>L'épargne en ligne simple, rémunérée et sans frais.</p>
       </div>
       <div>
-        <p><a href="index.html#livrets">Nos livrets</a></p>
+        <p><a href="index.html#livrets">Nos produits</a></p>
         <p><a href="index.html#parrainage">Parrainage</a></p>
         <p><a href="aide.html">Aide & FAQ</a></p>
       </div>
