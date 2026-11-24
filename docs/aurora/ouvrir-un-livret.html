@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Ouvrir un livret — AURORA ÉPARGNE</title>
+  <title>Ouvrir un compte — AURORA ÉPARGNE</title>
   
   <link rel="manifest" href="#">
   <link rel="apple-touch-icon" href="#">
@@ -36,35 +36,61 @@
 
 <main class="form-page"><div class="container">
   <form class="form-card" method="post" action="#" autocomplete="on">
-    <input type="hidden" name="_csrf" value="8a10037287772a38930331cdc208d739350c54518f5e489e">
-    <h1>Ouvrir mon livret</h1>
+    <input type="hidden" name="_csrf" value="269e61547d2c7e8280854ea604ee878c33f0cb13fff00685">
+    <h1>Ouvrir mon compte</h1>
     <p class="muted">Gratuit, sans engagement, en 5 minutes.</p>
     
+    
+
+    <fieldset>
+      <legend>Je suis</legend>
+      <div class="choice" id="type-choice">
+        <label><input type="radio" name="account_type" value="particulier" checked> <span><strong>Un particulier</strong><br><span class="small muted">Livrets, comptes à terme, compte joint, livret enfant</span></span></label>
+        <label><input type="radio" name="account_type" value="pro" > <span><strong>Une entreprise</strong><br><span class="small muted">Placez la trésorerie de votre société ou activité</span></span></label>
+      </div>
+    </fieldset>
+
+    <fieldset id="company-fields" hidden>
+      <legend>Mon entreprise</legend>
+      <label for="company_name">Raison sociale</label><input id="company_name" name="company_name" value="" autocomplete="organization">
+      <div class="row">
+        <div><label for="siren">SIREN</label><input id="siren" name="siren" inputmode="numeric" maxlength="11" value="" placeholder="9 chiffres"></div>
+        <div><label for="legal_form">Forme juridique</label><select id="legal_form" name="legal_form"><option value="">Choisir…</option><option >EI</option><option >EURL</option><option >SARL</option><option >SAS</option><option >SASU</option><option >SA</option><option >SCI</option><option >SNC</option><option >Association</option><option >Autre</option></select></div>
+      </div>
+      <label for="company_role">Votre fonction</label><input id="company_role" name="company_role" value="" placeholder="Gérant, président…">
+      <p class="small muted">Le représentant légal ouvre le compte en son nom pour l'entreprise. Un extrait Kbis vous sera demandé lors de la validation.</p>
+    </fieldset>
 
     <fieldset>
       <legend>1. Mon produit d'épargne</legend>
       <div class="choice">
         
-        <label><input type="radio" name="product_id" value="1" checked>
+        <label data-audience="particulier" ><input type="radio" name="product_id" value="1" >
           <span><strong>Livret Boosté</strong><br><span class="small muted">4,50 % · pendant 3 mois, puis 2,25 %</span></span></label>
         
-        <label><input type="radio" name="product_id" value="2" >
+        <label data-audience="particulier" ><input type="radio" name="product_id" value="2" >
           <span><strong>Livret Plus</strong><br><span class="small muted">2,50 % · taux annuel brut</span></span></label>
         
-        <label><input type="radio" name="product_id" value="3" >
+        <label data-audience="particulier" ><input type="radio" name="product_id" value="3" >
           <span><strong>Compte à terme 12 mois</strong><br><span class="small muted">3,00 % · taux fixe garanti 12 mois</span></span></label>
         
-        <label><input type="radio" name="product_id" value="4" >
+        <label data-audience="particulier" ><input type="radio" name="product_id" value="4" >
           <span><strong>Compte à terme 24 mois</strong><br><span class="small muted">3,10 % · taux fixe garanti 24 mois</span></span></label>
         
-        <label><input type="radio" name="product_id" value="5" >
+        <label data-audience="particulier" ><input type="radio" name="product_id" value="5" >
           <span><strong>Compte à terme 36 mois</strong><br><span class="small muted">3,20 % · taux fixe garanti 36 mois</span></span></label>
+        
+        <label data-audience="pro" hidden><input type="radio" name="product_id" value="7" >
+          <span><strong>Livret Pro</strong><br><span class="small muted">3,00 % · pendant 3 mois, puis 2,00 %</span></span></label>
+        
+        <label data-audience="pro" hidden><input type="radio" name="product_id" value="8" >
+          <span><strong>Compte à terme Pro 12 mois</strong><br><span class="small muted">3,00 % · taux fixe garanti 12 mois</span></span></label>
         
       </div>
     </fieldset>
 
     <fieldset>
-      <legend>2. Mon identité</legend>
+      <legend>2. <span id="identity-title">Mon identité</span></legend>
       <div class="row-3">
         <div><label for="civility">Civilité</label>
           <select id="civility" name="civility"><option value="M." >M.</option><option value="Mme" >Mme</option></select></div>
@@ -87,7 +113,7 @@
 
     <fieldset>
       <legend>3. Mon compte de référence</legend>
-      <p class="small muted">Votre compte courant, à votre nom, dans une autre banque. Les versements partent de ce compte et les retraits y sont reversés.</p>
+      <p class="small muted">Votre compte courant (ou celui de l'entreprise), dans une autre banque. Les versements partent de ce compte et les retraits y sont reversés.</p>
       <label for="reference_iban">IBAN</label><input id="reference_iban" name="reference_iban" class="mono" value="" placeholder="FR76 ...." required>
       <label for="reference_holder">Titulaire du compte</label><input id="reference_holder" name="reference_holder" value="" required>
     </fieldset>

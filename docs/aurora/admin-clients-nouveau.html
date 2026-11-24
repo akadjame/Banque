@@ -26,7 +26,7 @@
       
         <a class="link" href="admin.html">Admin Démo</a>
         <form method="post" action="#" style="margin:0">
-          <input type="hidden" name="_csrf" value="1c1bebcbe466504b039a4a03dd53ed06ae92fadf3add5c90">
+          <input type="hidden" name="_csrf" value="f599c3b0496ba0b1cc5eba17f805f2868351cc4f0079e127">
           <button class="btn btn-ghost btn-sm" type="submit">Déconnexion</button>
         </form>
       
@@ -51,8 +51,23 @@
 
 <div class="page-head"><h1>Nouveau client</h1></div>
 <form class="card" method="post" action="#" style="max-width:760px">
-  <input type="hidden" name="_csrf" value="1c1bebcbe466504b039a4a03dd53ed06ae92fadf3add5c90">
+  <input type="hidden" name="_csrf" value="f599c3b0496ba0b1cc5eba17f805f2868351cc4f0079e127">
   
+  <div class="choice" id="type-choice" style="margin-bottom:10px">
+    <label><input type="radio" name="account_type" value="particulier" checked> <strong>Particulier</strong></label>
+    <label><input type="radio" name="account_type" value="pro" > <strong>Entreprise</strong></label>
+  </div>
+  <fieldset id="company-fields" style="margin:0" hidden>
+    <div class="row">
+      <div><label>Raison sociale</label><input name="company_name" value=""></div>
+      <div><label>SIREN</label><input name="siren" value="" inputmode="numeric"></div>
+    </div>
+    <div class="row">
+      <div><label>Forme juridique</label><select name="legal_form"><option value="">Choisir…</option><option >EI</option><option >EURL</option><option >SARL</option><option >SAS</option><option >SASU</option><option >SA</option><option >SCI</option><option >SNC</option><option >Association</option><option >Autre</option></select></div>
+      <div><label>Fonction du représentant</label><input name="company_role" value=""></div>
+    </div>
+  </fieldset>
+  <span id="identity-title" hidden></span>
   <div class="row-3">
     <div><label for="civility">Civilité</label><select id="civility" name="civility"><option>M.</option><option >Mme</option></select></div>
     <div><label for="birth_date">Date de naissance</label><input type="date" id="birth_date" name="birth_date" value=""></div>
@@ -73,7 +88,7 @@
     <div><label for="reference_holder">Titulaire</label><input id="reference_holder" name="reference_holder" value=""></div>
   </div>
   <div class="row">
-    <div><label for="product_id">Livret</label><select id="product_id" name="product_id"><option value="1">Livret Boosté</option><option value="2">Livret Plus</option><option value="3">Compte à terme 12 mois</option><option value="4">Compte à terme 24 mois</option><option value="5">Compte à terme 36 mois</option></select></div>
+    <div><label for="product_id">Produit</label><select id="product_id" name="product_id"><option value="1">Livret Boosté</option><option value="2">Livret Plus</option><option value="3">Compte à terme 12 mois</option><option value="4">Compte à terme 24 mois</option><option value="5">Compte à terme 36 mois</option><option value="7">Livret Pro (entreprises)</option><option value="8">Compte à terme Pro 12 mois (entreprises)</option></select></div>
     <div><label for="password">Mot de passe provisoire</label><input id="password" name="password" required minlength="10"></div>
   </div>
   <button class="btn btn-violet" style="margin-top:18px">Créer le client (statut actif)</button>

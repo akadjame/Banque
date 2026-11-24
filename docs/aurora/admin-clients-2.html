@@ -26,7 +26,7 @@
       
         <a class="link" href="admin.html">Admin Démo</a>
         <form method="post" action="#" style="margin:0">
-          <input type="hidden" name="_csrf" value="1c1bebcbe466504b039a4a03dd53ed06ae92fadf3add5c90">
+          <input type="hidden" name="_csrf" value="f599c3b0496ba0b1cc5eba17f805f2868351cc4f0079e127">
           <button class="btn btn-ghost btn-sm" type="submit">Déconnexion</button>
         </form>
       
@@ -52,11 +52,12 @@
 <div class="page-head">
   <div>
     <h1>Mme Camille Martin</h1>
+    
     <span class="chip green">Actif</span>
-    <span class="small muted">N° <span class="mono">17350277</span> · inscrit le 24/11/2026 · dernière connexion 24/11/2026 10:21</span>
+    <span class="small muted">N° <span class="mono">09265698</span> · inscrit le 24/11/2026 · dernière connexion 24/11/2026 10:28</span>
   </div>
   <form method="post" action="#" class="actions">
-    <input type="hidden" name="_csrf" value="1c1bebcbe466504b039a4a03dd53ed06ae92fadf3add5c90">
+    <input type="hidden" name="_csrf" value="f599c3b0496ba0b1cc5eba17f805f2868351cc4f0079e127">
     
     <button class="btn btn-danger btn-sm" name="status" value="bloque" data-confirm="Bloquer ce client ?">Bloquer</button>
   </form>
@@ -71,13 +72,15 @@
       <span class="chip green">Actif</span>
     </div>
     <div style="font-size:1.8rem;font-weight:800">15 215,68 €</div>
-    <div class="small muted mono">FR76 9999 9000 0187 1562 6467 753</div>
+    <div class="small muted mono">FR76 9999 9000 0129 0581 2480 627</div>
+    
+    
     <div class="small">Taux : <strong>4,50 %</strong> (boosté jusqu&#39;au 15/01/2027) ·
       Intérêts acquis : <strong class="amt-pos">18,60 €</strong> · <span class="chip orange">500,00 € en retrait</span></div>
 
     
     <form method="post" action="#" style="margin-top:14px" data-confirm="Confirmer l'opération ?">
-      <input type="hidden" name="_csrf" value="1c1bebcbe466504b039a4a03dd53ed06ae92fadf3add5c90">
+      <input type="hidden" name="_csrf" value="f599c3b0496ba0b1cc5eba17f805f2868351cc4f0079e127">
       <div class="inline-form">
         <div><label>Opération</label><select name="kind">
           <option value="credit">Créditer (versement reçu)</option>
@@ -90,8 +93,43 @@
       <button class="btn btn-violet btn-sm" style="margin-top:10px">Enregistrer</button>
     </form>
     <div class="actions" style="margin-top:10px">
-      <form method="post" action="#"><input type="hidden" name="_csrf" value="1c1bebcbe466504b039a4a03dd53ed06ae92fadf3add5c90"><button class="btn btn-light btn-sm">Verser les intérêts</button></form>
-      <form method="post" action="#"><input type="hidden" name="_csrf" value="1c1bebcbe466504b039a4a03dd53ed06ae92fadf3add5c90">
+      <form method="post" action="#"><input type="hidden" name="_csrf" value="f599c3b0496ba0b1cc5eba17f805f2868351cc4f0079e127"><button class="btn btn-light btn-sm">Verser les intérêts</button></form>
+      <form method="post" action="#"><input type="hidden" name="_csrf" value="f599c3b0496ba0b1cc5eba17f805f2868351cc4f0079e127">
+        <button class="btn btn-light btn-sm" name="status" value="bloque">Bloquer le livret</button>
+        <button class="btn btn-light btn-sm" name="status" value="cloture" data-confirm="Clôturer ce livret ? (solde à zéro requis)">Clôturer</button></form>
+    </div>
+    
+  </div>
+
+  <div class="card" style="margin:0">
+    <div style="display:flex;justify-content:space-between;gap:8px;align-items:center">
+      <strong>Livret Junior — Léo</strong>
+      <span class="chip green">Actif</span>
+    </div>
+    <div style="font-size:1.8rem;font-weight:800">2 500,00 €</div>
+    <div class="small muted mono">FR76 9999 9000 0180 5212 0985 950</div>
+    
+    <div class="small">👶 Bénéficiaire : Léo Martin, né(e) le 14/03/2018</div>
+    <div class="small">Taux : <strong>3,00 %</strong> ·
+      Intérêts acquis : <strong class="amt-pos">0,00 €</strong></div>
+
+    
+    <form method="post" action="#" style="margin-top:14px" data-confirm="Confirmer l'opération ?">
+      <input type="hidden" name="_csrf" value="f599c3b0496ba0b1cc5eba17f805f2868351cc4f0079e127">
+      <div class="inline-form">
+        <div><label>Opération</label><select name="kind">
+          <option value="credit">Créditer (versement reçu)</option>
+          <option value="prime">Créditer (prime / geste)</option>
+          <option value="debit">Débiter (régularisation)</option>
+        </select></div>
+        <div><label>Montant (€)</label><input name="amount" inputmode="decimal" placeholder="0,00" required></div>
+      </div>
+      <label>Libellé (visible par le client)</label><input name="label" placeholder="Ex : Virement reçu de M. Dupont" maxlength="120">
+      <button class="btn btn-violet btn-sm" style="margin-top:10px">Enregistrer</button>
+    </form>
+    <div class="actions" style="margin-top:10px">
+      <form method="post" action="#"><input type="hidden" name="_csrf" value="f599c3b0496ba0b1cc5eba17f805f2868351cc4f0079e127"><button class="btn btn-light btn-sm">Verser les intérêts</button></form>
+      <form method="post" action="#"><input type="hidden" name="_csrf" value="f599c3b0496ba0b1cc5eba17f805f2868351cc4f0079e127">
         <button class="btn btn-light btn-sm" name="status" value="bloque">Bloquer le livret</button>
         <button class="btn btn-light btn-sm" name="status" value="cloture" data-confirm="Clôturer ce livret ? (solde à zéro requis)">Clôturer</button></form>
     </div>
@@ -104,13 +142,15 @@
       <span class="chip green">Actif</span>
     </div>
     <div style="font-size:1.8rem;font-weight:800">10 000,00 €</div>
-    <div class="small muted mono">FR76 9999 9000 0115 7223 8154 902</div>
+    <div class="small muted mono">FR76 9999 9000 0138 9558 9583 550</div>
+    
+    
     <div class="small">Taux : <strong>3,10 %</strong> (fixe, échéance 24/11/2028) ·
       Intérêts acquis : <strong class="amt-pos">0,00 €</strong></div>
 
     
     <form method="post" action="#" style="margin-top:14px" data-confirm="Confirmer l'opération ?">
-      <input type="hidden" name="_csrf" value="1c1bebcbe466504b039a4a03dd53ed06ae92fadf3add5c90">
+      <input type="hidden" name="_csrf" value="f599c3b0496ba0b1cc5eba17f805f2868351cc4f0079e127">
       <div class="inline-form">
         <div><label>Opération</label><select name="kind">
           <option value="credit">Créditer (versement reçu)</option>
@@ -123,8 +163,8 @@
       <button class="btn btn-violet btn-sm" style="margin-top:10px">Enregistrer</button>
     </form>
     <div class="actions" style="margin-top:10px">
-      <form method="post" action="#"><input type="hidden" name="_csrf" value="1c1bebcbe466504b039a4a03dd53ed06ae92fadf3add5c90"><button class="btn btn-light btn-sm">Verser les intérêts</button></form>
-      <form method="post" action="#"><input type="hidden" name="_csrf" value="1c1bebcbe466504b039a4a03dd53ed06ae92fadf3add5c90">
+      <form method="post" action="#"><input type="hidden" name="_csrf" value="f599c3b0496ba0b1cc5eba17f805f2868351cc4f0079e127"><button class="btn btn-light btn-sm">Verser les intérêts</button></form>
+      <form method="post" action="#"><input type="hidden" name="_csrf" value="f599c3b0496ba0b1cc5eba17f805f2868351cc4f0079e127">
         <button class="btn btn-light btn-sm" name="status" value="bloque">Bloquer le livret</button>
         <button class="btn btn-light btn-sm" name="status" value="cloture" data-confirm="Clôturer ce livret ? (solde à zéro requis)">Clôturer</button></form>
     </div>
@@ -133,9 +173,14 @@
 
   
   <form class="card" style="margin:0" method="post" action="#">
-    <input type="hidden" name="_csrf" value="1c1bebcbe466504b039a4a03dd53ed06ae92fadf3add5c90">
+    <input type="hidden" name="_csrf" value="f599c3b0496ba0b1cc5eba17f805f2868351cc4f0079e127">
     <h2>Ouvrir un livret</h2>
-    <select name="product_id"><option value="2">Livret Plus</option><option value="3">Compte à terme 12 mois</option><option value="5">Compte à terme 36 mois</option></select>
+    <select name="product_id"><option value="2">Livret Plus</option><option value="3">Compte à terme 12 mois</option><option value="5">Compte à terme 36 mois</option><option value="6">Livret Junior</option></select>
+    
+    <p class="small muted" style="margin:10px 0 0">Pour un Livret Junior, renseignez l'enfant :</p>
+    <div class="row"><input name="beneficiary_first_name" placeholder="Prénom de l'enfant"><input name="beneficiary_last_name" placeholder="Nom de l'enfant"></div>
+    <input type="date" name="beneficiary_birth_date" style="margin-top:8px">
+    
     <button class="btn btn-light btn-sm" style="margin-top:10px">Ouvrir</button>
   </form>
   
@@ -146,19 +191,19 @@
     <h2>Primes</h2>
     <div class="actions">
       <form method="post" action="#" data-confirm="Verser la prime de bienvenue (80,00 €) ?">
-        <input type="hidden" name="_csrf" value="1c1bebcbe466504b039a4a03dd53ed06ae92fadf3add5c90">
+        <input type="hidden" name="_csrf" value="f599c3b0496ba0b1cc5eba17f805f2868351cc4f0079e127">
         <button class="btn btn-sm btn-light" disabled>Prime de bienvenue versée ✓</button>
       </form>
       
     </div>
-    <p class="small" style="margin-top:12px">Parrain : — · Code de parrainage : <span class="mono">MARTI7122</span></p>
-    <p class="small">Filleuls : <a href="admin-clients-3.html">Hugo Bernard</a>, <a href="admin-clients-4.html">Léa Dubois</a> ✓</p>
+    <p class="small" style="margin-top:12px">Parrain : — · Code de parrainage : <span class="mono">MARTI4652</span></p>
+    <p class="small">Filleuls : <a href="admin-clients-3.html">Hugo Bernard</a>, <a href="admin-clients-5.html">Léa Dubois</a> ✓</p>
   </div>
 
   <div class="card">
     <h2>Projets & versements programmés</h2>
     
-    <p class="small">✈️ <strong>Voyage au Japon</strong> : 15 215,68 € / 18 000,00 € (85 %)</p><p class="small">🏠 <strong>Apport appartement</strong> : 25 215,68 € / 40 000,00 € (63 %)</p>
+    <p class="small">✈️ <strong>Voyage au Japon</strong> : 15 215,68 € / 18 000,00 € (85 %)</p><p class="small">🏠 <strong>Apport appartement</strong> : 27 715,68 € / 40 000,00 € (69 %)</p>
     <p class="small">🔁 <strong>300,00 €</strong> le 5 du mois → Livret Boosté</p>
   </div>
 
@@ -175,7 +220,7 @@
 
 <div class="grid grid-2">
   <form class="card" method="post" action="#">
-    <input type="hidden" name="_csrf" value="1c1bebcbe466504b039a4a03dd53ed06ae92fadf3add5c90">
+    <input type="hidden" name="_csrf" value="f599c3b0496ba0b1cc5eba17f805f2868351cc4f0079e127">
     <h2>Informations</h2>
     <dl class="kv"><dt>E-mail</dt><dd>client@demo.local</dd><dt>Naissance</dt><dd>12/04/1990</dd></dl>
     <label>Téléphone</label><input name="phone" value="0600000000">
@@ -190,16 +235,16 @@
       <h2>Messagerie</h2>
       <div class="thread" style="max-height:300px">
         
-        <div class="msg me">Bienvenue ! Votre livret est actif et votre prime de bienvenue a été versée.<div class="meta">Conseiller · 24/11/2026 10:21</div></div><div class="msg "><strong>Question</strong><br>Bonjour, quand seront versés les intérêts de novembre ?<div class="meta">Client · 24/11/2026 10:21</div></div>
+        <div class="msg me">Bienvenue ! Votre livret est actif et votre prime de bienvenue a été versée.<div class="meta">Conseiller · 24/11/2026 10:28</div></div><div class="msg "><strong>Question</strong><br>Bonjour, quand seront versés les intérêts de novembre ?<div class="meta">Client · 24/11/2026 10:28</div></div>
       </div>
       <form method="post" action="#" style="margin-top:12px">
-        <input type="hidden" name="_csrf" value="1c1bebcbe466504b039a4a03dd53ed06ae92fadf3add5c90">
+        <input type="hidden" name="_csrf" value="f599c3b0496ba0b1cc5eba17f805f2868351cc4f0079e127">
         <textarea name="body" rows="3" required placeholder="Répondre au client…"></textarea>
         <button class="btn btn-violet btn-sm" style="margin-top:8px">Envoyer</button>
       </form>
     </div>
     <form class="card" method="post" action="#" data-confirm="Réinitialiser le mot de passe ?">
-      <input type="hidden" name="_csrf" value="1c1bebcbe466504b039a4a03dd53ed06ae92fadf3add5c90">
+      <input type="hidden" name="_csrf" value="f599c3b0496ba0b1cc5eba17f805f2868351cc4f0079e127">
       <h2>Réinitialiser le mot de passe</h2>
       <input name="password" placeholder="Nouveau mot de passe provisoire" minlength="10" required>
       <button class="btn btn-light btn-sm" style="margin-top:8px">Réinitialiser</button>
@@ -212,27 +257,32 @@
   <div class="table-wrap"><table>
     <thead><tr><th>Date</th><th>Livret</th><th>Libellé</th><th>Type</th><th>Par</th><th style="text-align:right">Montant</th><th style="text-align:right">Solde</th></tr></thead>
     <tbody>
-      <tr><td class="small">24/11/2026 10:21</td><td class="small">Livret Boosté</td><td>Prime parrain — filleul Léa D.</td><td><span class="chip">Parrainage</span></td>
+      <tr><td class="small">24/11/2026 10:28</td><td class="small">Livret Boosté</td><td>Prime parrain — filleul Léa D.</td><td><span class="chip">Parrainage</span></td>
         <td class="small muted">Admin</td>
         <td style="text-align:right" class="amt-pos">+80,00 €</td>
         <td style="text-align:right" class="muted">15 215,68 €</td></tr>
     
-      <tr><td class="small">24/11/2026 10:21</td><td class="small">Compte à terme 24 mois</td><td>Virement reçu — Camille Martin</td><td><span class="chip">Versement</span></td>
+      <tr><td class="small">24/11/2026 10:28</td><td class="small">Compte à terme 24 mois</td><td>Virement reçu — Camille Martin</td><td><span class="chip">Versement</span></td>
         <td class="small muted">Admin</td>
         <td style="text-align:right" class="amt-pos">+10 000,00 €</td>
         <td style="text-align:right" class="muted">10 000,00 €</td></tr>
     
-      <tr><td class="small">24/11/2026 10:21</td><td class="small">Livret Boosté</td><td>Intérêts du 15/10/2026 au 14/11/2026</td><td><span class="chip">Intérêts</span></td>
+      <tr><td class="small">24/11/2026 10:28</td><td class="small">Livret Junior</td><td>Virement reçu — Camille Martin</td><td><span class="chip">Versement</span></td>
+        <td class="small muted">Admin</td>
+        <td style="text-align:right" class="amt-pos">+2 500,00 €</td>
+        <td style="text-align:right" class="muted">2 500,00 €</td></tr>
+    
+      <tr><td class="small">24/11/2026 10:28</td><td class="small">Livret Boosté</td><td>Intérêts du 15/10/2026 au 14/11/2026</td><td><span class="chip">Intérêts</span></td>
         <td class="small muted">Admin</td>
         <td style="text-align:right" class="amt-pos">+55,68 €</td>
         <td style="text-align:right" class="muted">15 135,68 €</td></tr>
     
-      <tr><td class="small">25/10/2026 10:21</td><td class="small">Livret Boosté</td><td>Prime de bienvenue</td><td><span class="chip">Prime</span></td>
+      <tr><td class="small">25/10/2026 10:28</td><td class="small">Livret Boosté</td><td>Prime de bienvenue</td><td><span class="chip">Prime</span></td>
         <td class="small muted">Admin</td>
         <td style="text-align:right" class="amt-pos">+80,00 €</td>
         <td style="text-align:right" class="muted">15 080,00 €</td></tr>
     
-      <tr><td class="small">16/10/2026 11:21</td><td class="small">Livret Boosté</td><td>Virement reçu — Camille Martin</td><td><span class="chip">Versement</span></td>
+      <tr><td class="small">16/10/2026 11:28</td><td class="small">Livret Boosté</td><td>Virement reçu — Camille Martin</td><td><span class="chip">Versement</span></td>
         <td class="small muted">Admin</td>
         <td style="text-align:right" class="amt-pos">+15 000,00 €</td>
         <td style="text-align:right" class="muted">15 000,00 €</td></tr>

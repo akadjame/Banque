@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Ouvrir un livret — AURORA ÉPARGNE</title>
+  <title>Ouvrir un produit — AURORA ÉPARGNE</title>
   
   <link rel="manifest" href="#">
   <link rel="apple-touch-icon" href="#">
@@ -26,7 +26,7 @@
       
         <a class="link" href="espace.html">Camille Martin</a>
         <form method="post" action="#" style="margin:0">
-          <input type="hidden" name="_csrf" value="2f5f891804dcb1f9f5ed86fa401e2f9f132cd23d5a9c5a67">
+          <input type="hidden" name="_csrf" value="a0da6e5833f221b3885d233ee6aa061895a717178c734e54">
           <button class="btn btn-ghost btn-sm" type="submit">Déconnexion</button>
         </form>
       
@@ -42,6 +42,7 @@
     <a href="espace-retrait.html" class="">⬆️ Retrait</a>
     <a href="espace-versements-programmes.html" class="">🔁 Versements programmés</a>
     <a href="espace-projets.html" class="">🎯 Mes projets</a>
+    <a href="espace-compte-joint.html" class="">👥 Compte joint<span class="count">1</span></a>
     <a href="espace-ouvrir.html" class="active">➕ Ouvrir un produit</a>
     <div class="side-title">Services</div>
     <a href="espace-messages.html" class="">💬 Messagerie<span class="count">1</span></a>
@@ -50,6 +51,9 @@
     <a href="espace-profil.html" class="">👤 Mon profil</a>
   </aside>
   <main class="main">
+    
+    
+      <div class="alert alert-info no-print">👥 Léa Dubois vous invite à devenir cotitulaire de son Livret Plus. <a href="espace-compte-joint.html"><strong>Répondre</strong></a></div>
     
     
 
@@ -63,9 +67,10 @@
     <div style="font-size:2.4rem;font-weight:800;color:var(--violet)">2,50 %</div>
     <p class="small muted">taux annuel brut · dès 10,00 €</p>
     <p>Taux fixe garanti, sans plafond, sans frais.</p>
-    <form method="post" action="#" data-confirm="Ouvrir le Livret Plus ?">
-      <input type="hidden" name="_csrf" value="2f5f891804dcb1f9f5ed86fa401e2f9f132cd23d5a9c5a67"><input type="hidden" name="product_id" value="2">
-      <button class="btn btn-violet">Ouvrir</button>
+    <form method="post" action="#">
+      <input type="hidden" name="_csrf" value="a0da6e5833f221b3885d233ee6aa061895a717178c734e54"><input type="hidden" name="product_id" value="2">
+      
+      <button class="btn btn-violet" style="margin-top:10px">Ouvrir</button>
     </form>
   </div>
   
@@ -74,9 +79,10 @@
     <div style="font-size:2.4rem;font-weight:800;color:var(--violet)">3,00 %</div>
     <p class="small muted">taux fixe garanti 12 mois · dès 5 000,00 €</p>
     <p>Taux fixe garanti pendant 12 mois. Capital et intérêts versés à l’échéance.</p>
-    <form method="post" action="#" data-confirm="Ouvrir le Compte à terme 12 mois ?">
-      <input type="hidden" name="_csrf" value="2f5f891804dcb1f9f5ed86fa401e2f9f132cd23d5a9c5a67"><input type="hidden" name="product_id" value="3">
-      <button class="btn btn-violet">Ouvrir</button>
+    <form method="post" action="#">
+      <input type="hidden" name="_csrf" value="a0da6e5833f221b3885d233ee6aa061895a717178c734e54"><input type="hidden" name="product_id" value="3">
+      
+      <button class="btn btn-violet" style="margin-top:10px">Ouvrir</button>
     </form>
   </div>
   
@@ -85,9 +91,29 @@
     <div style="font-size:2.4rem;font-weight:800;color:var(--violet)">3,20 %</div>
     <p class="small muted">taux fixe garanti 36 mois · dès 5 000,00 €</p>
     <p>Taux fixe garanti pendant 36 mois. Capital et intérêts versés à l’échéance.</p>
-    <form method="post" action="#" data-confirm="Ouvrir le Compte à terme 36 mois ?">
-      <input type="hidden" name="_csrf" value="2f5f891804dcb1f9f5ed86fa401e2f9f132cd23d5a9c5a67"><input type="hidden" name="product_id" value="5">
-      <button class="btn btn-violet">Ouvrir</button>
+    <form method="post" action="#">
+      <input type="hidden" name="_csrf" value="a0da6e5833f221b3885d233ee6aa061895a717178c734e54"><input type="hidden" name="product_id" value="5">
+      
+      <button class="btn btn-violet" style="margin-top:10px">Ouvrir</button>
+    </form>
+  </div>
+  
+  <div class="card">
+    <h2>Livret Junior</h2>
+    <div style="font-size:2.4rem;font-weight:800;color:var(--violet)">3,00 %</div>
+    <p class="small muted">taux annuel brut · dès 10,00 €</p>
+    <p>Le livret de vos enfants, ouvert et géré par un parent jusqu’à leurs 18 ans. Sans frais.</p>
+    <form method="post" action="#">
+      <input type="hidden" name="_csrf" value="a0da6e5833f221b3885d233ee6aa061895a717178c734e54"><input type="hidden" name="product_id" value="6">
+      
+        <div class="row">
+          <div><label for="bf6">Prénom de l'enfant</label><input id="bf6" name="beneficiary_first_name" required maxlength="60"></div>
+          <div><label for="bl6">Nom de l'enfant</label><input id="bl6" name="beneficiary_last_name" value="Martin" required maxlength="60"></div>
+        </div>
+        <label for="bb6">Date de naissance</label><input type="date" id="bb6" name="beneficiary_birth_date" required>
+        <p class="small muted">Vous gérez le livret en tant que représentant légal jusqu'aux 18 ans de l'enfant. Un livret par enfant.</p>
+      
+      <button class="btn btn-violet" style="margin-top:10px">Ouvrir</button>
     </form>
   </div>
   
