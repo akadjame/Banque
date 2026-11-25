@@ -102,6 +102,20 @@ app.locals.LEGAL_FORMS = LEGAL_FORMS;
 // ======================= SITE PUBLIC =======================
 app.get('/', (req, res) => res.render('index', { title: 'Épargne en ligne' }));
 app.get('/aide', (req, res) => res.render('aide', { title: 'Aide & FAQ' }));
+
+// Où va votre argent : projets financés, saisis par l'établissement dans l'administration
+function transparencyData() {
+  const projects = db.prepare("SELECT * FROM funded_projects WHERE published = 1 ORDER BY CASE status WHEN 'en_cours' THEN 0 WHEN 'a_venir' THEN 1 ELSE 2 END, created_at DESC").all();
+  const totals = {
+    count: projects.length,
+    units: projects.reduce((s, p) => s + (p.housing_units || 0), 0),
+    amount: projects.reduce((s, p) => s + (p.amount_cents || 0), 0),
+    delivered: projects.filter((p) => p.status === 'livre').length,
+  };
+  return { projects, totals, intro: getSetting('transparency_intro') };
+}
+app.locals.projectStatus = { a_venir: 'À venir', en_cours: 'En cours', livre: 'Livré' };
+app.get('/ou-va-votre-argent', (req, res) => res.render('transparence', { title: 'Où va votre argent', ...transparencyData() }));
 app.get('/mentions-legales', (req, res) => res.render('mentions', { title: 'Mentions légales' }));
 
 app.get('/ouvrir-un-livret', (req, res) => {
@@ -322,6 +336,11 @@ espace.post('/messages', handle((req, res) => {
   req.flash('success', 'Message envoyé à votre conseiller.');
   res.redirect('/espace/messages');
 }));
+
+espace.get('/impact', (req, res) => {
+  const accounts = bank.userAccounts(req.user.id);
+  res.render('client/impact', { title: 'Où va mon argent', ...transparencyData(), myTotal: accounts.reduce((s, a) => s + a.balance_cents, 0) });
+});
 
 // ----- Compte joint -----
 espace.get('/compte-joint', (req, res) => {
@@ -650,6 +669,45 @@ admin.post('/produits', handle((req, res) => {
   db.prepare('INSERT INTO products (code, name, description, base_rate, active) VALUES (?,?,?,?,0)').run(code, 'Nouveau livret', '', 2);
   req.flash('success', 'Livret créé (inactif). Configurez-le puis activez-le.');
   res.redirect('/admin/parametres');
+}));
+
+admin.get('/projets', (req, res) => {
+  const projects = db.prepare('SELECT * FROM funded_projects ORDER BY created_at DESC').all();
+  res.render('admin/projets', { title: 'Projets financés', projects, intro: getSetting('transparency_intro') });
+});
+function projectValues(b) {
+  const title = str(b.title, 120);
+  if (!title) throw new bank.BankError('Le titre du projet est obligatoire.');
+  const status = ['a_venir', 'en_cours', 'livre'].includes(b.status) ? b.status : 'en_cours';
+  const units = b.housing_units ? Math.max(0, Math.floor(Number(b.housing_units)) || 0) : null;
+  const amount = b.amount ? m.parseEuros(b.amount) : null;
+  if (b.amount && amount === null) throw new bank.BankError('Montant invalide.');
+  return [title, str(b.city, 80), str(b.partner, 120), units, amount, status, str(b.description, 1500), b.published ? 1 : 0];
+}
+admin.post('/projets', handle((req, res) => {
+  if (req.body.action === 'intro') {
+    const { setSetting } = require('./db');
+    setSetting('transparency_intro', str(req.body.intro, 1500));
+    req.flash('success', 'Texte de présentation enregistré.');
+    return res.redirect('/admin/projets');
+  }
+  db.prepare('INSERT INTO funded_projects (title, city, partner, housing_units, amount_cents, status, description, published) VALUES (?,?,?,?,?,?,?,?)').run(...projectValues(req.body));
+  bank.audit(req.user.id, 'projet_ajoute', { title: req.body.title });
+  req.flash('success', 'Projet ajouté.');
+  res.redirect('/admin/projets');
+}));
+admin.post('/projets/:id', handle((req, res) => {
+  const id = Number(req.params.id);
+  if (req.body.action === 'supprimer') {
+    db.prepare('DELETE FROM funded_projects WHERE id = ?').run(id);
+    bank.audit(req.user.id, 'projet_supprime', { id });
+    req.flash('success', 'Projet supprimé.');
+  } else {
+    db.prepare('UPDATE funded_projects SET title = ?, city = ?, partner = ?, housing_units = ?, amount_cents = ?, status = ?, description = ?, published = ?, is_example = 0 WHERE id = ?').run(...projectValues(req.body), id);
+    bank.audit(req.user.id, 'projet_modifie', { id });
+    req.flash('success', 'Projet mis à jour.');
+  }
+  res.redirect('/admin/projets');
 }));
 
 admin.get('/journal', (req, res) => {

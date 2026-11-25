@@ -52,5 +52,11 @@ insGoal.run(c1, acc, 'Voyage au Japon', '✈️', 1800000, '2027-09-01');
 insGoal.run(c1, null, 'Apport appartement', '🏠', 4000000, '2029-06-01');
 db.prepare('INSERT INTO standing_orders (user_id, account_id, amount_cents, day_of_month) VALUES (?,?,?,?)').run(c1, acc, 30000, 5);
 
+// Projets financés d'exemple (marqués « Exemple », à remplacer par les projets réels dans l'admin)
+const insP = db.prepare('INSERT INTO funded_projects (title, city, partner, housing_units, amount_cents, status, description, is_example) VALUES (?,?,?,?,?,?,?,1)');
+insP.run('Résidence intergénérationnelle (exemple)', 'Lyon (69)', 'Bailleur social partenaire', 48, 320000000, 'en_cours', 'Construction de 48 logements sociaux, dont 12 réservés aux seniors, avec jardin partagé.');
+insP.run('Rénovation énergétique d’une résidence (exemple)', 'Lille (59)', 'Office public de l’habitat partenaire', 120, 180000000, 'livre', 'Isolation, chauffage collectif et fenêtres : jusqu’à 40 % d’économies d’énergie pour les locataires.');
+insP.run('Logements pour jeunes actifs (exemple)', 'Bordeaux (33)', 'Bailleur social partenaire', 36, 210000000, 'a_venir', 'Résidence de 36 studios à loyer modéré proche des transports.');
+
 console.log('Données de démo créées. Mot de passe pour tous : Demo12345!');
 console.log('  admin@demo.local / client@demo.local / filleul@demo.local (code parrain', parrainCode + ')');

@@ -1,0 +1,40 @@
+<%- include('partials/head') %>
+<main>
+  <section class="block" style="padding-bottom:40px">
+    <div class="container" style="max-width:880px;text-align:center">
+      <h1 class="section-title" style="font-size:clamp(2rem,5vw,3rem)">Où va votre argent ?</h1>
+      <p style="font-size:1.15rem;color:#c9cbef;white-space:pre-wrap"><%= intro %></p>
+    </div>
+  </section>
+  <section class="block light">
+    <div class="container">
+      <h2 class="section-title">Comment ça marche</h2>
+      <div class="grid grid-3 steps" style="margin-top:30px">
+        <div class="step"><h3>Vous épargnez</h3><p class="muted">Vos versements sur vos livrets et comptes à terme sont enregistrés à votre nom et restent votre propriété.</p></div>
+        <div class="step"><h3>Nous finançons</h3><p class="muted">Une partie des sommes déposées est prêtée à des bailleurs sociaux pour construire et rénover des logements.</p></div>
+        <div class="step"><h3>Vous suivez</h3><p class="muted">Chaque projet est présenté ici avec son porteur, son lieu et son avancement, mis à jour par nos équipes.</p></div>
+      </div>
+    </div>
+  </section>
+  <section class="block light" style="padding-top:0">
+    <div class="container">
+      <h2 class="section-title">Les projets financés</h2>
+      <p class="section-sub">Liste mise à jour par nos équipes.</p>
+      <%- include('partials/projects') %>
+    </div>
+  </section>
+  <section class="block">
+    <div class="container" style="max-width:880px">
+      <h2 class="section-title">Votre épargne est protégée</h2>
+      <div class="grid grid-2" style="margin-top:24px">
+        <div class="feature"><div class="ico">🔓</div><h3>Toujours disponible</h3><p>Le financement des projets ne bloque pas votre livret : vous pouvez demander un retrait à tout moment. Seuls les comptes à terme sont disponibles à leur échéance.</p></div>
+        <div class="feature"><div class="ico">🛡️</div><h3>Établissement encadré</h3>
+          <% if (bank.agrement) { %><p><%= bank.legalName %> est un établissement de crédit agréé par l'Autorité de contrôle prudentiel et de résolution (ACPR) sous le numéro <strong><%= bank.agrement %></strong>. Vos dépôts sont couverts par le Fonds de garantie des dépôts et de résolution (FGDR) dans la limite de 100 000 € par déposant.</p>
+          <% } else if (bank.partnerBank) { %><p>Vos comptes sont tenus par <strong><%= bank.partnerBank %></strong>, établissement de crédit agréé par l'ACPR. Vos dépôts sont couverts par le FGDR dans la limite de 100 000 € par déposant.</p>
+          <% } else { %><p>Les informations réglementaires de l'établissement sont disponibles dans nos <a href="/mentions-legales">mentions légales</a>.</p><% } %>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+<%- include('partials/foot') %>

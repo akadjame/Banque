@@ -13,6 +13,9 @@ module.exports = {
     legalName: env.BANK_LEGAL_NAME || 'Aurora Épargne SAS',
     supportEmail: env.BANK_SUPPORT_EMAIL || 'support@exemple.fr',
     supportPhone: env.BANK_SUPPORT_PHONE || '01 00 00 00 00',
+    // Numéro d'agrément ACPR (ou de la banque partenaire) — affiché sur la page de transparence et le pied de page
+    agrement: env.BANK_AGREMENT || '',
+    partnerBank: env.BANK_PARTNER || '',
     bankCode: env.BANK_CODE || '99999', // code banque utilisé pour générer les IBAN internes
     branchCode: env.BRANCH_CODE || '00001',
   },

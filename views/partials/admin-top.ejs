@@ -7,6 +7,7 @@
     <a href="/admin/retraits" class="<%= path === '/retraits' ? 'active' : '' %>">⬆️ Retraits<% if (counts.pendingWithdrawals) { %><span class="count"><%= counts.pendingWithdrawals %></span><% } %></a>
     <a href="/admin/messages" class="<%= path === '/messages' ? 'active' : '' %>">💬 Messagerie<% if (counts.unread) { %><span class="count"><%= counts.unread %></span><% } %></a>
     <div class="side-title">Configuration</div>
+    <a href="/admin/projets" class="<%= path === '/projets' ? 'active' : '' %>">🏘️ Projets financés</a>
     <a href="/admin/parametres" class="<%= path === '/parametres' ? 'active' : '' %>">⚙️ Offres & taux</a>
     <a href="/admin/journal" class="<%= path === '/journal' ? 'active' : '' %>">📜 Journal</a>
   </aside>

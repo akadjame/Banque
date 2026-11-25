@@ -1,0 +1,9 @@
+<%- include('../partials/client-top') %>
+<div class="page-head"><h1>Où va mon argent</h1></div>
+<div class="balance-card" style="margin-bottom:22px">
+  <div class="label">Votre épargne de <strong><%= eur(myTotal) %></strong> participe au financement de logements sociaux en France.</div>
+  <div class="label" style="margin-top:8px;white-space:pre-wrap"><%= intro %></div>
+</div>
+<%- include('../partials/projects') %>
+<p class="small muted" style="margin-top:18px">Vos sommes restent inscrites à votre nom et disponibles selon les conditions de chaque produit. <a href="/ou-va-votre-argent">En savoir plus</a></p>
+<%- include('../partials/client-bottom') %>

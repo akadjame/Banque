@@ -11,6 +11,7 @@
       <div>
         <p><a href="/#livrets">Nos produits</a></p>
         <p><a href="/#parrainage">Parrainage</a></p>
+        <p><a href="/ou-va-votre-argent">Où va votre argent</a></p>
         <p><a href="/aide">Aide & FAQ</a></p>
       </div>
       <div>
@@ -20,7 +21,7 @@
       </div>
     </div>
     <div class="legal">
-      <%= bank.legalName %>. Taux annuels bruts, avant prélèvements fiscaux et sociaux. Livrets : intérêts calculés par quinzaine.
+      <%= bank.legalName %><%= bank.agrement ? ', établissement de crédit agréé par l’ACPR sous le n° ' + bank.agrement : '' %>. Taux annuels bruts, avant prélèvements fiscaux et sociaux. Livrets : intérêts calculés par quinzaine.
       Offres soumises à conditions, voir <a href="/aide">conditions</a>.
     </div>
   </div>

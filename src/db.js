@@ -139,6 +139,19 @@ addColumn('users', 'company_role', 'TEXT');
 addColumn('products', 'audience', "TEXT NOT NULL DEFAULT 'particulier'"); // particulier | pro | tous
 
 db.exec(`
+CREATE TABLE IF NOT EXISTS funded_projects (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  title TEXT NOT NULL,
+  city TEXT,
+  partner TEXT,                 -- bailleur social / porteur du projet
+  housing_units INTEGER,        -- nombre de logements
+  amount_cents INTEGER,         -- montant financé
+  status TEXT NOT NULL DEFAULT 'en_cours' CHECK (status IN ('a_venir','en_cours','livre')),
+  description TEXT,
+  is_example INTEGER NOT NULL DEFAULT 0,
+  published INTEGER NOT NULL DEFAULT 1,
+  created_at TEXT NOT NULL DEFAULT (datetime('now'))
+);
 CREATE TABLE IF NOT EXISTS joint_invites (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   account_id INTEGER NOT NULL REFERENCES accounts(id),
@@ -208,6 +221,7 @@ setDefault.run('welcome_bonus_cents', String(defaults.welcomeBonusCents));
 setDefault.run('referrer_bonus_cents', String(defaults.referrerBonusCents));
 setDefault.run('referee_bonus_cents', String(defaults.refereeBonusCents));
 setDefault.run('offer_end_date', defaults.offerEndDate);
+setDefault.run('transparency_intro', "Votre épargne ne dort pas : elle finance la construction et la rénovation de logements sociaux en France. Chaque projet financé est présenté ci-dessous, avec son porteur, sa localisation et son avancement.");
 
 function getSetting(key) {
   const row = db.prepare('SELECT value FROM settings WHERE key = ?').get(key);

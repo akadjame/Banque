@@ -1,0 +1,45 @@
+<%- include('../partials/admin-top') %>
+<div class="page-head"><h1>Projets financés</h1><a class="btn btn-light btn-sm" href="/ou-va-votre-argent" target="_blank">Voir la page publique</a></div>
+<% if (!bank.agrement && !bank.partnerBank) { %>
+<div class="alert alert-warn">Le numéro d'agrément ACPR (ou le nom de la banque partenaire agréée) n'est pas renseigné. Il doit figurer sur le site avant toute ouverture au public : variables <span class="mono">BANK_AGREMENT</span> ou <span class="mono">BANK_PARTNER</span>.</div>
+<% } %>
+<div class="alert alert-info">Ne publiez que des projets réels et vérifiables (bailleur, lieu, montant). Les informations affichées engagent l'établissement vis-à-vis des épargnants.</div>
+
+<form class="card" method="post" action="/admin/projets">
+  <input type="hidden" name="_csrf" value="<%= csrf %>"><input type="hidden" name="action" value="intro">
+  <h2>Texte de présentation</h2>
+  <textarea name="intro" rows="3" maxlength="1500"><%= intro %></textarea>
+  <button class="btn btn-light btn-sm" style="margin-top:10px">Enregistrer</button>
+</form>
+
+<% const fields = (p) => { %>
+  <div class="row"><div><label>Titre du projet</label><input name="title" value="<%= p.title || '' %>" required maxlength="120" placeholder="Ex : Résidence Les Tilleuls — 42 logements"></div>
+    <div><label>Ville</label><input name="city" value="<%= p.city || '' %>" maxlength="80"></div></div>
+  <div class="row"><div><label>Bailleur / porteur du projet</label><input name="partner" value="<%= p.partner || '' %>" maxlength="120"></div>
+    <div><label>Statut</label><select name="status"><% Object.entries(projectStatus).forEach(([k, v]) => { %><option value="<%= k %>" <%= p.status === k ? 'selected' : '' %>><%= v %></option><% }) %></select></div></div>
+  <div class="row"><div><label>Nombre de logements</label><input name="housing_units" type="number" min="0" value="<%= p.housing_units ?? '' %>"></div>
+    <div><label>Montant financé (€)</label><input name="amount" inputmode="decimal" value="<%= p.amount_cents ? p.amount_cents / 100 : '' %>"></div></div>
+  <label>Description</label><textarea name="description" rows="3" maxlength="1500"><%= p.description || '' %></textarea>
+  <label class="check" style="margin-top:10px"><input type="checkbox" name="published" value="1" <%= p.published === 0 ? '' : 'checked' %>> Publié sur le site</label>
+<% } %>
+
+<form class="card" method="post" action="/admin/projets">
+  <input type="hidden" name="_csrf" value="<%= csrf %>">
+  <h2>Ajouter un projet</h2>
+  <% fields({}) %>
+  <button class="btn btn-violet btn-sm" style="margin-top:12px">Ajouter</button>
+</form>
+
+<% projects.forEach(p => { %>
+<form class="card" method="post" action="/admin/projets/<%= p.id %>">
+  <input type="hidden" name="_csrf" value="<%= csrf %>">
+  <div class="page-head" style="margin-bottom:0"><h2 style="margin:0"><%= p.title %></h2>
+    <div><% if (p.is_example) { %><span class="chip orange">Exemple de démonstration</span><% } %> <% if (!p.published) { %><span class="chip">Non publié</span><% } %></div></div>
+  <% fields(p) %>
+  <div class="actions" style="margin-top:12px">
+    <button class="btn btn-light btn-sm" name="action" value="modifier">Mettre à jour</button>
+    <button class="btn btn-danger btn-sm" name="action" value="supprimer" data-confirm="Supprimer ce projet ?">Supprimer</button>
+  </div>
+</form>
+<% }) %>
+<%- include('../partials/admin-bottom') %>
