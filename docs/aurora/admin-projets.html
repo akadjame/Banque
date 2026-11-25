@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Projets financés — AURORA ÉPARGNE</title>
+  
+  <link rel="manifest" href="#">
+  <link rel="apple-touch-icon" href="#">
+  <meta name="theme-color" content="#1d2240">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="AURORA">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body><div class="demo-bar">Aperçu de démonstration · marque provisoire · les formulaires sont désactivés ·
+    <a href="index.html">Site public</a> · <a href="espace.html">Espace client</a> · <a href="admin.html">Administration</a></div><div class="demo-toast" id="demo-toast" hidden>Aperçu : cette action fonctionne sur la vraie version du site.</div>
+<header class="site-header">
+  <div class="container">
+    <a class="logo" href="index.html">
+      <img class="logo-mark" src="logo.svg" alt="">
+      <span class="logo-text"><strong>AURORA</strong><span>ÉPARGNE</span></span>
+    </a>
+    <nav class="nav">
+      
+        <a class="link" href="admin.html">Admin Démo</a>
+        <form method="post" action="#" style="margin:0">
+          <input type="hidden" name="_csrf" value="26e0f5cf4c49d09cdf1d1f9ed58d83d3e77dd9fc21dabf7c">
+          <button class="btn btn-ghost btn-sm" type="submit">Déconnexion</button>
+        </form>
+      
+    </nav>
+  </div>
+</header>
+
+<div class="app">
+  <aside class="side no-print">
+    <div class="side-title">Administration</div>
+    <a href="admin.html" class="">📊 Tableau de bord</a>
+    <a href="admin-clients.html" class="">👥 Clients<span class="count">2</span></a>
+    <a href="admin-retraits.html" class="">⬆️ Retraits<span class="count">1</span></a>
+    <a href="admin-messages.html" class="">💬 Messagerie<span class="count">1</span></a>
+    <div class="side-title">Configuration</div>
+    <a href="admin-projets.html" class="active">🏘️ Projets financés</a>
+    <a href="admin-parametres.html" class="">⚙️ Offres & taux</a>
+    <a href="admin-journal.html" class="">📜 Journal</a>
+  </aside>
+  <main class="main">
+    
+
+
+<div class="page-head"><h1>Projets financés</h1><a class="btn btn-light btn-sm" href="ou-va-votre-argent.html" target="_blank">Voir la page publique</a></div>
+
+<div class="alert alert-warn">Le numéro d'agrément ACPR (ou le nom de la banque partenaire agréée) n'est pas renseigné. Il doit figurer sur le site avant toute ouverture au public : variables <span class="mono">BANK_AGREMENT</span> ou <span class="mono">BANK_PARTNER</span>.</div>
+
+<div class="alert alert-info">Ne publiez que des projets réels et vérifiables (bailleur, lieu, montant). Les informations affichées engagent l'établissement vis-à-vis des épargnants.</div>
+
+<form class="card" method="post" action="#">
+  <input type="hidden" name="_csrf" value="26e0f5cf4c49d09cdf1d1f9ed58d83d3e77dd9fc21dabf7c"><input type="hidden" name="action" value="intro">
+  <h2>Texte de présentation</h2>
+  <textarea name="intro" rows="3" maxlength="1500">Votre épargne ne dort pas : elle finance la construction et la rénovation de logements sociaux en France. Chaque projet financé est présenté ci-dessous, avec son porteur, sa localisation et son avancement.</textarea>
+  <button class="btn btn-light btn-sm" style="margin-top:10px">Enregistrer</button>
+</form>
+
+
+
+<form class="card" method="post" action="#">
+  <input type="hidden" name="_csrf" value="26e0f5cf4c49d09cdf1d1f9ed58d83d3e77dd9fc21dabf7c">
+  <h2>Ajouter un projet</h2>
+  
+  <div class="row"><div><label>Titre du projet</label><input name="title" value="" required maxlength="120" placeholder="Ex : Résidence Les Tilleuls — 42 logements"></div>
+    <div><label>Ville</label><input name="city" value="" maxlength="80"></div></div>
+  <div class="row"><div><label>Bailleur / porteur du projet</label><input name="partner" value="" maxlength="120"></div>
+    <div><label>Statut</label><select name="status"><option value="a_venir" >À venir</option><option value="en_cours" >En cours</option><option value="livre" >Livré</option></select></div></div>
+  <div class="row"><div><label>Nombre de logements</label><input name="housing_units" type="number" min="0" value=""></div>
+    <div><label>Montant financé (€)</label><input name="amount" inputmode="decimal" value=""></div></div>
+  <label>Description</label><textarea name="description" rows="3" maxlength="1500"></textarea>
+  <label class="check" style="margin-top:10px"><input type="checkbox" name="published" value="1" checked> Publié sur le site</label>
+
+  <button class="btn btn-violet btn-sm" style="margin-top:12px">Ajouter</button>
+</form>
+
+
+<form class="card" method="post" action="#">
+  <input type="hidden" name="_csrf" value="26e0f5cf4c49d09cdf1d1f9ed58d83d3e77dd9fc21dabf7c">
+  <div class="page-head" style="margin-bottom:0"><h2 style="margin:0">Résidence intergénérationnelle (exemple)</h2>
+    <div><span class="chip orange">Exemple de démonstration</span> </div></div>
+  
+  <div class="row"><div><label>Titre du projet</label><input name="title" value="Résidence intergénérationnelle (exemple)" required maxlength="120" placeholder="Ex : Résidence Les Tilleuls — 42 logements"></div>
+    <div><label>Ville</label><input name="city" value="Lyon (69)" maxlength="80"></div></div>
+  <div class="row"><div><label>Bailleur / porteur du projet</label><input name="partner" value="Bailleur social partenaire" maxlength="120"></div>
+    <div><label>Statut</label><select name="status"><option value="a_venir" >À venir</option><option value="en_cours" selected>En cours</option><option value="livre" >Livré</option></select></div></div>
+  <div class="row"><div><label>Nombre de logements</label><input name="housing_units" type="number" min="0" value="48"></div>
+    <div><label>Montant financé (€)</label><input name="amount" inputmode="decimal" value="3200000"></div></div>
+  <label>Description</label><textarea name="description" rows="3" maxlength="1500">Construction de 48 logements sociaux, dont 12 réservés aux seniors, avec jardin partagé.</textarea>
+  <label class="check" style="margin-top:10px"><input type="checkbox" name="published" value="1" checked> Publié sur le site</label>
+
+  <div class="actions" style="margin-top:12px">
+    <button class="btn btn-light btn-sm" name="action" value="modifier">Mettre à jour</button>
+    <button class="btn btn-danger btn-sm" name="action" value="supprimer" data-confirm="Supprimer ce projet ?">Supprimer</button>
+  </div>
+</form>
+
+<form class="card" method="post" action="#">
+  <input type="hidden" name="_csrf" value="26e0f5cf4c49d09cdf1d1f9ed58d83d3e77dd9fc21dabf7c">
+  <div class="page-head" style="margin-bottom:0"><h2 style="margin:0">Rénovation énergétique d’une résidence (exemple)</h2>
+    <div><span class="chip orange">Exemple de démonstration</span> </div></div>
+  
+  <div class="row"><div><label>Titre du projet</label><input name="title" value="Rénovation énergétique d’une résidence (exemple)" required maxlength="120" placeholder="Ex : Résidence Les Tilleuls — 42 logements"></div>
+    <div><label>Ville</label><input name="city" value="Lille (59)" maxlength="80"></div></div>
+  <div class="row"><div><label>Bailleur / porteur du projet</label><input name="partner" value="Office public de l’habitat partenaire" maxlength="120"></div>
+    <div><label>Statut</label><select name="status"><option value="a_venir" >À venir</option><option value="en_cours" >En cours</option><option value="livre" selected>Livré</option></select></div></div>
+  <div class="row"><div><label>Nombre de logements</label><input name="housing_units" type="number" min="0" value="120"></div>
+    <div><label>Montant financé (€)</label><input name="amount" inputmode="decimal" value="1800000"></div></div>
+  <label>Description</label><textarea name="description" rows="3" maxlength="1500">Isolation, chauffage collectif et fenêtres : jusqu’à 40 % d’économies d’énergie pour les locataires.</textarea>
+  <label class="check" style="margin-top:10px"><input type="checkbox" name="published" value="1" checked> Publié sur le site</label>
+
+  <div class="actions" style="margin-top:12px">
+    <button class="btn btn-light btn-sm" name="action" value="modifier">Mettre à jour</button>
+    <button class="btn btn-danger btn-sm" name="action" value="supprimer" data-confirm="Supprimer ce projet ?">Supprimer</button>
+  </div>
+</form>
+
+<form class="card" method="post" action="#">
+  <input type="hidden" name="_csrf" value="26e0f5cf4c49d09cdf1d1f9ed58d83d3e77dd9fc21dabf7c">
+  <div class="page-head" style="margin-bottom:0"><h2 style="margin:0">Logements pour jeunes actifs (exemple)</h2>
+    <div><span class="chip orange">Exemple de démonstration</span> </div></div>
+  
+  <div class="row"><div><label>Titre du projet</label><input name="title" value="Logements pour jeunes actifs (exemple)" required maxlength="120" placeholder="Ex : Résidence Les Tilleuls — 42 logements"></div>
+    <div><label>Ville</label><input name="city" value="Bordeaux (33)" maxlength="80"></div></div>
+  <div class="row"><div><label>Bailleur / porteur du projet</label><input name="partner" value="Bailleur social partenaire" maxlength="120"></div>
+    <div><label>Statut</label><select name="status"><option value="a_venir" selected>À venir</option><option value="en_cours" >En cours</option><option value="livre" >Livré</option></select></div></div>
+  <div class="row"><div><label>Nombre de logements</label><input name="housing_units" type="number" min="0" value="36"></div>
+    <div><label>Montant financé (€)</label><input name="amount" inputmode="decimal" value="2100000"></div></div>
+  <label>Description</label><textarea name="description" rows="3" maxlength="1500">Résidence de 36 studios à loyer modéré proche des transports.</textarea>
+  <label class="check" style="margin-top:10px"><input type="checkbox" name="published" value="1" checked> Publié sur le site</label>
+
+  <div class="actions" style="margin-top:12px">
+    <button class="btn btn-light btn-sm" name="action" value="modifier">Mettre à jour</button>
+    <button class="btn btn-danger btn-sm" name="action" value="supprimer" data-confirm="Supprimer ce projet ?">Supprimer</button>
+  </div>
+</form>
+
+  </main>
+</div>
+<footer class="site-footer no-print">
+  <div class="container">
+    <div class="cols">
+      <div>
+        <a class="logo" href="index.html">
+          <img class="logo-mark" src="logo.svg" alt="">
+          <span class="logo-text"><strong>AURORA</strong><span>ÉPARGNE</span></span>
+        </a>
+        <p>L'épargne en ligne simple, rémunérée et sans frais.</p>
+      </div>
+      <div>
+        <p><a href="index.html#livrets">Nos produits</a></p>
+        <p><a href="index.html#parrainage">Parrainage</a></p>
+        <p><a href="ou-va-votre-argent.html">Où va votre argent</a></p>
+        <p><a href="aide.html">Aide & FAQ</a></p>
+      </div>
+      <div>
+        <p><a href="connexion.html">Espace client</a></p>
+        <p><a href="mentions-legales.html">Mentions légales</a></p>
+        <p>01 00 00 00 00<br>support@exemple.fr</p>
+      </div>
+    </div>
+    <div class="legal">
+      Aurora Épargne SAS. Taux annuels bruts, avant prélèvements fiscaux et sociaux. Livrets : intérêts calculés par quinzaine.
+      Offres soumises à conditions, voir <a href="aide.html">conditions</a>.
+    </div>
+  </div>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>
+
+
