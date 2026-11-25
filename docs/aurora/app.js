@@ -8,14 +8,15 @@
   const amount = document.getElementById('simu-amount'), monthly = document.getElementById('simu-monthly');
 
   function compute() {
+    // 24 quinzaines ; le versement initial rapporte dès la 1re, chaque versement mensuel à partir de la quinzaine suivante
     let bal = Number(amount.value), interest = 0;
-    for (let d = 0; d < 365; d++) {
-      if (d > 0 && d % 30 === 0) bal += Number(monthly.value);
-      const boosted = boost && d < months * 30.4;
+    for (let q = 0; q < 24; q++) {
+      if (q > 0 && q % 2 === 0) bal += Number(monthly.value);
+      const boosted = boost && q < months * 2;
       if (boosted) {
         const b = cap ? Math.min(bal, cap) : bal;
-        interest += (b * boost + (bal - b) * base) / 100 / 365;
-      } else interest += (bal * base) / 100 / 365;
+        interest += (b * boost + (bal - b) * base) / 100 / 24;
+      } else interest += (bal * base) / 100 / 24;
     }
     document.getElementById('simu-amount-out').textContent = fmt(Number(amount.value));
     document.getElementById('simu-monthly-out').textContent = fmt(Number(monthly.value));
