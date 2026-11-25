@@ -1,0 +1,83 @@
+# Déploiement automatique du site BOYAMA BTP sur Hostinger
+#
+# À chaque modification du dossier docs/ poussée sur la branche du site :
+#   1. Vérification : les fichiers indispensables sont présents
+#   2. Préparation : numéro de version unique pour forcer la mise à jour chez les visiteurs
+#   3. Envoi sur Hostinger par FTP sécurisé (seuls les fichiers modifiés sont envoyés)
+#
+# Secrets à créer dans GitHub (Settings > Secrets and variables > Actions) :
+#   FTP_SERVER    ex. ftp.boyamabtp.com (ou l'IP indiquée dans hPanel > Comptes FTP)
+#   FTP_USERNAME  ex. u123456789
+#   FTP_PASSWORD  mot de passe du compte FTP
+# Variable facultative (onglet "Variables") :
+#   FTP_SERVER_DIR  dossier du site sur le serveur (par défaut : public_html/)
+
+name: Déploiement Hostinger
+
+on:
+  push:
+    branches: [claude/focused-goldberg-f1saih]
+    paths: ["docs/**", ".github/workflows/deploy-hostinger.yml"]
+
+concurrency:
+  group: deploy-hostinger
+  cancel-in-progress: false
+
+jobs:
+  verification:
+    name: Vérification du site
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Fichiers indispensables présents
+        run: |
+          for f in index.html styles.css script.js config.js favicon.svg; do
+            test -s "docs/$f" || { echo "::error::Fichier manquant : docs/$f"; exit 1; }
+          done
+          echo "Tous les fichiers sont présents."
+      - name: Rappel des coordonnées provisoires
+        run: |
+          if grep -q "XXXX" docs/config.js; then
+            echo "::warning::Le numéro WhatsApp/téléphone dans docs/config.js est encore provisoire."
+          fi
+
+  deploiement:
+    name: Envoi sur Hostinger
+    needs: verification
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: https://boyamabtp.com
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Secrets FTP configurés ?
+        id: secrets
+        env:
+          FTP_SERVER: ${{ secrets.FTP_SERVER }}
+        run: |
+          if [ -z "$FTP_SERVER" ]; then
+            echo "::warning::Secrets FTP non configurés : déploiement Hostinger ignoré."
+            echo "ok=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "ok=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Préparation (version unique anti-cache)
+        if: steps.secrets.outputs.ok == 'true'
+        run: |
+          mkdir -p build
+          cp -r docs/. build/
+          rm -f build/.nojekyll
+          sed -i "s/?v=[0-9a-z]*/?v=${GITHUB_SHA::7}/g" build/index.html
+
+      - name: Envoi FTP vers Hostinger
+        if: steps.secrets.outputs.ok == 'true'
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          protocol: ftps
+          local-dir: ./build/
+          server-dir: ${{ vars.FTP_SERVER_DIR || 'public_html/' }}
