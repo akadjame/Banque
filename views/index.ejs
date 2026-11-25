@@ -66,7 +66,7 @@
           <span class="chip <%= p.audience === 'pro' ? 'orange' : p.kind === 'cat' ? 'cyan' : p.kind === 'junior' ? 'green' : 'violet' %>" style="align-self:flex-start;margin-bottom:10px"><%= audienceLabel(p) %></span>
           <h3><%= p.name %></h3>
           <div class="rate"><%= fmtRate(headlineRate(p)) %>%</div>
-          <p class="small" style="color:#b9bce0">taux annuel brut, <%= productRateText(p) %></p>
+          <p class="small" style="color:var(--on-dark-muted)">taux annuel brut, <%= productRateText(p) %></p>
           <ul>
             <li><%= p.description %></li>
             <li>Versement minimum : <%= eur(p.min_deposit_cents) %></li>
@@ -122,9 +122,9 @@
       <h2 class="section-title">Ouvrez votre livret en 3 étapes</h2>
       <p class="section-sub">Moins de 5 minutes, depuis votre téléphone ou votre ordinateur.</p>
       <div class="grid grid-3 steps">
-        <div class="step"><h3>Remplissez le formulaire</h3><p style="color:#c9cbef">Vos informations et l'IBAN de votre compte courant (compte de référence).</p></div>
-        <div class="step"><h3>Validation du dossier</h3><p style="color:#c9cbef">Notre équipe vérifie votre dossier et active votre livret.</p></div>
-        <div class="step"><h3>Faites un premier versement</h3><p style="color:#c9cbef">Virement depuis votre compte de référence : vos intérêts démarrent aussitôt.</p></div>
+        <div class="step"><h3>Remplissez le formulaire</h3><p style="color:var(--on-dark-muted)">Vos informations et l'IBAN de votre compte courant (compte de référence).</p></div>
+        <div class="step"><h3>Validation du dossier</h3><p style="color:var(--on-dark-muted)">Notre équipe vérifie votre dossier et active votre livret.</p></div>
+        <div class="step"><h3>Faites un premier versement</h3><p style="color:var(--on-dark-muted)">Virement depuis votre compte de référence : vos intérêts démarrent aussitôt.</p></div>
       </div>
     </div>
   </section>
@@ -146,7 +146,7 @@
   </section>
 
   <section class="block">
-    <div class="container small" style="color:#9fa3cf">
+    <div class="container small" style="color:var(--on-dark-muted)">
       <p>(1) Taux annuel brut boosté applicable aux nouveaux livrets ouverts pendant la période de l'offre, pendant la durée et dans la limite du plafond indiqués. Au-delà, taux de base en vigueur. * Taux de base susceptible d'évoluer.</p>
       <p>(2) Prime versée après validation du dossier et premier versement. Une seule prime par client.</p>
     </div>

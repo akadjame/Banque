@@ -9,6 +9,13 @@
     <div><label>Prime filleul (€)</label><input name="referee_bonus_cents" value="<%= (offer.referee / 100).toFixed(2).replace('.', ',') %>"></div>
     <div><label>Fin de l'offre (vide = « durée limitée »)</label><input type="date" name="offer_end_date" value="<%= offer.endDate %>"></div>
   </div>
+  <h2 style="margin-top:22px">Couleurs du site</h2>
+  <div class="choice">
+    <% Object.entries(PALETTES).forEach(([k, p]) => { %>
+    <label data-palette="<%= k %>"><input type="radio" name="palette" value="<%= k %>" <%= palette === k ? 'checked' : '' %>>
+      <span><span style="display:inline-flex;gap:4px;vertical-align:middle;margin-right:6px"><i style="width:16px;height:16px;border-radius:4px;background:var(--dark)"></i><i style="width:16px;height:16px;border-radius:4px;background:var(--primary)"></i><i style="width:16px;height:16px;border-radius:4px;background:var(--accent)"></i></span><%= p.label %></span></label>
+    <% }) %>
+  </div>
   <button class="btn btn-violet btn-sm" style="margin-top:14px">Enregistrer</button>
 </form>
 

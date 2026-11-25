@@ -65,7 +65,15 @@ function offer() {
     endDate: getSetting('offer_end_date'),
   };
 }
-app.use((req, res, next) => { res.locals.offer = offer(); res.locals.path = req.path; next(); });
+const PALETTES = { emeraude: { label: 'Émeraude & or', dark: '#0d3530' }, terracotta: { label: 'Terracotta & ardoise', dark: '#2a2d3e' }, bleu: { label: 'Bleu France', dark: '#0f2a47' }, aurora: { label: "Violet & cyan (d'origine)", dark: '#1d2240' } };
+app.locals.PALETTES = PALETTES;
+app.use((req, res, next) => {
+  res.locals.offer = offer(); res.locals.path = req.path;
+  const pal = getSetting('palette');
+  res.locals.palette = PALETTES[pal] ? pal : 'emeraude';
+  res.locals.paletteDark = PALETTES[res.locals.palette].dark;
+  next();
+});
 
 // Petite aide pour attraper les erreurs métier et revenir au formulaire
 const handle = (fn) => async (req, res, next) => {
@@ -640,6 +648,7 @@ admin.post('/parametres', handle((req, res) => {
     if (v === null) throw new bank.BankError('Montant de prime invalide.');
     setSetting(k, v);
   }
+  if (b.palette && PALETTES[b.palette]) setSetting('palette', b.palette);
   if (!b.offer_end_date) setSetting('offer_end_date', '');
   else if (/^\d{4}-\d{2}-\d{2}$/.test(b.offer_end_date)) setSetting('offer_end_date', b.offer_end_date);
   bank.audit(req.user.id, 'parametres', { welcome: b.welcome_bonus_cents, referrer: b.referrer_bonus_cents, referee: b.referee_bonus_cents });

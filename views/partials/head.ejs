@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="fr">
+<html lang="fr" data-palette="<%= palette %>">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -7,7 +7,7 @@
   <link rel="icon" href="/static/img/logo.svg" type="image/svg+xml">
   <link rel="manifest" href="/static/manifest.webmanifest">
   <link rel="apple-touch-icon" href="/static/img/icon-192.png">
-  <meta name="theme-color" content="#1d2240">
+  <meta name="theme-color" content="<%= paletteDark %>">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-title" content="<%= bank.name %>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -18,7 +18,7 @@
 <header class="site-header">
   <div class="container">
     <a class="logo" href="/">
-      <img class="logo-mark" src="/static/img/logo.svg" alt="">
+      <%- include('logo-mark') %>
       <span class="logo-text"><strong><%= bank.name %></strong><span><%= bank.subtitle %></span></span>
     </a>
     <nav class="nav">
