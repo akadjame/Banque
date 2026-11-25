@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="fr" data-palette="emeraude">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Thomas Petit — AURORA ÉPARGNE</title>
+  
+  <link rel="manifest" href="#">
+  <link rel="apple-touch-icon" href="#">
+  <meta name="theme-color" content="#0d3530">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="AURORA">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body><div class="demo-bar">Aperçu de démonstration · marque provisoire · les formulaires sont désactivés ·
+    <a href="index.html">Site public</a> · <a href="espace.html">Espace client</a> · <a href="admin.html">Administration</a></div><div class="demo-toast" id="demo-toast" hidden>Aperçu : cette action fonctionne sur la vraie version du site.</div>
+<header class="site-header">
+  <div class="container">
+    <a class="logo" href="index.html">
+      <svg class="logo-mark" viewBox="0 0 64 64" aria-hidden="true"><path d="M32 4 L58 56 H44 L32 30 L20 56 H6 Z" fill="var(--primary)"/><path d="M32 4 L58 56 H44 L32 30 Z" fill="var(--accent)" opacity=".85"/><path d="M22 46 H42" stroke="var(--dark)" stroke-width="5" stroke-linecap="round"/><circle cx="32" cy="14" r="4" fill="#fff"/></svg>
+
+      <span class="logo-text"><strong>AURORA</strong><span>ÉPARGNE</span></span>
+    </a>
+    <nav class="nav">
+      
+        <a class="link" href="admin.html">Admin Démo</a>
+        <form method="post" action="#" style="margin:0">
+          <input type="hidden" name="_csrf" value="400333246d347423fe002ee29ccf89a202c88a651f6eae97">
+          <button class="btn btn-ghost btn-sm" type="submit">Déconnexion</button>
+        </form>
+      
+    </nav>
+  </div>
+</header>
+
+<div class="app">
+  <aside class="side no-print">
+    <div class="side-title">Administration</div>
+    <a href="admin.html" class="">📊 Tableau de bord</a>
+    <a href="admin-clients.html" class="active">👥 Clients<span class="count">2</span></a>
+    <a href="admin-retraits.html" class="">⬆️ Retraits<span class="count">1</span></a>
+    <a href="admin-messages.html" class="">💬 Messagerie</a>
+    <div class="side-title">Configuration</div>
+    <a href="admin-projets.html" class="">🏘️ Projets financés</a>
+    <a href="admin-parametres.html" class="">⚙️ Offres & taux</a>
+    <a href="admin-journal.html" class="">📜 Journal</a>
+  </aside>
+  <main class="main">
+    
+
+
+<div class="page-head">
+  <div>
+    <h1>M. Thomas Petit</h1>
+    
+    <span class="chip orange">En attente</span>
+    <span class="small muted">N° <span class="mono">08491412</span> · inscrit le 25/11/2026 · dernière connexion —</span>
+  </div>
+  <form method="post" action="#" class="actions">
+    <input type="hidden" name="_csrf" value="400333246d347423fe002ee29ccf89a202c88a651f6eae97">
+    <button class="btn btn-success btn-sm" name="status" value="actif">Valider / activer</button>
+    <button class="btn btn-danger btn-sm" name="status" value="bloque" data-confirm="Bloquer ce client ?">Bloquer</button>
+  </form>
+</div>
+
+<h2 style="font-size:1.2rem">Livrets</h2>
+<div class="grid grid-2" style="margin-bottom:22px">
+
+  <div class="card" style="margin:0">
+    <div style="display:flex;justify-content:space-between;gap:8px;align-items:center">
+      <strong>Livret Plus</strong>
+      <span class="chip green">Actif</span>
+    </div>
+    <div style="font-size:1.8rem;font-weight:800">0,00 €</div>
+    <div class="small muted mono">FR76 9999 9000 0116 9238 7172 310</div>
+    
+    
+    <div class="small">Taux : <strong>3,30 %</strong> ·
+      Intérêts acquis : <strong class="amt-pos">0,00 €</strong></div>
+
+    
+    <form method="post" action="#" style="margin-top:14px" data-confirm="Confirmer l'opération ?">
+      <input type="hidden" name="_csrf" value="400333246d347423fe002ee29ccf89a202c88a651f6eae97">
+      <div class="inline-form">
+        <div><label>Opération</label><select name="kind">
+          <option value="credit">Créditer (versement reçu)</option>
+          <option value="prime">Créditer (prime / geste)</option>
+          <option value="debit">Débiter (régularisation)</option>
+        </select></div>
+        <div><label>Montant (€)</label><input name="amount" inputmode="decimal" placeholder="0,00" required></div>
+      </div>
+      <label>Libellé (visible par le client)</label><input name="label" placeholder="Ex : Virement reçu de M. Dupont" maxlength="120">
+      <button class="btn btn-violet btn-sm" style="margin-top:10px">Enregistrer</button>
+    </form>
+    <div class="actions" style="margin-top:10px">
+      <form method="post" action="#"><input type="hidden" name="_csrf" value="400333246d347423fe002ee29ccf89a202c88a651f6eae97"><button class="btn btn-light btn-sm">Verser les intérêts</button></form>
+      <form method="post" action="#"><input type="hidden" name="_csrf" value="400333246d347423fe002ee29ccf89a202c88a651f6eae97">
+        <button class="btn btn-light btn-sm" name="status" value="bloque">Bloquer le livret</button>
+        <button class="btn btn-light btn-sm" name="status" value="cloture" data-confirm="Clôturer ce livret ? (solde à zéro requis)">Clôturer</button></form>
+    </div>
+    
+  </div>
+
+  
+  <form class="card" style="margin:0" method="post" action="#">
+    <input type="hidden" name="_csrf" value="400333246d347423fe002ee29ccf89a202c88a651f6eae97">
+    <h2>Ouvrir un livret</h2>
+    <select name="product_id"><option value="1">Livret Boosté</option><option value="3">Compte à terme 1 an</option><option value="4">Compte à terme 2 ans</option><option value="5">Compte à terme 3 ans</option><option value="6">Livret Junior</option></select>
+    
+    <p class="small muted" style="margin:10px 0 0">Pour un Livret Junior, renseignez l'enfant :</p>
+    <div class="row"><input name="beneficiary_first_name" placeholder="Prénom de l'enfant"><input name="beneficiary_last_name" placeholder="Nom de l'enfant"></div>
+    <input type="date" name="beneficiary_birth_date" style="margin-top:8px">
+    
+    <button class="btn btn-light btn-sm" style="margin-top:10px">Ouvrir</button>
+  </form>
+  
+</div>
+
+<div class="grid grid-2">
+  <div class="card">
+    <h2>Primes</h2>
+    <div class="actions">
+      <form method="post" action="#" data-confirm="Verser la prime de bienvenue (80,00 €) ?">
+        <input type="hidden" name="_csrf" value="400333246d347423fe002ee29ccf89a202c88a651f6eae97">
+        <button class="btn btn-sm btn-violet" >Verser la prime de bienvenue (80,00 €)</button>
+      </form>
+      
+    </div>
+    <p class="small" style="margin-top:12px">Parrain : — · Code de parrainage : <span class="mono">PETIT3263</span></p>
+    
+  </div>
+
+  <div class="card">
+    <h2>Projets & versements programmés</h2>
+    <p class="muted small">Aucun.</p>
+    
+    
+  </div>
+
+  <div class="card">
+    <h2>Retraits</h2>
+    <p class="muted small">Aucune demande.</p>
+    <table></table>
+    
+  </div>
+</div>
+
+<div class="grid grid-2">
+  <form class="card" method="post" action="#">
+    <input type="hidden" name="_csrf" value="400333246d347423fe002ee29ccf89a202c88a651f6eae97">
+    <h2>Informations</h2>
+    <dl class="kv"><dt>E-mail</dt><dd>thomas@demo.local</dd><dt>Naissance</dt><dd>02/06/1979</dd></dl>
+    <label>Téléphone</label><input name="phone" value="">
+    <label>Adresse</label><input name="address" value="8 rue Nationale">
+    <div class="row-3"><div><label>CP</label><input name="postal_code" value="59000"></div><div><label>Ville</label><input name="city" value="Lille"></div></div>
+    <label>IBAN de référence</label><input class="mono" name="reference_iban" value="FR76 3000 3012 3411 1222 3334 437">
+    <label>Titulaire</label><input name="reference_holder" value="Thomas Petit">
+    <button class="btn btn-light btn-sm" style="margin-top:12px">Enregistrer</button>
+  </form>
+  <div>
+    <div class="card" id="messages">
+      <h2>Messagerie</h2>
+      <div class="thread" style="max-height:300px">
+        <p class="muted small">Aucun message.</p>
+        
+      </div>
+      <form method="post" action="#" style="margin-top:12px">
+        <input type="hidden" name="_csrf" value="400333246d347423fe002ee29ccf89a202c88a651f6eae97">
+        <textarea name="body" rows="3" required placeholder="Répondre au client…"></textarea>
+        <button class="btn btn-violet btn-sm" style="margin-top:8px">Envoyer</button>
+      </form>
+    </div>
+    <form class="card" method="post" action="#" data-confirm="Réinitialiser le mot de passe ?">
+      <input type="hidden" name="_csrf" value="400333246d347423fe002ee29ccf89a202c88a651f6eae97">
+      <h2>Réinitialiser le mot de passe</h2>
+      <input name="password" placeholder="Nouveau mot de passe provisoire" minlength="10" required>
+      <button class="btn btn-light btn-sm" style="margin-top:8px">Réinitialiser</button>
+    </form>
+  </div>
+</div>
+
+<div class="card">
+  <h2>Historique des opérations</h2>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Date</th><th>Livret</th><th>Libellé</th><th>Type</th><th>Par</th><th style="text-align:right">Montant</th><th style="text-align:right">Solde</th></tr></thead>
+    <tbody></tbody>
+  </table></div>
+</div>
+  </main>
+</div>
+<footer class="site-footer no-print">
+  <div class="container">
+    <div class="cols">
+      <div>
+        <a class="logo" href="index.html">
+          <svg class="logo-mark" viewBox="0 0 64 64" aria-hidden="true"><path d="M32 4 L58 56 H44 L32 30 L20 56 H6 Z" fill="var(--primary)"/><path d="M32 4 L58 56 H44 L32 30 Z" fill="var(--accent)" opacity=".85"/><path d="M22 46 H42" stroke="var(--dark)" stroke-width="5" stroke-linecap="round"/><circle cx="32" cy="14" r="4" fill="#fff"/></svg>
+
+          <span class="logo-text"><strong>AURORA</strong><span>ÉPARGNE</span></span>
+        </a>
+        <p>L'épargne en ligne simple, rémunérée et sans frais.</p>
+      </div>
+      <div>
+        <p><a href="index.html#livrets">Nos produits</a></p>
+        <p><a href="index.html#parrainage">Parrainage</a></p>
+        <p><a href="ou-va-votre-argent.html">Où va votre argent</a></p>
+        <p><a href="aide.html">Aide & FAQ</a></p>
+      </div>
+      <div>
+        <p><a href="connexion.html">Espace client</a></p>
+        <p><a href="mentions-legales.html">Mentions légales</a></p>
+        <p>01 00 00 00 00<br>support@exemple.fr</p>
+      </div>
+    </div>
+    <div class="legal">
+      Aurora Épargne SAS. Taux annuels bruts, avant prélèvements fiscaux et sociaux. Livrets : intérêts calculés par quinzaine.
+      Offres soumises à conditions, voir <a href="aide.html">conditions</a>.
+    </div>
+  </div>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>
+
+

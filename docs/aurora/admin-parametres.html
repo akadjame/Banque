@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="fr" data-palette="emeraude">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Offres &amp; paramètres — AURORA ÉPARGNE</title>
+  
+  <link rel="manifest" href="#">
+  <link rel="apple-touch-icon" href="#">
+  <meta name="theme-color" content="#0d3530">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="AURORA">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body><div class="demo-bar">Aperçu de démonstration · marque provisoire · les formulaires sont désactivés ·
+    <a href="index.html">Site public</a> · <a href="espace.html">Espace client</a> · <a href="admin.html">Administration</a></div><div class="demo-toast" id="demo-toast" hidden>Aperçu : cette action fonctionne sur la vraie version du site.</div>
+<header class="site-header">
+  <div class="container">
+    <a class="logo" href="index.html">
+      <svg class="logo-mark" viewBox="0 0 64 64" aria-hidden="true"><path d="M32 4 L58 56 H44 L32 30 L20 56 H6 Z" fill="var(--primary)"/><path d="M32 4 L58 56 H44 L32 30 Z" fill="var(--accent)" opacity=".85"/><path d="M22 46 H42" stroke="var(--dark)" stroke-width="5" stroke-linecap="round"/><circle cx="32" cy="14" r="4" fill="#fff"/></svg>
+
+      <span class="logo-text"><strong>AURORA</strong><span>ÉPARGNE</span></span>
+    </a>
+    <nav class="nav">
+      
+        <a class="link" href="admin.html">Admin Démo</a>
+        <form method="post" action="#" style="margin:0">
+          <input type="hidden" name="_csrf" value="400333246d347423fe002ee29ccf89a202c88a651f6eae97">
+          <button class="btn btn-ghost btn-sm" type="submit">Déconnexion</button>
+        </form>
+      
+    </nav>
+  </div>
+</header>
+
+<div class="app">
+  <aside class="side no-print">
+    <div class="side-title">Administration</div>
+    <a href="admin.html" class="">📊 Tableau de bord</a>
+    <a href="admin-clients.html" class="">👥 Clients<span class="count">2</span></a>
+    <a href="admin-retraits.html" class="">⬆️ Retraits<span class="count">1</span></a>
+    <a href="admin-messages.html" class="">💬 Messagerie</a>
+    <div class="side-title">Configuration</div>
+    <a href="admin-projets.html" class="">🏘️ Projets financés</a>
+    <a href="admin-parametres.html" class="active">⚙️ Offres & taux</a>
+    <a href="admin-journal.html" class="">📜 Journal</a>
+  </aside>
+  <main class="main">
+    
+
+
+<div class="page-head"><h1>Offres & taux</h1></div>
+<form class="card" method="post" action="#">
+  <input type="hidden" name="_csrf" value="400333246d347423fe002ee29ccf89a202c88a651f6eae97">
+  <h2>Primes & offre du moment</h2>
+  <div class="grid grid-4">
+    <div><label>Prime de bienvenue (€)</label><input name="welcome_bonus_cents" value="80,00"></div>
+    <div><label>Prime parrain (€)</label><input name="referrer_bonus_cents" value="150,00"></div>
+    <div><label>Prime filleul (€)</label><input name="referee_bonus_cents" value="150,00"></div>
+    <div><label>Fin de l'offre (vide = « durée limitée »)</label><input type="date" name="offer_end_date" value=""></div>
+  </div>
+  <h2 style="margin-top:22px">Couleurs du site</h2>
+  <div class="choice">
+    
+    <label data-palette="emeraude"><input type="radio" name="palette" value="emeraude" checked>
+      <span><span style="display:inline-flex;gap:4px;vertical-align:middle;margin-right:6px"><i style="width:16px;height:16px;border-radius:4px;background:var(--dark)"></i><i style="width:16px;height:16px;border-radius:4px;background:var(--primary)"></i><i style="width:16px;height:16px;border-radius:4px;background:var(--accent)"></i></span>Émeraude &amp; or</span></label>
+    
+    <label data-palette="terracotta"><input type="radio" name="palette" value="terracotta" >
+      <span><span style="display:inline-flex;gap:4px;vertical-align:middle;margin-right:6px"><i style="width:16px;height:16px;border-radius:4px;background:var(--dark)"></i><i style="width:16px;height:16px;border-radius:4px;background:var(--primary)"></i><i style="width:16px;height:16px;border-radius:4px;background:var(--accent)"></i></span>Terracotta &amp; ardoise</span></label>
+    
+    <label data-palette="bleu"><input type="radio" name="palette" value="bleu" >
+      <span><span style="display:inline-flex;gap:4px;vertical-align:middle;margin-right:6px"><i style="width:16px;height:16px;border-radius:4px;background:var(--dark)"></i><i style="width:16px;height:16px;border-radius:4px;background:var(--primary)"></i><i style="width:16px;height:16px;border-radius:4px;background:var(--accent)"></i></span>Bleu France</span></label>
+    
+    <label data-palette="aurora"><input type="radio" name="palette" value="aurora" >
+      <span><span style="display:inline-flex;gap:4px;vertical-align:middle;margin-right:6px"><i style="width:16px;height:16px;border-radius:4px;background:var(--dark)"></i><i style="width:16px;height:16px;border-radius:4px;background:var(--primary)"></i><i style="width:16px;height:16px;border-radius:4px;background:var(--accent)"></i></span>Violet &amp; cyan (d&#39;origine)</span></label>
+    
+  </div>
+  <button class="btn btn-violet btn-sm" style="margin-top:14px">Enregistrer</button>
+</form>
+
+<div class="alert alert-warn">Avant de modifier un taux, versez les intérêts acquis (tableau de bord) : le calcul des intérêts non versés utilise le taux en vigueur.</div>
+
+
+<form class="card" method="post" action="#">
+  <input type="hidden" name="_csrf" value="400333246d347423fe002ee29ccf89a202c88a651f6eae97">
+  <div class="page-head" style="margin-bottom:4px"><h2 style="margin:0">Livret Boosté <span class="small muted mono">LIVRET_BOOST</span></h2>
+    <label class="check" style="margin:0"><input type="checkbox" name="active" value="1" checked> Proposé à l'ouverture</label></div>
+  <div class="row"><div><label>Nom</label><input name="name" value="Livret Boosté"></div><div><label>Description</label><input name="description" value="Taux boosté pendant 3 mois à l&#39;ouverture, puis taux standard. Sans frais, disponible à tout moment."></div></div>
+  <div class="grid grid-4">
+    <div><label>Type</label><select name="kind"><option value="livret" selected>Livret (disponible)</option><option value="cat" >Compte à terme</option></select></div>
+    <div><label>Durée du terme (mois)</label><input name="term_months" type="number" min="1" value="" placeholder="CAT uniquement"></div>
+    <div><label>Versement minimum (€)</label><input name="min_deposit" value="10"></div>
+    <div><label>Taux de base / fixe (%)</label><input name="base_rate" value="3.3"></div>
+    <div><label>Taux boosté (%)</label><input name="boosted_rate" value="6" placeholder="aucun"></div>
+    <div><label>Durée du boost (mois)</label><input name="boost_months" type="number" min="0" value="3"></div>
+    <div><label>Plafond du boost (€)</label><input name="boost_cap" value="200000" placeholder="aucun"></div>
+    <div><label>Plafond de dépôt (€)</label><input name="max_balance" value="" placeholder="illimité"></div>
+  </div>
+  <button class="btn btn-light btn-sm" style="margin-top:14px">Mettre à jour</button>
+</form>
+
+<form class="card" method="post" action="#">
+  <input type="hidden" name="_csrf" value="400333246d347423fe002ee29ccf89a202c88a651f6eae97">
+  <div class="page-head" style="margin-bottom:4px"><h2 style="margin:0">Livret Plus <span class="small muted mono">LIVRET_PLUS</span></h2>
+    <label class="check" style="margin:0"><input type="checkbox" name="active" value="1" checked> Proposé à l'ouverture</label></div>
+  <div class="row"><div><label>Nom</label><input name="name" value="Livret Plus"></div><div><label>Description</label><input name="description" value="Taux standard, sans plafond, sans frais."></div></div>
+  <div class="grid grid-4">
+    <div><label>Type</label><select name="kind"><option value="livret" selected>Livret (disponible)</option><option value="cat" >Compte à terme</option></select></div>
+    <div><label>Durée du terme (mois)</label><input name="term_months" type="number" min="1" value="" placeholder="CAT uniquement"></div>
+    <div><label>Versement minimum (€)</label><input name="min_deposit" value="10"></div>
+    <div><label>Taux de base / fixe (%)</label><input name="base_rate" value="3.3"></div>
+    <div><label>Taux boosté (%)</label><input name="boosted_rate" value="" placeholder="aucun"></div>
+    <div><label>Durée du boost (mois)</label><input name="boost_months" type="number" min="0" value="0"></div>
+    <div><label>Plafond du boost (€)</label><input name="boost_cap" value="" placeholder="aucun"></div>
+    <div><label>Plafond de dépôt (€)</label><input name="max_balance" value="" placeholder="illimité"></div>
+  </div>
+  <button class="btn btn-light btn-sm" style="margin-top:14px">Mettre à jour</button>
+</form>
+
+<form class="card" method="post" action="#">
+  <input type="hidden" name="_csrf" value="400333246d347423fe002ee29ccf89a202c88a651f6eae97">
+  <div class="page-head" style="margin-bottom:4px"><h2 style="margin:0">Compte à terme 1 an <span class="small muted mono">CAT_12</span></h2>
+    <label class="check" style="margin:0"><input type="checkbox" name="active" value="1" checked> Proposé à l'ouverture</label></div>
+  <div class="row"><div><label>Nom</label><input name="name" value="Compte à terme 1 an"></div><div><label>Description</label><input name="description" value="Taux fixe garanti pendant 1 an. Capital et intérêts versés à l’échéance."></div></div>
+  <div class="grid grid-4">
+    <div><label>Type</label><select name="kind"><option value="livret" >Livret (disponible)</option><option value="cat" selected>Compte à terme</option></select></div>
+    <div><label>Durée du terme (mois)</label><input name="term_months" type="number" min="1" value="12" placeholder="CAT uniquement"></div>
+    <div><label>Versement minimum (€)</label><input name="min_deposit" value="5000"></div>
+    <div><label>Taux de base / fixe (%)</label><input name="base_rate" value="3.5"></div>
+    <div><label>Taux boosté (%)</label><input name="boosted_rate" value="" placeholder="aucun"></div>
+    <div><label>Durée du boost (mois)</label><input name="boost_months" type="number" min="0" value="0"></div>
+    <div><label>Plafond du boost (€)</label><input name="boost_cap" value="" placeholder="aucun"></div>
+    <div><label>Plafond de dépôt (€)</label><input name="max_balance" value="100000" placeholder="illimité"></div>
+  </div>
+  <button class="btn btn-light btn-sm" style="margin-top:14px">Mettre à jour</button>
+</form>
+
+<form class="card" method="post" action="#">
+  <input type="hidden" name="_csrf" value="400333246d347423fe002ee29ccf89a202c88a651f6eae97">
+  <div class="page-head" style="margin-bottom:4px"><h2 style="margin:0">Compte à terme 2 ans <span class="small muted mono">CAT_24</span></h2>
+    <label class="check" style="margin:0"><input type="checkbox" name="active" value="1" checked> Proposé à l'ouverture</label></div>
+  <div class="row"><div><label>Nom</label><input name="name" value="Compte à terme 2 ans"></div><div><label>Description</label><input name="description" value="Taux fixe garanti pendant 2 ans. Capital et intérêts versés à l’échéance."></div></div>
+  <div class="grid grid-4">
+    <div><label>Type</label><select name="kind"><option value="livret" >Livret (disponible)</option><option value="cat" selected>Compte à terme</option></select></div>
+    <div><label>Durée du terme (mois)</label><input name="term_months" type="number" min="1" value="24" placeholder="CAT uniquement"></div>
+    <div><label>Versement minimum (€)</label><input name="min_deposit" value="5000"></div>
+    <div><label>Taux de base / fixe (%)</label><input name="base_rate" value="3.7"></div>
+    <div><label>Taux boosté (%)</label><input name="boosted_rate" value="" placeholder="aucun"></div>
+    <div><label>Durée du boost (mois)</label><input name="boost_months" type="number" min="0" value="0"></div>
+    <div><label>Plafond du boost (€)</label><input name="boost_cap" value="" placeholder="aucun"></div>
+    <div><label>Plafond de dépôt (€)</label><input name="max_balance" value="100000" placeholder="illimité"></div>
+  </div>
+  <button class="btn btn-light btn-sm" style="margin-top:14px">Mettre à jour</button>
+</form>
+
+<form class="card" method="post" action="#">
+  <input type="hidden" name="_csrf" value="400333246d347423fe002ee29ccf89a202c88a651f6eae97">
+  <div class="page-head" style="margin-bottom:4px"><h2 style="margin:0">Compte à terme 3 ans <span class="small muted mono">CAT_36</span></h2>
+    <label class="check" style="margin:0"><input type="checkbox" name="active" value="1" checked> Proposé à l'ouverture</label></div>
+  <div class="row"><div><label>Nom</label><input name="name" value="Compte à terme 3 ans"></div><div><label>Description</label><input name="description" value="Taux fixe garanti pendant 3 ans. Capital et intérêts versés à l’échéance."></div></div>
+  <div class="grid grid-4">
+    <div><label>Type</label><select name="kind"><option value="livret" >Livret (disponible)</option><option value="cat" selected>Compte à terme</option></select></div>
+    <div><label>Durée du terme (mois)</label><input name="term_months" type="number" min="1" value="36" placeholder="CAT uniquement"></div>
+    <div><label>Versement minimum (€)</label><input name="min_deposit" value="5000"></div>
+    <div><label>Taux de base / fixe (%)</label><input name="base_rate" value="4"></div>
+    <div><label>Taux boosté (%)</label><input name="boosted_rate" value="" placeholder="aucun"></div>
+    <div><label>Durée du boost (mois)</label><input name="boost_months" type="number" min="0" value="0"></div>
+    <div><label>Plafond du boost (€)</label><input name="boost_cap" value="" placeholder="aucun"></div>
+    <div><label>Plafond de dépôt (€)</label><input name="max_balance" value="100000" placeholder="illimité"></div>
+  </div>
+  <button class="btn btn-light btn-sm" style="margin-top:14px">Mettre à jour</button>
+</form>
+
+<form class="card" method="post" action="#">
+  <input type="hidden" name="_csrf" value="400333246d347423fe002ee29ccf89a202c88a651f6eae97">
+  <div class="page-head" style="margin-bottom:4px"><h2 style="margin:0">Livret Junior <span class="small muted mono">LIVRET_JUNIOR</span></h2>
+    <label class="check" style="margin:0"><input type="checkbox" name="active" value="1" checked> Proposé à l'ouverture</label></div>
+  <div class="row"><div><label>Nom</label><input name="name" value="Livret Junior"></div><div><label>Description</label><input name="description" value="Le livret de vos enfants, ouvert et géré par un parent jusqu’à leurs 18 ans. Sans frais."></div></div>
+  <div class="grid grid-4">
+    <div><label>Type</label><select name="kind"><option value="livret" selected>Livret (disponible)</option><option value="cat" >Compte à terme</option></select></div>
+    <div><label>Durée du terme (mois)</label><input name="term_months" type="number" min="1" value="" placeholder="CAT uniquement"></div>
+    <div><label>Versement minimum (€)</label><input name="min_deposit" value="10"></div>
+    <div><label>Taux de base / fixe (%)</label><input name="base_rate" value="3"></div>
+    <div><label>Taux boosté (%)</label><input name="boosted_rate" value="" placeholder="aucun"></div>
+    <div><label>Durée du boost (mois)</label><input name="boost_months" type="number" min="0" value="0"></div>
+    <div><label>Plafond du boost (€)</label><input name="boost_cap" value="" placeholder="aucun"></div>
+    <div><label>Plafond de dépôt (€)</label><input name="max_balance" value="50000" placeholder="illimité"></div>
+  </div>
+  <button class="btn btn-light btn-sm" style="margin-top:14px">Mettre à jour</button>
+</form>
+
+<form class="card" method="post" action="#">
+  <input type="hidden" name="_csrf" value="400333246d347423fe002ee29ccf89a202c88a651f6eae97">
+  <div class="page-head" style="margin-bottom:4px"><h2 style="margin:0">Livret Pro <span class="small muted mono">LIVRET_PRO</span></h2>
+    <label class="check" style="margin:0"><input type="checkbox" name="active" value="1" checked> Proposé à l'ouverture</label></div>
+  <div class="row"><div><label>Nom</label><input name="name" value="Livret Pro"></div><div><label>Description</label><input name="description" value="Placez la trésorerie de votre entreprise sans la bloquer. Sans plafond, sans frais."></div></div>
+  <div class="grid grid-4">
+    <div><label>Type</label><select name="kind"><option value="livret" selected>Livret (disponible)</option><option value="cat" >Compte à terme</option></select></div>
+    <div><label>Durée du terme (mois)</label><input name="term_months" type="number" min="1" value="" placeholder="CAT uniquement"></div>
+    <div><label>Versement minimum (€)</label><input name="min_deposit" value="1000"></div>
+    <div><label>Taux de base / fixe (%)</label><input name="base_rate" value="2"></div>
+    <div><label>Taux boosté (%)</label><input name="boosted_rate" value="3" placeholder="aucun"></div>
+    <div><label>Durée du boost (mois)</label><input name="boost_months" type="number" min="0" value="3"></div>
+    <div><label>Plafond du boost (€)</label><input name="boost_cap" value="1000000" placeholder="aucun"></div>
+    <div><label>Plafond de dépôt (€)</label><input name="max_balance" value="" placeholder="illimité"></div>
+  </div>
+  <button class="btn btn-light btn-sm" style="margin-top:14px">Mettre à jour</button>
+</form>
+
+<form class="card" method="post" action="#">
+  <input type="hidden" name="_csrf" value="400333246d347423fe002ee29ccf89a202c88a651f6eae97">
+  <div class="page-head" style="margin-bottom:4px"><h2 style="margin:0">Compte à terme Pro 12 mois <span class="small muted mono">CAT_PRO_12</span></h2>
+    <label class="check" style="margin:0"><input type="checkbox" name="active" value="1" checked> Proposé à l'ouverture</label></div>
+  <div class="row"><div><label>Nom</label><input name="name" value="Compte à terme Pro 12 mois"></div><div><label>Description</label><input name="description" value="Trésorerie excédentaire placée 12 mois à taux fixe garanti."></div></div>
+  <div class="grid grid-4">
+    <div><label>Type</label><select name="kind"><option value="livret" >Livret (disponible)</option><option value="cat" selected>Compte à terme</option></select></div>
+    <div><label>Durée du terme (mois)</label><input name="term_months" type="number" min="1" value="12" placeholder="CAT uniquement"></div>
+    <div><label>Versement minimum (€)</label><input name="min_deposit" value="10000"></div>
+    <div><label>Taux de base / fixe (%)</label><input name="base_rate" value="3"></div>
+    <div><label>Taux boosté (%)</label><input name="boosted_rate" value="" placeholder="aucun"></div>
+    <div><label>Durée du boost (mois)</label><input name="boost_months" type="number" min="0" value="0"></div>
+    <div><label>Plafond du boost (€)</label><input name="boost_cap" value="" placeholder="aucun"></div>
+    <div><label>Plafond de dépôt (€)</label><input name="max_balance" value="" placeholder="illimité"></div>
+  </div>
+  <button class="btn btn-light btn-sm" style="margin-top:14px">Mettre à jour</button>
+</form>
+
+<form method="post" action="#"><input type="hidden" name="_csrf" value="400333246d347423fe002ee29ccf89a202c88a651f6eae97"><button class="btn btn-violet btn-sm">+ Créer un livret</button></form>
+  </main>
+</div>
+<footer class="site-footer no-print">
+  <div class="container">
+    <div class="cols">
+      <div>
+        <a class="logo" href="index.html">
+          <svg class="logo-mark" viewBox="0 0 64 64" aria-hidden="true"><path d="M32 4 L58 56 H44 L32 30 L20 56 H6 Z" fill="var(--primary)"/><path d="M32 4 L58 56 H44 L32 30 Z" fill="var(--accent)" opacity=".85"/><path d="M22 46 H42" stroke="var(--dark)" stroke-width="5" stroke-linecap="round"/><circle cx="32" cy="14" r="4" fill="#fff"/></svg>
+
+          <span class="logo-text"><strong>AURORA</strong><span>ÉPARGNE</span></span>
+        </a>
+        <p>L'épargne en ligne simple, rémunérée et sans frais.</p>
+      </div>
+      <div>
+        <p><a href="index.html#livrets">Nos produits</a></p>
+        <p><a href="index.html#parrainage">Parrainage</a></p>
+        <p><a href="ou-va-votre-argent.html">Où va votre argent</a></p>
+        <p><a href="aide.html">Aide & FAQ</a></p>
+      </div>
+      <div>
+        <p><a href="connexion.html">Espace client</a></p>
+        <p><a href="mentions-legales.html">Mentions légales</a></p>
+        <p>01 00 00 00 00<br>support@exemple.fr</p>
+      </div>
+    </div>
+    <div class="legal">
+      Aurora Épargne SAS. Taux annuels bruts, avant prélèvements fiscaux et sociaux. Livrets : intérêts calculés par quinzaine.
+      Offres soumises à conditions, voir <a href="aide.html">conditions</a>.
+    </div>
+  </div>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>
+
+
