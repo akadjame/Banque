@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="fr">
+<html lang="fr" data-palette="emeraude">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -7,7 +7,7 @@
   
   <link rel="manifest" href="#">
   <link rel="apple-touch-icon" href="#">
-  <meta name="theme-color" content="#1d2240">
+  <meta name="theme-color" content="#0d3530">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-title" content="AURORA">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -19,14 +19,15 @@
 <header class="site-header">
   <div class="container">
     <a class="logo" href="index.html">
-      <img class="logo-mark" src="logo.svg" alt="">
+      <svg class="logo-mark" viewBox="0 0 64 64" aria-hidden="true"><path d="M32 4 L58 56 H44 L32 30 L20 56 H6 Z" fill="var(--primary)"/><path d="M32 4 L58 56 H44 L32 30 Z" fill="var(--accent)" opacity=".85"/><path d="M22 46 H42" stroke="var(--dark)" stroke-width="5" stroke-linecap="round"/><circle cx="32" cy="14" r="4" fill="#fff"/></svg>
+
       <span class="logo-text"><strong>AURORA</strong><span>ÉPARGNE</span></span>
     </a>
     <nav class="nav">
       
         <a class="link" href="admin.html">Admin Démo</a>
         <form method="post" action="#" style="margin:0">
-          <input type="hidden" name="_csrf" value="26e0f5cf4c49d09cdf1d1f9ed58d83d3e77dd9fc21dabf7c">
+          <input type="hidden" name="_csrf" value="400333246d347423fe002ee29ccf89a202c88a651f6eae97">
           <button class="btn btn-ghost btn-sm" type="submit">Déconnexion</button>
         </form>
       
@@ -40,7 +41,7 @@
     <a href="admin.html" class="">📊 Tableau de bord</a>
     <a href="admin-clients.html" class="active">👥 Clients<span class="count">2</span></a>
     <a href="admin-retraits.html" class="">⬆️ Retraits<span class="count">1</span></a>
-    <a href="admin-messages.html" class="">💬 Messagerie<span class="count">1</span></a>
+    <a href="admin-messages.html" class="">💬 Messagerie</a>
     <div class="side-title">Configuration</div>
     <a href="admin-projets.html" class="">🏘️ Projets financés</a>
     <a href="admin-parametres.html" class="">⚙️ Offres & taux</a>
@@ -55,10 +56,10 @@
     <h1>Mme Camille Martin</h1>
     
     <span class="chip green">Actif</span>
-    <span class="small muted">N° <span class="mono">32381884</span> · inscrit le 25/11/2026 · dernière connexion 25/11/2026 16:21</span>
+    <span class="small muted">N° <span class="mono">32381884</span> · inscrit le 25/11/2026 · dernière connexion 25/11/2026 16:24</span>
   </div>
   <form method="post" action="#" class="actions">
-    <input type="hidden" name="_csrf" value="26e0f5cf4c49d09cdf1d1f9ed58d83d3e77dd9fc21dabf7c">
+    <input type="hidden" name="_csrf" value="400333246d347423fe002ee29ccf89a202c88a651f6eae97">
     
     <button class="btn btn-danger btn-sm" name="status" value="bloque" data-confirm="Bloquer ce client ?">Bloquer</button>
   </form>
@@ -81,7 +82,7 @@
 
     
     <form method="post" action="#" style="margin-top:14px" data-confirm="Confirmer l'opération ?">
-      <input type="hidden" name="_csrf" value="26e0f5cf4c49d09cdf1d1f9ed58d83d3e77dd9fc21dabf7c">
+      <input type="hidden" name="_csrf" value="400333246d347423fe002ee29ccf89a202c88a651f6eae97">
       <div class="inline-form">
         <div><label>Opération</label><select name="kind">
           <option value="credit">Créditer (versement reçu)</option>
@@ -94,8 +95,8 @@
       <button class="btn btn-violet btn-sm" style="margin-top:10px">Enregistrer</button>
     </form>
     <div class="actions" style="margin-top:10px">
-      <form method="post" action="#"><input type="hidden" name="_csrf" value="26e0f5cf4c49d09cdf1d1f9ed58d83d3e77dd9fc21dabf7c"><button class="btn btn-light btn-sm">Verser les intérêts</button></form>
-      <form method="post" action="#"><input type="hidden" name="_csrf" value="26e0f5cf4c49d09cdf1d1f9ed58d83d3e77dd9fc21dabf7c">
+      <form method="post" action="#"><input type="hidden" name="_csrf" value="400333246d347423fe002ee29ccf89a202c88a651f6eae97"><button class="btn btn-light btn-sm">Verser les intérêts</button></form>
+      <form method="post" action="#"><input type="hidden" name="_csrf" value="400333246d347423fe002ee29ccf89a202c88a651f6eae97">
         <button class="btn btn-light btn-sm" name="status" value="bloque">Bloquer le livret</button>
         <button class="btn btn-light btn-sm" name="status" value="cloture" data-confirm="Clôturer ce livret ? (solde à zéro requis)">Clôturer</button></form>
     </div>
@@ -116,7 +117,7 @@
 
     
     <form method="post" action="#" style="margin-top:14px" data-confirm="Confirmer l'opération ?">
-      <input type="hidden" name="_csrf" value="26e0f5cf4c49d09cdf1d1f9ed58d83d3e77dd9fc21dabf7c">
+      <input type="hidden" name="_csrf" value="400333246d347423fe002ee29ccf89a202c88a651f6eae97">
       <div class="inline-form">
         <div><label>Opération</label><select name="kind">
           <option value="credit">Créditer (versement reçu)</option>
@@ -129,8 +130,8 @@
       <button class="btn btn-violet btn-sm" style="margin-top:10px">Enregistrer</button>
     </form>
     <div class="actions" style="margin-top:10px">
-      <form method="post" action="#"><input type="hidden" name="_csrf" value="26e0f5cf4c49d09cdf1d1f9ed58d83d3e77dd9fc21dabf7c"><button class="btn btn-light btn-sm">Verser les intérêts</button></form>
-      <form method="post" action="#"><input type="hidden" name="_csrf" value="26e0f5cf4c49d09cdf1d1f9ed58d83d3e77dd9fc21dabf7c">
+      <form method="post" action="#"><input type="hidden" name="_csrf" value="400333246d347423fe002ee29ccf89a202c88a651f6eae97"><button class="btn btn-light btn-sm">Verser les intérêts</button></form>
+      <form method="post" action="#"><input type="hidden" name="_csrf" value="400333246d347423fe002ee29ccf89a202c88a651f6eae97">
         <button class="btn btn-light btn-sm" name="status" value="bloque">Bloquer le livret</button>
         <button class="btn btn-light btn-sm" name="status" value="cloture" data-confirm="Clôturer ce livret ? (solde à zéro requis)">Clôturer</button></form>
     </div>
@@ -151,7 +152,7 @@
 
     
     <form method="post" action="#" style="margin-top:14px" data-confirm="Confirmer l'opération ?">
-      <input type="hidden" name="_csrf" value="26e0f5cf4c49d09cdf1d1f9ed58d83d3e77dd9fc21dabf7c">
+      <input type="hidden" name="_csrf" value="400333246d347423fe002ee29ccf89a202c88a651f6eae97">
       <div class="inline-form">
         <div><label>Opération</label><select name="kind">
           <option value="credit">Créditer (versement reçu)</option>
@@ -164,8 +165,8 @@
       <button class="btn btn-violet btn-sm" style="margin-top:10px">Enregistrer</button>
     </form>
     <div class="actions" style="margin-top:10px">
-      <form method="post" action="#"><input type="hidden" name="_csrf" value="26e0f5cf4c49d09cdf1d1f9ed58d83d3e77dd9fc21dabf7c"><button class="btn btn-light btn-sm">Verser les intérêts</button></form>
-      <form method="post" action="#"><input type="hidden" name="_csrf" value="26e0f5cf4c49d09cdf1d1f9ed58d83d3e77dd9fc21dabf7c">
+      <form method="post" action="#"><input type="hidden" name="_csrf" value="400333246d347423fe002ee29ccf89a202c88a651f6eae97"><button class="btn btn-light btn-sm">Verser les intérêts</button></form>
+      <form method="post" action="#"><input type="hidden" name="_csrf" value="400333246d347423fe002ee29ccf89a202c88a651f6eae97">
         <button class="btn btn-light btn-sm" name="status" value="bloque">Bloquer le livret</button>
         <button class="btn btn-light btn-sm" name="status" value="cloture" data-confirm="Clôturer ce livret ? (solde à zéro requis)">Clôturer</button></form>
     </div>
@@ -174,7 +175,7 @@
 
   
   <form class="card" style="margin:0" method="post" action="#">
-    <input type="hidden" name="_csrf" value="26e0f5cf4c49d09cdf1d1f9ed58d83d3e77dd9fc21dabf7c">
+    <input type="hidden" name="_csrf" value="400333246d347423fe002ee29ccf89a202c88a651f6eae97">
     <h2>Ouvrir un livret</h2>
     <select name="product_id"><option value="2">Livret Plus</option><option value="3">Compte à terme 1 an</option><option value="5">Compte à terme 3 ans</option><option value="6">Livret Junior</option></select>
     
@@ -192,7 +193,7 @@
     <h2>Primes</h2>
     <div class="actions">
       <form method="post" action="#" data-confirm="Verser la prime de bienvenue (80,00 €) ?">
-        <input type="hidden" name="_csrf" value="26e0f5cf4c49d09cdf1d1f9ed58d83d3e77dd9fc21dabf7c">
+        <input type="hidden" name="_csrf" value="400333246d347423fe002ee29ccf89a202c88a651f6eae97">
         <button class="btn btn-sm btn-light" disabled>Prime de bienvenue versée ✓</button>
       </form>
       
@@ -221,7 +222,7 @@
 
 <div class="grid grid-2">
   <form class="card" method="post" action="#">
-    <input type="hidden" name="_csrf" value="26e0f5cf4c49d09cdf1d1f9ed58d83d3e77dd9fc21dabf7c">
+    <input type="hidden" name="_csrf" value="400333246d347423fe002ee29ccf89a202c88a651f6eae97">
     <h2>Informations</h2>
     <dl class="kv"><dt>E-mail</dt><dd>client@demo.local</dd><dt>Naissance</dt><dd>12/04/1990</dd></dl>
     <label>Téléphone</label><input name="phone" value="0600000000">
@@ -239,13 +240,13 @@
         <div class="msg me">Bienvenue ! Votre livret est actif et votre prime de bienvenue a été versée.<div class="meta">Conseiller · 25/11/2026 16:21</div></div><div class="msg "><strong>Question</strong><br>Bonjour, quand seront versés les intérêts de novembre ?<div class="meta">Client · 25/11/2026 16:21</div></div>
       </div>
       <form method="post" action="#" style="margin-top:12px">
-        <input type="hidden" name="_csrf" value="26e0f5cf4c49d09cdf1d1f9ed58d83d3e77dd9fc21dabf7c">
+        <input type="hidden" name="_csrf" value="400333246d347423fe002ee29ccf89a202c88a651f6eae97">
         <textarea name="body" rows="3" required placeholder="Répondre au client…"></textarea>
         <button class="btn btn-violet btn-sm" style="margin-top:8px">Envoyer</button>
       </form>
     </div>
     <form class="card" method="post" action="#" data-confirm="Réinitialiser le mot de passe ?">
-      <input type="hidden" name="_csrf" value="26e0f5cf4c49d09cdf1d1f9ed58d83d3e77dd9fc21dabf7c">
+      <input type="hidden" name="_csrf" value="400333246d347423fe002ee29ccf89a202c88a651f6eae97">
       <h2>Réinitialiser le mot de passe</h2>
       <input name="password" placeholder="Nouveau mot de passe provisoire" minlength="10" required>
       <button class="btn btn-light btn-sm" style="margin-top:8px">Réinitialiser</button>
@@ -292,7 +293,8 @@
     <div class="cols">
       <div>
         <a class="logo" href="index.html">
-          <img class="logo-mark" src="logo.svg" alt="">
+          <svg class="logo-mark" viewBox="0 0 64 64" aria-hidden="true"><path d="M32 4 L58 56 H44 L32 30 L20 56 H6 Z" fill="var(--primary)"/><path d="M32 4 L58 56 H44 L32 30 Z" fill="var(--accent)" opacity=".85"/><path d="M22 46 H42" stroke="var(--dark)" stroke-width="5" stroke-linecap="round"/><circle cx="32" cy="14" r="4" fill="#fff"/></svg>
+
           <span class="logo-text"><strong>AURORA</strong><span>ÉPARGNE</span></span>
         </a>
         <p>L'épargne en ligne simple, rémunérée et sans frais.</p>
