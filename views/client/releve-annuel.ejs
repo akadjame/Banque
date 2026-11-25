@@ -1,0 +1,38 @@
+<%- include('../partials/client-top') %>
+<div class="print-doc">
+  <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:20px">
+    <div><strong><%= bank.name %> <%= bank.subtitle %></strong><br><span class="small"><%= bank.legalName %></span></div>
+    <div style="text-align:right"><%= clientName(user) %><br><%= user.address %><br><%= user.postal_code %> <%= user.city %></div>
+  </div>
+  <h1 style="margin-top:30px">Relevé annuel <%= year %></h1>
+  <p><%= account.displayName %> — <span class="mono"><%= iban(account.iban) %></span><br>
+    <span class="small muted">Période du 01/01/<%= year %> au 31/12/<%= year %> · taux en vigueur : <%= rate(account.rate.rate) %></span></p>
+  <table style="margin:16px 0">
+    <tbody>
+      <tr><td>Solde au 1er janvier</td><td style="text-align:right"><strong><%= eur(opening) %></strong></td></tr>
+      <tr><td>Versements</td><td style="text-align:right">+ <%= eur(totals.depots) %></td></tr>
+      <tr><td>Retraits</td><td style="text-align:right">− <%= eur(totals.retraits) %></td></tr>
+      <tr><td>Intérêts versés</td><td style="text-align:right">+ <%= eur(totals.interets) %></td></tr>
+      <tr><td>Primes (bienvenue, parrainage)</td><td style="text-align:right">+ <%= eur(totals.primes) %></td></tr>
+      <% if (totals.ajustements) { %><tr><td>Régularisations</td><td style="text-align:right"><%= eur(totals.ajustements, { sign: true }) %></td></tr><% } %>
+      <tr><td><strong>Solde au 31 décembre<%= year == new Date().getFullYear() ? ' (à ce jour)' : '' %></strong></td><td style="text-align:right"><strong><%= eur(closing) %></strong></td></tr>
+    </tbody>
+  </table>
+  <h2 style="font-size:1.05rem">Détail des opérations</h2>
+  <table>
+    <thead><tr><th>Date</th><th>Libellé</th><th style="text-align:right">Débit</th><th style="text-align:right">Crédit</th></tr></thead>
+    <tbody>
+      <% if (!txs.length) { %><tr><td colspan="4" class="muted">Aucune opération sur l'année.</td></tr><% } %>
+      <% txs.forEach(t => { %>
+      <tr><td><%= date(t.created_at) %></td><td><%= t.label %></td>
+        <td style="text-align:right"><%= t.amount_cents < 0 ? eur(-t.amount_cents) : '' %></td>
+        <td style="text-align:right"><%= t.amount_cents > 0 ? eur(t.amount_cents) : '' %></td></tr>
+      <% }) %>
+    </tbody>
+  </table>
+  <div class="actions no-print" style="margin-top:20px">
+    <button class="btn btn-violet btn-sm" data-print>Imprimer / PDF</button>
+    <a class="btn btn-light btn-sm" href="/espace/documents">Retour</a>
+  </div>
+</div>
+<%- include('../partials/client-bottom') %>

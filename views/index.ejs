@@ -15,7 +15,7 @@
 
       <div class="offer-card">
         <div class="offer-title">NOS OFFRES DU MOMENT ✨</div>
-        <% if (end) { %><p class="until">Jusqu'au <%= end %></p><% } %>
+        <p class="until"><%= end ? `Jusqu'au ${end}` : 'Offre à durée limitée' %></p>
         <p class="lead">Profitez de notre offre de bienvenue</p>
         <% if (b) { %>
           <span class="boost-tag">TAUX BOOSTÉ</span>
@@ -42,7 +42,7 @@
       <h2 class="section-title">Pourquoi nous choisir ?</h2>
       <p class="section-sub">Tout ce qu'un livret en ligne doit offrir, et un peu plus.</p>
       <div class="grid grid-3">
-        <div class="feature"><div class="ico">📈</div><h3>Intérêts au jour le jour</h3><p>Chaque euro rapporte dès le premier jour, pas à la quinzaine. Suivez vos intérêts acquis en temps réel.</p></div>
+        <div class="feature"><div class="ico">📈</div><h3>Intérêts suivis en temps réel</h3><p>Vos intérêts sont calculés par quinzaine et affichés dans votre espace dès qu'une quinzaine est acquise.</p></div>
         <div class="feature"><div class="ico">🔓</div><h3>Argent disponible</h3><p>Pas de durée de blocage. Demandez un retrait vers votre compte de référence à tout moment.</p></div>
         <div class="feature"><div class="ico">0€</div><h3>Zéro frais</h3><p>Ni frais d'ouverture, ni frais de gestion, ni frais de clôture.</p></div>
         <div class="feature"><div class="ico">🎯</div><h3>Des projets, pas juste un solde</h3><p>Créez vos objectifs (voyage, voiture, apport) et voyez chaque mois combien il vous reste à épargner.</p></div>
@@ -105,7 +105,7 @@
           <input type="range" id="simu-amount" min="100" max="200000" step="100" value="10000">
           <label for="simu-monthly">Versement mensuel : <strong id="simu-monthly-out">100 €</strong></label>
           <input type="range" id="simu-monthly" min="0" max="3000" step="50" value="100">
-          <p class="small muted">Simulation indicative, sur la base des taux actuels et d'intérêts calculés au jour le jour, avant prélèvements fiscaux et sociaux.</p>
+          <p class="small muted">Simulation indicative, sur la base des taux actuels et d'intérêts calculés par quinzaine, avant prélèvements fiscaux et sociaux.</p>
         </div>
         <div class="result">
           <div>Intérêts estimés sur 12 mois</div>

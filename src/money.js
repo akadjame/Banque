@@ -123,6 +123,53 @@ function computeInterest(account, product, txs, now = new Date()) {
   return { cents: Math.floor(total), exact: total, until: new Date(start.getTime() + days * DAY_MS) };
 }
 
+// ---------- Intérêts par quinzaine (règle des livrets d'épargne) ----------
+// Une quinzaine va du 1er au 15 ou du 16 à la fin du mois (24 quinzaines par an).
+// - un versement rapporte à partir de la quinzaine qui suit (date de valeur : 1er ou 16 suivant) ;
+// - un retrait cesse de rapporter dès le début de la quinzaine où il a lieu.
+// Chaque quinzaine complète rapporte : solde valorisé × taux / 24.
+function quinzaineStart(d) {
+  return new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate() >= 16 ? 16 : 1));
+}
+function nextQuinzaine(d) {
+  const s = quinzaineStart(d);
+  return s.getUTCDate() === 1 ? new Date(Date.UTC(s.getUTCFullYear(), s.getUTCMonth(), 16)) : new Date(Date.UTC(s.getUTCFullYear(), s.getUTCMonth() + 1, 1));
+}
+// Première borne de quinzaine >= d
+function quinzaineCeil(d) {
+  const s = quinzaineStart(d);
+  return s.getTime() === d.getTime() ? s : nextQuinzaine(d);
+}
+
+function computeInterestQuinzaine(account, product, txs, now = new Date()) {
+  const from = parseDbDate(account.last_interest_at);
+  const start = quinzaineCeil(from);
+  const sorted = txs.map((t) => ({ at: parseDbDate(t.created_at), amount: t.amount_cents })).sort((a, b) => a.at - b.at);
+  // Solde à `from` : solde actuel moins les opérations postérieures
+  const base = account.balance_cents - sorted.reduce((s, t) => s + t.amount, 0);
+  // Date de valeur de chaque opération
+  const valued = sorted.map((t) => ({ amount: t.amount, value: t.amount > 0 ? (t.at < start ? start : nextQuinzaine(t.at)) : (t.at < start ? start : quinzaineStart(t.at)) }));
+  const boostEnd = boostEndDate(account, product);
+  const cap = product.boost_cap_cents;
+  let total = 0, q = start, count = 0;
+  for (;;) {
+    const end = nextQuinzaine(q);
+    if (end > now) break;
+    let bal = base;
+    for (const v of valued) if (v.value <= q) bal += v.amount;
+    if (bal > 0) {
+      if (boostEnd && q < boostEnd) {
+        const boosted = cap ? Math.min(bal, cap) : bal;
+        total += (boosted * product.boosted_rate + (bal - boosted) * product.base_rate) / 100 / 24;
+      } else {
+        total += (bal * product.base_rate) / 100 / 24;
+      }
+    }
+    q = end; count++;
+  }
+  return { cents: Math.floor(total), exact: total, until: count ? q : from, quinzaines: count };
+}
+
 // Taux actuellement appliqué au compte
 function currentRate(account, product, now = new Date()) {
   const end = boostEndDate(account, product);
@@ -134,5 +181,5 @@ module.exports = {
   formatEuros, parseEuros, formatRate,
   isValidIban, isValidSiren, ageOn, normalizeIban, formatIban, generateFrenchIban,
   parseDbDate, toDbDate, addMonths, boostEndDate,
-  computeInterest, currentRate, DAY_MS,
+  computeInterest, computeInterestQuinzaine, quinzaineStart, nextQuinzaine, currentRate, DAY_MS,
 };

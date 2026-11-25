@@ -177,17 +177,17 @@ const productCount = db.prepare('SELECT COUNT(*) AS n FROM products').get().n;
 if (productCount === 0) {
   const ins = db.prepare(`INSERT INTO products (code,name,description,base_rate,boosted_rate,boost_months,boost_cap_cents,max_balance_cents,min_deposit_cents)
     VALUES (?,?,?,?,?,?,?,?,?)`);
-  ins.run('LIVRET_BOOST', 'Livret Boosté', "Taux boosté pendant 3 mois à l'ouverture, puis taux de base. Sans frais, disponible à tout moment.", 2.25, 4.5, 3, 20000000, null, 1000);
-  ins.run('LIVRET_PLUS', 'Livret Plus', 'Taux fixe garanti, sans plafond, sans frais.', 2.5, null, 0, null, null, 1000);
+  ins.run('LIVRET_BOOST', 'Livret Boosté', "Taux boosté pendant 3 mois à l'ouverture, puis taux standard. Sans frais, disponible à tout moment.", 3.3, 6.0, 3, 20000000, null, 1000);
+  ins.run('LIVRET_PLUS', 'Livret Plus', 'Taux standard, sans plafond, sans frais.', 3.3, null, 0, null, null, 1000);
 }
 
 // Comptes à terme par défaut
 if (!db.prepare("SELECT 1 FROM products WHERE kind = 'cat'").get()) {
-  const ins = db.prepare(`INSERT INTO products (code,name,description,base_rate,boost_months,min_deposit_cents,kind,term_months)
-    VALUES (?,?,?,?,0,500000,'cat',?)`);
-  ins.run('CAT_12', 'Compte à terme 12 mois', 'Taux fixe garanti pendant 12 mois. Capital et intérêts versés à l’échéance.', 3.0, 12);
-  ins.run('CAT_24', 'Compte à terme 24 mois', 'Taux fixe garanti pendant 24 mois. Capital et intérêts versés à l’échéance.', 3.1, 24);
-  ins.run('CAT_36', 'Compte à terme 36 mois', 'Taux fixe garanti pendant 36 mois. Capital et intérêts versés à l’échéance.', 3.2, 36);
+  const ins = db.prepare(`INSERT INTO products (code,name,description,base_rate,boost_months,min_deposit_cents,max_balance_cents,kind,term_months)
+    VALUES (?,?,?,?,0,500000,10000000,'cat',?)`);
+  ins.run('CAT_12', 'Compte à terme 1 an', 'Taux fixe garanti pendant 1 an. Capital et intérêts versés à l’échéance.', 3.5, 12);
+  ins.run('CAT_24', 'Compte à terme 2 ans', 'Taux fixe garanti pendant 2 ans. Capital et intérêts versés à l’échéance.', 3.7, 24);
+  ins.run('CAT_36', 'Compte à terme 3 ans', 'Taux fixe garanti pendant 3 ans. Capital et intérêts versés à l’échéance.', 4.0, 36);
 }
 
 // Livret enfant et offre professionnelle

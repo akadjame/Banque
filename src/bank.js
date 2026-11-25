@@ -92,7 +92,8 @@ function postTransaction(accountId, type, amountCents, label, adminId = null) {
   if (newBalance < 0) throw new BankError('Solde insuffisant.');
   if (amountCents > 0 && type === 'depot') {
     const p = getProduct(acc.product_id);
-    if (p.max_balance_cents && newBalance > p.max_balance_cents) throw new BankError(`Plafond du livret dépassé (${m.formatEuros(p.max_balance_cents)}).`);
+    if (p.max_balance_cents && newBalance > p.max_balance_cents) throw new BankError(`Plafond du produit dépassé (${m.formatEuros(p.max_balance_cents)}).`);
+    if (p.kind === 'cat' && p.min_deposit_cents && newBalance < p.min_deposit_cents) throw new BankError(`Versement minimum sur ce compte à terme : ${m.formatEuros(p.min_deposit_cents)}.`);
   }
   db.prepare('UPDATE accounts SET balance_cents = ? WHERE id = ?').run(newBalance, accountId);
   const r = db.prepare('INSERT INTO transactions (account_id,type,amount_cents,balance_after_cents,label,created_by) VALUES (?,?,?,?,?,?)')
@@ -172,7 +173,8 @@ function accruedInterest(acc, product = getProduct(acc.product_id), now = new Da
   // Un compte à terme cesse de produire des intérêts à son échéance
   if (acc.maturity_at && m.parseDbDate(acc.maturity_at) < now) now = m.parseDbDate(acc.maturity_at);
   const txs = db.prepare('SELECT created_at, amount_cents FROM transactions WHERE account_id = ? AND created_at > ?').all(acc.id, acc.last_interest_at);
-  return m.computeInterest(acc, product, txs, now);
+  // Livrets : règle des quinzaines ; comptes à terme : prorata exact jusqu'à l'échéance
+  return product.kind === 'cat' ? m.computeInterest(acc, product, txs, now) : m.computeInterestQuinzaine(acc, product, txs, now);
 }
 
 // Verse les intérêts acquis d'un compte

@@ -227,6 +227,18 @@ espace.get('/compte/:id/releve', handle((req, res) => {
   res.render('client/releve', { title: 'Relevé', account, txs, month, opening, closing });
 }));
 
+espace.get('/compte/:id/releve-annuel', handle((req, res) => {
+  const account = ownAccount(req);
+  const year = /^\d{4}$/.test(req.query.annee || '') ? req.query.annee : String(new Date().getFullYear());
+  const txs = db.prepare("SELECT * FROM transactions WHERE account_id = ? AND strftime('%Y', created_at) = ? ORDER BY created_at, id").all(account.id, year);
+  const before = db.prepare("SELECT balance_after_cents FROM transactions WHERE account_id = ? AND strftime('%Y', created_at) < ? ORDER BY created_at DESC, id DESC LIMIT 1").get(account.id, year);
+  const opening = before ? before.balance_after_cents : 0;
+  const closing = txs.length ? txs[txs.length - 1].balance_after_cents : opening;
+  const sum = (types) => txs.filter((t) => types.includes(t.type)).reduce((s, t) => s + t.amount_cents, 0);
+  const totals = { depots: sum(['depot']), retraits: -sum(['retrait']), interets: sum(['interets']), primes: sum(['prime', 'parrainage']), ajustements: sum(['ajustement']) };
+  res.render('client/releve-annuel', { title: `Relevé annuel ${year}`, account, txs, year, opening, closing, totals });
+}));
+
 espace.get('/retrait', (req, res) => {
   const accounts = bank.userAccounts(req.user.id);
   const requests = db.prepare(`SELECT w.*, p.name AS product_name FROM withdrawals w JOIN accounts a ON a.id = w.account_id JOIN products p ON p.id = a.product_id
@@ -609,7 +621,8 @@ admin.post('/parametres', handle((req, res) => {
     if (v === null) throw new bank.BankError('Montant de prime invalide.');
     setSetting(k, v);
   }
-  if (b.offer_end_date && /^\d{4}-\d{2}-\d{2}$/.test(b.offer_end_date)) setSetting('offer_end_date', b.offer_end_date);
+  if (!b.offer_end_date) setSetting('offer_end_date', '');
+  else if (/^\d{4}-\d{2}-\d{2}$/.test(b.offer_end_date)) setSetting('offer_end_date', b.offer_end_date);
   bank.audit(req.user.id, 'parametres', { welcome: b.welcome_bonus_cents, referrer: b.referrer_bonus_cents, referee: b.referee_bonus_cents });
   req.flash('success', 'Paramètres enregistrés.');
   res.redirect('/admin/parametres');

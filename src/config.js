@@ -20,9 +20,9 @@ module.exports = {
   // Montants par défaut des offres (en centimes) — modifiables dans l'admin
   defaults: {
     welcomeBonusCents: 8000,
-    referrerBonusCents: 8000,
-    refereeBonusCents: 8000,
-    offerEndDate: '2026-11-30',
+    referrerBonusCents: 15000,
+    refereeBonusCents: 15000,
+    offerEndDate: '', // vide = date non affichée (« offre à durée limitée »)
   },
 
   sessionDays: 1, // durée de session

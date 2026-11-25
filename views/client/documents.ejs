@@ -13,6 +13,17 @@
   </div>
 </div>
 <div class="card">
+  <h2>Relevés annuels</h2>
+  <% if (!years.length) { %><p class="muted">Disponible après vos premières opérations.</p><% } %>
+  <div class="table-wrap"><table>
+    <% years.forEach(y => { accounts.forEach(a => { if (!months.some(r => r.account_id === a.id && r.m.startsWith(y))) return; %>
+    <tr><td><strong><%= y %></strong></td><td class="muted"><%= a.displayName %></td>
+      <td style="text-align:right"><a class="btn btn-light btn-sm" href="/espace/compte/<%= a.id %>/releve-annuel?annee=<%= y %>">Voir</a></td></tr>
+    <% }) }) %>
+  </table></div>
+</div>
+
+<div class="card">
   <h2>Relevés mensuels</h2>
   <% if (!months.length) { %><p class="muted">Aucun relevé pour le moment.</p><% } %>
   <div class="table-wrap"><table>

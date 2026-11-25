@@ -48,3 +48,32 @@ test('SIREN et âge', () => {
   assert.strictEqual(m.ageOn('2010-06-15', new Date('2026-06-14')), 15);
   assert.strictEqual(m.ageOn('2010-06-15', new Date('2026-06-15')), 16);
 });
+
+test('quinzaines : versement valorisé à la quinzaine suivante, retrait dès sa quinzaine', () => {
+  const product = { base_rate: 2.4, boosted_rate: null, boost_months: 0 };
+  // 2,4 % / 24 = 0,1 % par quinzaine
+  const acc = { balance_cents: 1000000, opened_at: '2026-01-01 00:00:00', last_interest_at: '2026-01-01 00:00:00' };
+  // 10 000 € versés le 5 janvier : rien en 1re quinzaine de janvier, puis 10 € par quinzaine
+  const txs = [{ created_at: '2026-01-05 10:00:00', amount_cents: 1000000 }];
+  const r = m.computeInterestQuinzaine(acc, product, txs, new Date('2026-02-01T00:00:00Z'));
+  assert.strictEqual(r.quinzaines, 2);
+  assert.strictEqual(r.cents, 1000); // seule la quinzaine du 16 au 31 janvier rapporte
+  assert.strictEqual(r.until.toISOString().slice(0, 10), '2026-02-01');
+  // Retrait de 4 000 € le 20 janvier : la quinzaine du 16 au 31 est calculée sur 6 000 €
+  const acc2 = { ...acc, balance_cents: 600000 };
+  const r2 = m.computeInterestQuinzaine(acc2, product, [...txs, { created_at: '2026-01-20 10:00:00', amount_cents: -400000 }], new Date('2026-02-01T00:00:00Z'));
+  assert.strictEqual(r2.cents, 600);
+  // Quinzaine en cours non comptée
+  assert.strictEqual(m.computeInterestQuinzaine(acc, product, txs, new Date('2026-01-25T00:00:00Z')).cents, 0);
+});
+
+test('quinzaines : taux boosté pendant la durée du boost', () => {
+  const product = { base_rate: 3.3, boosted_rate: 6, boost_months: 3, boost_cap_cents: 20000000 };
+  const acc = { balance_cents: 2400000, opened_at: '2026-01-01 00:00:00', last_interest_at: '2026-01-01 00:00:00' };
+  // 24 000 € présents dès le 1er janvier : 24 000 × 6 % / 24 = 60 € par quinzaine
+  const r = m.computeInterestQuinzaine(acc, product, [], new Date('2026-02-01T00:00:00Z'));
+  assert.strictEqual(r.cents, 12000);
+  // Après le boost (à partir du 1er avril) : 24 000 × 3,3 % / 24 = 33 €
+  const later = { ...acc, last_interest_at: '2026-04-01 00:00:00' };
+  assert.strictEqual(m.computeInterestQuinzaine(later, product, [], new Date('2026-04-16T00:00:00Z')).cents, 3300);
+});
