@@ -17,7 +17,7 @@ name: Déploiement Hostinger
 on:
   push:
     branches: [claude/focused-goldberg-f1saih]
-    paths: ["docs/**", ".github/workflows/deploy-hostinger.yml"]
+    paths: ["docs/**", "!docs/aurora/**", ".github/workflows/deploy-hostinger.yml"]
 
 concurrency:
   group: deploy-hostinger
@@ -68,7 +68,7 @@ jobs:
         run: |
           mkdir -p build
           cp -r docs/. build/
-          rm -f build/.nojekyll
+          rm -rf build/.nojekyll build/aurora   # aurora = autre projet, jamais envoyé sur boyamabtp.com
           sed -i "s/?v=[0-9a-z]*/?v=${GITHUB_SHA::7}/g" build/index.html
 
       - name: Envoi FTP vers Hostinger
