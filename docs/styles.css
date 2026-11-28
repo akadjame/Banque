@@ -1,24 +1,24 @@
 :root {
-  --navy: #13202e;
-  --navy-2: #1c2d40;
-  --steel: #2c4660;
-  --accent: #f5a400;
-  --accent-dark: #d98f00;
+  --navy: #0B2E5B;
+  --navy-2: #0f3a70;
+  --steel: #7A8087;
+  --accent: #D6C4A1;
+  --accent-dark: #9c8556;
   --bg: #ffffff;
-  --bg-alt: #f4f6f8;
-  --text: #1d2733;
-  --muted: #5b6876;
+  --bg-alt: #F2F2F2;
+  --text: #2B2B2B;
+  --muted: #5f656c;
   --line: #e1e6ec;
   --radius: 10px;
-  --shadow: 0 10px 30px rgba(19, 32, 46, .08);
+  --shadow: 0 10px 30px rgba(11, 46, 91, .08);
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; scroll-padding-top: 80px; }
-body { font-family: "Inter", system-ui, sans-serif; color: var(--text); background: var(--bg); line-height: 1.65; font-size: 16px; overflow-x: hidden; }
+body { font-family: "Montserrat", system-ui, sans-serif; color: var(--text); background: var(--bg); line-height: 1.65; font-size: 16px; overflow-x: hidden; }
 img, svg { display: block; max-width: 100%; }
 a { color: inherit; text-decoration: none; }
-h1, h2, h3 { font-family: "Archivo", sans-serif; line-height: 1.15; color: var(--navy); }
+h1, h2, h3 { font-family: "Montserrat", sans-serif; line-height: 1.15; color: var(--navy); }
 h1 { font-size: clamp(2.1rem, 5vw, 3.5rem); font-weight: 800; }
 h2 { font-size: clamp(1.7rem, 3.5vw, 2.4rem); font-weight: 800; margin-bottom: 1rem; }
 h3 { font-size: 1.15rem; font-weight: 700; margin-bottom: .4rem; }
@@ -41,9 +41,9 @@ p + p { margin-top: 1rem; }
 
 /* Header */
 .header { position: fixed; inset: 0 0 auto; z-index: 50; transition: .25s; }
-.header.is-scrolled { background: rgba(19, 32, 46, .97); box-shadow: 0 2px 20px rgba(0,0,0,.2); }
+.header.is-scrolled { background: rgba(11, 46, 91, .97); box-shadow: 0 2px 20px rgba(0,0,0,.2); }
 .header__inner { display: flex; align-items: center; justify-content: space-between; height: 72px; }
-.logo { display: flex; align-items: center; gap: .6rem; font-family: "Archivo", sans-serif; font-size: 1.25rem; color: #fff; letter-spacing: .02em; }
+.logo { display: flex; align-items: center; gap: .6rem; font-family: "Montserrat", sans-serif; font-size: 1.25rem; color: #fff; letter-spacing: .02em; }
 .logo strong { font-weight: 800; }
 .nav { display: flex; align-items: center; gap: 1.75rem; }
 .nav a { color: rgba(255,255,255,.85); font-weight: 500; font-size: .95rem; }
@@ -55,9 +55,9 @@ p + p { margin-top: 1rem; }
 /* Hero */
 .hero { position: relative; background: var(--navy); color: #fff; padding: 140px 0 90px; overflow: hidden; }
 .hero__bg { position: absolute; inset: 0; background:
-  linear-gradient(115deg, rgba(19,32,46,1) 40%, rgba(28,45,64,.9)),
-  repeating-linear-gradient(45deg, rgba(245,164,0,.06) 0 2px, transparent 2px 40px); }
-.hero__bg::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 10px; background: repeating-linear-gradient(-45deg, var(--accent) 0 18px, var(--navy) 18px 36px); }
+  linear-gradient(115deg, rgba(11,46,91,1) 40%, rgba(8,34,68,.92)),
+  repeating-linear-gradient(45deg, rgba(214,196,161,.06) 0 2px, transparent 2px 40px); }
+.hero__bg::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 6px; background: linear-gradient(90deg, var(--accent), #efe5d1 50%, var(--accent)); }
 .hero__inner { position: relative; display: grid; grid-template-columns: 1.15fr .85fr; gap: 3rem; align-items: center; }
 .hero h1 { color: #fff; margin-bottom: 1.25rem; }
 .hero .eyebrow { color: var(--accent); }
@@ -79,7 +79,7 @@ p + p { margin-top: 1rem; }
 /* Values */
 .values { list-style: none; display: grid; gap: 1.25rem; }
 .values li { display: flex; gap: 1rem; padding: 1.4rem; border: 1px solid var(--line); border-radius: var(--radius); background: #fff; }
-.values__icon { flex: none; width: 36px; height: 36px; display: grid; place-items: center; border-radius: 50%; background: rgba(245,164,0,.15); color: var(--accent-dark); font-weight: 700; }
+.values__icon { flex: none; width: 36px; height: 36px; display: grid; place-items: center; border-radius: 50%; background: rgba(214,196,161,.3); color: var(--accent-dark); font-weight: 700; }
 .values p { color: var(--muted); font-size: .95rem; }
 
 /* Cards */
@@ -95,13 +95,13 @@ p + p { margin-top: 1rem; }
 .materials__item { display: flex; flex-direction: column; padding: 1.5rem 1.75rem; border-radius: var(--radius); background: var(--navy); color: rgba(255,255,255,.75); border-left: 6px solid var(--accent); }
 .materials__item:nth-child(2) { margin-left: 2rem; background: var(--navy-2); }
 .materials__item:nth-child(3) { margin-left: 4rem; background: var(--steel); }
-.materials__item strong { font-family: "Archivo", sans-serif; font-size: 1.4rem; color: #fff; }
+.materials__item strong { font-family: "Montserrat", sans-serif; font-size: 1.4rem; color: #fff; }
 #materiaux .btn { margin-top: 1.75rem; }
 
 /* Steps */
 .steps { list-style: none; display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; }
 .steps li { padding: 2rem 1.5rem; border: 1px solid rgba(255,255,255,.12); border-radius: var(--radius); }
-.steps span { display: block; font-family: "Archivo", sans-serif; font-size: 2.4rem; font-weight: 800; color: var(--accent); margin-bottom: .75rem; }
+.steps span { display: block; font-family: "Montserrat", sans-serif; font-size: 2.4rem; font-weight: 800; color: var(--accent); margin-bottom: .75rem; }
 .steps p { font-size: .95rem; }
 
 /* Gallery */
@@ -123,7 +123,7 @@ p + p { margin-top: 1rem; }
 .form__actions { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: .5rem; }
 
 /* Footer */
-.footer { background: #0d1621; color: rgba(255,255,255,.6); padding: 48px 0; font-size: .92rem; }
+.footer { background: #08213f; color: rgba(255,255,255,.6); padding: 48px 0; font-size: .92rem; }
 .footer__inner { display: flex; justify-content: space-between; align-items: flex-end; gap: 2rem; flex-wrap: wrap; }
 .footer .logo { margin-bottom: .75rem; }
 
@@ -144,7 +144,7 @@ p + p { margin-top: 1rem; }
   .nav.is-open { transform: none; }
   .nav a { padding: .9rem 0; border-bottom: 1px solid rgba(255,255,255,.08); }
   .nav a.btn { margin-top: 1rem; border: 0; }
-  .header { background: rgba(19,32,46,.97); }
+  .header { background: rgba(11,46,91,.97); }
   .hero { padding: 110px 0 70px; }
   .hero__art { display: none; }
   .section { padding: 72px 0; }
@@ -154,9 +154,15 @@ p + p { margin-top: 1rem; }
 }
 
 /* Logo & couleurs du Bénin */
-.logo em { font-style: normal; font-weight: 800; color: var(--accent); }
+.logo em { font-style: normal; font-weight: 800; }
+.logo img { width: 44px; height: auto; }
+.logo__txt { display: flex; flex-direction: column; line-height: 1.05; }
+.logo__txt small { font-size: .56rem; font-weight: 500; letter-spacing: .2em; color: var(--accent); margin-top: 4px; }
 .flag { display: inline-block; width: 22px; height: 14px; margin-right: .6rem; vertical-align: -2px; border-radius: 2px;
   background: linear-gradient(#fcd116 50%, #e8112d 50%) right / 60% 100% no-repeat, #008751; }
-.footer { position: relative; }
-.footer::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 5px;
-  background: linear-gradient(90deg, #008751 0 33.3%, #fcd116 33.3% 66.6%, #e8112d 66.6%); }
+
+/* Identité : boutons et titres */
+.btn--primary { color: var(--navy); }
+.eyebrow { font-weight: 700; }
+.card { border-top-width: 4px; }
+.hero h1 .accent { color: var(--accent); }
